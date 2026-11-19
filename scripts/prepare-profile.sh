@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-# Prepare a custom ArchISO profile; refuse to overwrite an existing destination.
+# ---------------------------------------------------------------------
+# Nemesis profile staging: copy an ArchISO releng profile, add Mac extras.
+# ---------------------------------------------------------------------
 set -euo pipefail
 
 die() { printf 'nemesis: %s\n' "$*" >&2; exit 1; }
@@ -9,7 +11,9 @@ dest="${2%/}"
 [[ "$dest" == /* ]] || die "destination must be an absolute path"
 [[ ! -e "$dest" && ! -L "$dest" ]] || die "destination already exists: $dest"
 
-source_profile="/usr/share/archiso/configs/releng"
+# Test harnesses can select a *trusted fixture*. Actual ISO builds use the
+# system-installed ArchISO profile; do not point this to unreviewed code.
+source_profile="${ARCHISO_RELENG_PROFILE:-/usr/share/archiso/configs/releng}"
 [[ -f "$source_profile/profiledef.sh" ]] || die "archiso releng profile is missing; install archiso"
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 delta="$root/profiles/mac-intel/packages.x86_64"
@@ -21,7 +25,8 @@ cp -a "$source_profile" "$dest"
 [[ -f "$dest/packages.x86_64" ]] || die "upstream releng packages.x86_64 not found"
 [[ -d "$dest/airootfs" ]] || die "upstream releng airootfs missing"
 
-# Preserve upstream boot configuration; only change image identity and add overlay.
+# Keep boot media definitions from upstream; change only distribution labels,
+# the package list and the read-only hardware inventory executable.
 for key in iso_name iso_label iso_publisher iso_application; do
   grep -q "^$key=" "$dest/profiledef.sh" || die "upstream profile changed: missing $key"
 done
@@ -34,7 +39,8 @@ sed -i \
   -e '/^file_permissions=(/a\["/usr/local/bin/nemesis-hw-report"]="0:0:755"' \
   "$dest/profiledef.sh"
 
-# One package per line, strip comments/blank lines, never install duplicates.
+# Strip comments and deduplicate package names without rewriting upstream
+# sources. This allows current releng versions to change independently.
 tmp="$(mktemp)"
 trap 'rm -f "$tmp"' EXIT
 awk '

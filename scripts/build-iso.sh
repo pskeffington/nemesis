@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-# Build Mac Intel live ISO using ArchISO on an x86_64 Arch-family host.
+# ---------------------------------------------------------------------
+# Nemesis Intel-Mac ISO builder: staged profile, isolated work, fresh ISO.
+# ---------------------------------------------------------------------
 set -euo pipefail
 
 die() { printf 'nemesis: %s\n' "$*" >&2; exit 1; }
@@ -15,19 +17,23 @@ root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 stage="$root/.build/profile-$edition"
 work="$root/.build/work-$edition"
 out="$root/out/$edition"
+
+# Do not follow unreviewed symlinked staging/output directories as root.
+for path in "$root/.build" "$root/out" "$out"; do
+  [[ ! -L "$path" ]] || die "refusing symlinked build/output path: $path"
+done
 [[ ! -e "$stage" && ! -L "$stage" ]] || die "staging already exists: $stage; inspect/remove manually"
 [[ ! -e "$work" && ! -L "$work" ]] || die "work directory already exists: $work; inspect/remove manually"
 
+# Refuse existing artifacts, so a stale ISO can never be reported as new.
+shopt -s nullglob
+previous=( "$out"/nemesis-*-x86_64.iso )
+(( ${#previous[@]} == 0 )) || die "existing Nemesis ISO in $out; inspect/archive it before rebuilding"
+
 mkdir -p "$root/.build" "$out"
 bash "$root/scripts/prepare-profile.sh" "$edition" "$stage"
-printf 'Building Nemesis %s; inspect storage use before proceeding.\n' "$edition"
+printf 'Building Nemesis %s from installed archiso releng.\n' "$edition"
 mkarchiso -v -w "$work" -o "$out" "$stage"
 
-shopt -s nullglob
-isos=( "$out"/nemesis-*-x86_64.iso )
-(( ${#isos[@]} > 0 )) || die "mkarchiso returned without a matching Nemesis ISO"
-for iso in "${isos[@]}"; do
-  sha256sum "$iso" > "$iso.sha256"
-  printf 'ISO: %s\nSHA256: %s.sha256\n' "$iso" "$iso"
-done
-printf 'Build complete; UEFI virtual and physical Mac acceptance remain separate gates.\n'
+bash "$root/scripts/write-checksums.sh" "$out"
+printf 'Build complete; UEFI VM and physical Mac acceptance are separate gates.\n'

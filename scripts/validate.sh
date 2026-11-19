@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-# Portable source-level checks; actual archiso building is a separate gate.
+# ---------------------------------------------------------------------
+# Nemesis source validation: syntax, manifests, ShellCheck and fixtures.
+# ---------------------------------------------------------------------
 set -euo pipefail
 
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -7,7 +9,10 @@ cd "$root"
 scripts=(
   scripts/prepare-profile.sh
   scripts/build-iso.sh
+  scripts/write-checksums.sh
   scripts/validate.sh
+  tests/test-prepare-profile.sh
+  tests/test-checksums.sh
   profiles/mac-intel/airootfs/usr/local/bin/nemesis-hw-report
 )
 for script in "${scripts[@]}"; do
@@ -27,4 +32,7 @@ if command -v shellcheck >/dev/null 2>&1; then
 else
   printf 'ShellCheck: NOT RUN (install shellcheck for full static acceptance)\n'
 fi
-printf 'Bash syntax and package manifest: passed\n'
+
+bash tests/test-prepare-profile.sh
+bash tests/test-checksums.sh
+printf 'Bash syntax, manifest and fixture tests: passed\n'
