@@ -6,7 +6,7 @@
 
 **Active work remains in this GitHub repository and its hosted CI.** We are specifying architecture, package layers, hardware/firmware policies, provenance and handoff. **A narrowly authorized GitHub-hosted Docker run has assembled and verified the Intel ISO**, not on any user's Garuda/Mac. This does not authorize QEMU, USB, firmware, partitions, or real hardware testing.
 
-Earlier source/profile CI passed, and the first Intel ISO was built (~1.3 GB) with SHA-256 and UEFI metadata verified in [Docker CI 44610122687](https://github.com/pskeffington/nemesis/actions/runs/44610122687). This is **image assembly**, not virtual UEFI boot or physical MacBook Air support. The optional Air field edition now has its own source builder and GitHub Docker workflow; its independent build result is still pending.
+Earlier source/profile CI passed, and the first Intel ISO was built (~1.3 GB) with SHA-256 and UEFI metadata verified in [Docker CI 44610122687](https://github.com/pskeffington/nemesis/actions/runs/44610122687). This is **image assembly**, not virtual UEFI boot or physical MacBook Air support. The first Air ISO was [built and checksum-verified](https://github.com/pskeffington/nemesis/actions/runs/44612684836). The hardened revision has a separate [Docker build and SquashFS check](https://github.com/pskeffington/nemesis/actions/runs/44614544328), whose result must be accepted independently.
 
 **Current authority:** [foundation priorities](docs/FOUNDATION_PRIORITY_PLAN.md) → [edition/platform contract](docs/EDITION_CONTRACT.md) → [roadmap](ROADMAP.md) → [Codex repository-phase prompt](codex/REPOSITORY_PHASE_PROMPT.md). The [future Linux handoff contract](codex/HANDOFF_CONTRACT.md) is **NO-GO** until reviewed and explicitly authorized.
 
@@ -19,7 +19,7 @@ First engineering cohort: **MacBookAir7,2 and 6,x**, followed by 7,1/5,x legacy 
 | Platform / edition | Target | Source readiness | Execution |
 | --- | --- | --- | --- |
 | `mac-intel` | non-T2 Intel x86_64 rescue/live ISO | [Docker ISO assembled and checksummed](https://github.com/pskeffington/nemesis/actions/runs/44610122687); boot untested | Physical deployment deferred |
-| `macbook-air-field` | optional Air 5–7 field laptop layer | Independent profile builder, manifest and diagnostic; Docker validation pending | UEFI and Mac tests deferred |
+| `macbook-air-field` | optional Air 5–7 field laptop layer | Independent builder and first Docker ISO pass; hardened build pending | UEFI and Mac tests deferred |
 | `mac-intel-desktop` | optional accessible KDE desktop | design-only | Deferred |
 | `mac-intel-operator` | optional field / RF / engineering edition | design-only | Deferred |
 | `mac-t2` | Intel Macs with T2-specific kernel and device stack | research-only | Deferred |

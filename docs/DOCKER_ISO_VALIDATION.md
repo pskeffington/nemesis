@@ -61,3 +61,9 @@ If the build fails because of image package conflicts, resource exhaustion, moun
 ## Independent MacBook Air field ISO validation
 
 A second trusted-main Docker workflow (`.github/workflows/docker-air-field.yml`) builds a distinct `nemesis-air` image using `scripts/prepare-air-field-profile.sh` and `scripts/build-air-field-iso.sh`. It adds only the optional official-package manifest and read-only `nemesis-field-check`. [F03-A02 issue #15](https://github.com/pskeffington/nemesis/issues/15) tracks [field Docker run 44612684836](https://github.com/pskeffington/nemesis/actions/runs/44612684836). Generic `mac-intel` ISO contents and tests are separate. A container build cannot establish UEFI boot, battery life, internal Wi-Fi, power policy suitability or MacBook Air hardware compatibility.
+
+## Independent MacBook Air ISO evidence (2026-11-19)
+
+- **First Air ISO:** [Docker run 44612684836](https://github.com/pskeffington/nemesis/actions/runs/44612684836) passed source `e1f12a48`: `nemesis-air-2026.11.19-x86_64.iso` (~1.3 GB), portable SHA-256 `OK`, UEFI El Torito metadata present; [evidence artifact #14573862782](https://github.com/pskeffington/nemesis/actions/runs/44612684836/artifacts/14573862782). No ISO binary was uploaded.
+- **Hardened Air ISO:** [source 0257b09](https://github.com/pskeffington/nemesis/commit/0257b09bc03cc55b0931b411372af126ae8efbe5) adds SSH/ModemManager disabled auto-start, D-Bus alias removal, a mask and compiled-SquashFS checks. [Docker run 44614544328](https://github.com/pskeffington/nemesis/actions/runs/44614544328) was pending when this entry was written. A build PASS on the older source cannot be reused for the hardened revision.
+- **Hardware:** no VM/physical Air boot, battery endurance, Wi-Fi, USB receiver, suspend or install tests yet.
