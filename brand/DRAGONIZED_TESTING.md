@@ -99,3 +99,9 @@ Record: plasmashell --version, XDG_SESSION_TYPE, installed garuda-dr460nized pac
 - https://develop.kde.org/docs/plasma/theme/theme-details/ — Plasma style metadata, fallback and colors
 - https://wiki.garudalinux.org/en/customization/dr460nized/ — Garuda Kvantum color interaction
 - https://forum.garudalinux.org/t/garuda-linux-temeraire-260819/48606 — August 2026 Plasma login/theme changes
+
+## Operability extensions (phase B06-P04)
+
+The initial color-only command remains supported. Run bash brand/scripts/dragonized.sh doctor for read-only compatibility diagnostics before installing. Optionally use bash brand/scripts/dragonized.sh apply-style to preview the Nemesis Plasma Style separately from colors; the previous Plasma Style is saved independently. Undo via restore-style and restore before uninstall. This does not replace the Dr460nized Global Theme or change Kvantum or panels.
+
+Uninstall now refuses to remove resources still selected by Plasma Style, the wallpaper configuration, or a Konsole profile. See brand/OPERABILITY.md for commands and recovery details. Actual Dragonized workstation evidence remains outstanding.

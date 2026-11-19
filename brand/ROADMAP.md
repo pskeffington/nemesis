@@ -39,3 +39,13 @@ The distro ISO and Intel Mac hardware gates M01–M05 are unchanged.
 - Root static checks: **PASS** — https://github.com/pskeffington/nemesis/actions/runs/44607050005
 - Draft integration PR: https://github.com/pskeffington/nemesis/pull/5 — no merge until real workstation acceptance.
 - B06 physical acceptance remains REVIEW, never ACCEPTED based only on mock XDG tests.
+
+## B06-P04: Operability hardening and diagnostics
+
+Owner: Arch Theme Creative Developer. The live Dragonized test remains B06-P03 (OPEN, issue #6), so B06-P04 is an independent source and fixture pass, not physical acceptance.
+
+New operations: doctor, apply-style and restore-style. The color and Plasma Style backups are separate; a partially failed KDE apply retains recovery information when it has changed the active appearance. Staging/uninstall guard against unexpected symlinks, tampered state path/hash entries, modified files, and active wallpaper/Plasma Style/Konsole selections. Mutations use a per-user exclusive file lock.
+
+Acceptance evidence: 16 non-root fixture tests on temporary XDG folders, plus Python compilation. GitHub CI must pass on this commit before source-gate acceptance. Physical test still requires actual Garuda Dr460nized Plasma, Kvantum, panels, wallpaper and recovery verification. See brand/OPERABILITY.md.
+
+Rollback: restore-style, restore, uninstall, with manually chosen wallpaper and Konsole profile selections reverted in System Settings. Never force removal of an active UI resource.

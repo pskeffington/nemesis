@@ -22,3 +22,7 @@ The phase B06 test kit is staged from this branch without replacing Garuda's the
 The 2026-11-19 ZIP delivered in the project conversation contains the approved board, raster exports, 4K wallpapers, original refined icon artwork, QA manifest and a visual preview. This Git branch contains source text and vector assets; it **does not** assert that those raster files were uploaded to GitHub.
 
 See [brand guide](BRAND_GUIDE.md) and [delivery gates](ROADMAP.md).
+
+## Test-machine operability
+
+For per-user deployment on Garuda Dr460nized, follow [OPERABILITY.md](OPERABILITY.md). Begin with the read-only doctor and plan checks. Colors and Plasma Style can be explicitly applied and separately restored. Testing on an actual Plasma 6 desktop remains open in GitHub issue #6.

@@ -16,3 +16,7 @@ Read brand/README.md, brand/BRAND_GUIDE.md, brand/ROADMAP.md, plus root AGENTS.m
 ## Dragonized deployment pass B06
 
 Use `brand/DRAGONIZED_TESTING.md` for the phase-specific runbook. Maintain Python standard-library-only CLI commands `plan`, `install`, `apply`, `status`, `restore`, `uninstall`, and `render-wallpaper`; do not auto-apply global themes or modify Kvantum. Block collisions rather than overwriting user assets. Keep fixture testing separate from physical Plasma 6 acceptance and record actual Garuda version and screenshots before marking a milestone accepted.
+
+## B06-P04 operability responsibility
+
+Use brand/OPERABILITY.md as the test-machine entry point. Validate independent apply/restore of colors and Plasma Style, read-only doctor, collision and tampered-state defenses, and in-use asset protection. Fixture test completion is not a substitute for the Garuda/Kvantum physical validation checklist in issue #6.

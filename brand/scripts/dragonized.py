@@ -7,6 +7,8 @@ Never edits /etc, /usr, package state, global themes, or panel layouts.
 from __future__ import annotations
 
 import argparse
+from contextlib import contextmanager
+import fcntl
 import configparser
 import hashlib
 import json
@@ -25,6 +27,7 @@ STATE_DIR = Path(os.environ.get("XDG_STATE_HOME") or Path.home() / ".local/state
 CONFIG = Path(os.environ.get("XDG_CONFIG_HOME") or Path.home() / ".config").expanduser()
 MANIFEST = STATE_DIR / "state.json"
 SCHEME = "Nemesis"
+STYLE = "Nemesis"
 
 SOURCES = {
     "color-schemes/Nemesis.colors": ROOT / "brand/theme/kde/Nemesis.colors",
@@ -36,6 +39,40 @@ SOURCES = {
     "wallpapers/Nemesis/signal-dusk.svg": ROOT / "brand/wallpapers/signal-dusk.svg",
 }
 WALLPAPER_KEY = "wallpapers/Nemesis/signal-dusk-3840x2160.png"
+ALLOWED_FILES = set(SOURCES) | {WALLPAPER_KEY}
+
+
+def require_safe_target(target: Path) -> None:
+    """Reject symlink redirection inside the theme installation tree."""
+    if not DATA.is_absolute() or not STATE_DIR.is_absolute() or not CONFIG.is_absolute():
+        raise RuntimeError("XDG paths must be absolute")
+    if DATA.is_symlink():
+        raise RuntimeError(f"Refusing symlink data directory: {DATA}")
+    current = DATA
+    for component in target.relative_to(DATA).parts:
+        current = current / component
+        if current.is_symlink():
+            raise RuntimeError(f"Refusing symlink in managed path: {current}")
+        if current != target and current.exists() and not current.is_dir():
+            raise RuntimeError(f"Refusing non-directory in managed path: {current}")
+
+
+@contextmanager
+def exclusive_install_lock():
+    """Serialize mutations so two terminal sessions cannot corrupt ownership state."""
+    if STATE_DIR.is_symlink() or MANIFEST.is_symlink():
+        raise RuntimeError("State directory/file must not be a symlink")
+    STATE_DIR.mkdir(parents=True, exist_ok=True)
+    lockfile = STATE_DIR / ".lock"
+    flags = os.O_RDWR | os.O_CREAT | getattr(os, "O_NOFOLLOW", 0)
+    fd = os.open(lockfile, flags, 0o600)
+    try:
+        fcntl.flock(fd, fcntl.LOCK_EX)
+        yield
+    finally:
+        fcntl.flock(fd, fcntl.LOCK_UN)
+        os.close(fd)
+
 
 
 def digest(path: Path) -> str:
@@ -47,12 +84,22 @@ def digest(path: Path) -> str:
 
 
 def load_state() -> dict:
+    if MANIFEST.is_symlink() or STATE_DIR.is_symlink():
+        raise RuntimeError("State location is a symlink; refusing access")
     if not MANIFEST.exists():
-        return {"schema": 1, "managed": {}, "previous_scheme": None, "applied": False}
+        return {"schema": 1, "managed": {}, "previous_scheme": None,
+                "applied": False, "previous_style": None, "style_applied": False}
     with MANIFEST.open(encoding="utf-8") as stream:
         state = json.load(stream)
     if state.get("schema") != 1 or not isinstance(state.get("managed"), dict):
         raise RuntimeError("Unknown or invalid state format; refusing changes")
+    for name, sha in state["managed"].items():
+        if name not in ALLOWED_FILES or not isinstance(sha, str) or len(sha) != 64 or any(c not in "0123456789abcdef" for c in sha):
+            raise RuntimeError("Invalid or unexpected managed filename/hash in state")
+    state.setdefault("previous_style", None)
+    state.setdefault("style_applied", False)
+    if not isinstance(state["applied"], bool) or not isinstance(state["style_applied"], bool):
+        raise RuntimeError("Invalid applied flags in state")
     return state
 
 
@@ -70,17 +117,43 @@ def write_state(state: dict) -> None:
             os.unlink(path)
 
 
-def current_scheme() -> str:
-    kdeglobals = CONFIG / "kdeglobals"
-    if not kdeglobals.is_file():
+def config_value(path: Path, group: str, key: str) -> str:
+    if not path.is_file():
         return ""
     cfg = configparser.ConfigParser(interpolation=None)
     cfg.optionxform = str
     try:
-        cfg.read(kdeglobals, encoding="utf-8")
-        return cfg.get("General", "ColorScheme", fallback="").strip()
-    except configparser.Error:
+        cfg.read(path, encoding="utf-8")
+        return cfg.get(group, key, fallback="").strip()
+    except (configparser.Error, UnicodeError):
         return ""
+
+
+def current_scheme() -> str:
+    return config_value(CONFIG / "kdeglobals", "General", "ColorScheme")
+
+
+def current_style() -> str:
+    return config_value(CONFIG / "plasmarc", "Theme", "name")
+
+
+def has_active_wallpaper() -> bool:
+    """Prevent orphaning an active wallpaper selected in Plasma settings."""
+    path = CONFIG / "plasma-org.kde.plasma.desktop-appletsrc"
+    if not path.is_file():
+        return False
+    data = path.read_text(encoding="utf-8", errors="replace")
+    return "signal-dusk-3840x2160.png" in data or "wallpapers/Nemesis/signal-dusk.svg" in data
+
+
+def has_active_konsole_scheme() -> bool:
+    """Check user Konsole profiles before deleting an in-use color preset."""
+    for location in [DATA / "konsole", CONFIG / "konsole"]:
+        if location.is_dir():
+            for profile in location.glob("*.profile"):
+                if config_value(profile, "Appearance", "ColorScheme") == SCHEME:
+                    return True
+    return False
 
 
 def preflight(source_map: dict[str, Path], state: dict) -> None:
@@ -90,8 +163,7 @@ def preflight(source_map: dict[str, Path], state: dict) -> None:
         if not source.is_file():
             raise RuntimeError(f"Source missing: {source}")
         target = DATA / relpath
-        if target.is_symlink():
-            raise RuntimeError(f"Refusing symlink target: {target}")
+        require_safe_target(target)
         if target.exists():
             prior = state["managed"].get(relpath)
             if not prior:
@@ -154,9 +226,11 @@ def apply() -> None:
     if not previous:
         raise RuntimeError("Previous color scheme unavailable; install and select Nemesis manually in System Settings")
     state = load_state()
-    if state.get("applied") and previous == SCHEME:
-        print("Nemesis already applied by this installer")
-        return
+    if state.get("applied"):
+        if previous == SCHEME:
+            print("Nemesis colors already applied by this installer")
+            return
+        raise RuntimeError("KDE colors changed since Nemesis apply; run restore first to preserve original recovery target")
     if previous == SCHEME:
         raise RuntimeError("Nemesis already active but no reversible previous scheme recorded")
     preflight(SOURCES, state)
@@ -166,13 +240,72 @@ def apply() -> None:
     write_state(state)  # Persist recovery info before external application.
     try:
         subprocess.run(["plasma-apply-colorscheme", SCHEME], check=True)
-    except Exception:
-        state["previous_scheme"] = None
-        state["applied"] = False
-        write_state(state)
-        raise
+    except subprocess.CalledProcessError as error:
+        # Some command failures happen after the KDE color change was written.
+        # Preserve saved recovery info if the new scheme is now active.
+        if current_scheme() != SCHEME:
+            state["previous_scheme"] = None
+            state["applied"] = False
+            write_state(state)
+        raise RuntimeError("Color apply command failed; inspect status and use restore if Nemesis is active") from error
     print(f"Color scheme applied. Saved previous scheme: {previous}")
     print("Garuda Kvantum may override some accent colors; panel layout and global theme were not touched.")
+
+
+def apply_style() -> None:
+    """Explicit opt-in: switch Plasma *Style* without touching the global theme."""
+    require_user()
+    if "KDE" not in os.environ.get("XDG_CURRENT_DESKTOP", "").upper() and not os.environ.get("KDE_FULL_SESSION"):
+        raise RuntimeError("Apply a Plasma Style only inside a KDE session")
+    if not shutil.which("plasma-apply-desktoptheme"):
+        raise RuntimeError("plasma-apply-desktoptheme missing; choose the style in System Settings")
+    previous = current_style()
+    if not previous:
+        raise RuntimeError("Previous Plasma Style unavailable; select Nemesis manually instead")
+    state = load_state()
+    if state["style_applied"]:
+        if previous == STYLE:
+            print("Nemesis Plasma Style already applied")
+            return
+        raise RuntimeError("Plasma Style changed after Nemesis apply; run restore-style before retrying")
+    if previous == STYLE:
+        raise RuntimeError("Nemesis style already active; no saved previous style")
+    stage_files(SOURCES, state)
+    state["previous_style"] = previous
+    state["style_applied"] = True
+    write_state(state)
+    try:
+        subprocess.run(["plasma-apply-desktoptheme", STYLE], check=True)
+    except subprocess.CalledProcessError as error:
+        if current_style() != STYLE:
+            state["previous_style"] = None
+            state["style_applied"] = False
+            write_state(state)
+        raise RuntimeError("Plasma Style apply failed; inspect status then use restore-style") from error
+    print(f"Plasma Style applied; original style recorded: {previous}")
+    print("Global Theme, panel layout, Kvantum and Garuda configuration remain unchanged")
+
+
+def restore_style(state: dict | None = None) -> None:
+    require_user()
+    state = state or load_state()
+    previous = state.get("previous_style")
+    if not state.get("style_applied") or not previous:
+        print("No installer-applied Plasma Style recorded")
+        return
+    active = current_style()
+    if not active:
+        raise RuntimeError("Cannot identify active Plasma Style; restore manually in System Settings before uninstalling")
+    if active == STYLE:
+        if not shutil.which("plasma-apply-desktoptheme"):
+            raise RuntimeError("Cannot restore Plasma Style: plasma-apply-desktoptheme unavailable")
+        subprocess.run(["plasma-apply-desktoptheme", previous], check=True)
+        print(f"Restored Plasma Style: {previous}")
+    else:
+        print(f"Plasma Style changed independently ({active}); leaving it untouched")
+    state["previous_style"] = None
+    state["style_applied"] = False
+    write_state(state)
 
 
 def restore(state: dict | None = None) -> None:
@@ -183,6 +316,8 @@ def restore(state: dict | None = None) -> None:
         print("No installer-applied color scheme recorded; nothing to restore")
         return
     active = current_scheme()
+    if not active:
+        raise RuntimeError("Cannot identify active KDE colors; restore manually in System Settings before uninstalling")
     if active == SCHEME:
         if not shutil.which("plasma-apply-colorscheme"):
             raise RuntimeError("Cannot restore: plasma-apply-colorscheme is unavailable")
@@ -203,8 +338,17 @@ def uninstall() -> None:
     # Fail the whole operation if any managed file was edited since installation.
     for relpath, known_hash in state["managed"].items():
         target = DATA / relpath
-        if target.is_symlink() or (target.exists() and digest(target) != known_hash):
+        require_safe_target(target)
+        if target.exists() and digest(target) != known_hash:
             raise RuntimeError(f"Refusing to remove modified file: {target}")
+    if current_style() == STYLE and not state.get("style_applied"):
+        raise RuntimeError("Nemesis Plasma Style is active without a recorded backup; switch to your prior style first")
+    if has_active_wallpaper():
+        raise RuntimeError("Nemesis wallpaper is selected; choose another wallpaper before uninstall")
+    if has_active_konsole_scheme():
+        raise RuntimeError("Nemesis is selected by a Konsole profile; change its Appearance setting first")
+    if state.get("style_applied"):
+        restore_style(state)
     if state.get("applied"):
         restore(state)
     for relpath in list(state["managed"]):
@@ -224,12 +368,14 @@ def render_wallpaper() -> None:
         raise RuntimeError("Install optional wallpaper converter: sudo pacman -S --needed librsvg")
     state = load_state()
     preflight(SOURCES, state)
-    stage_files(SOURCES, state)
     source = SOURCES["wallpapers/Nemesis/signal-dusk.svg"]
     dest = DATA / WALLPAPER_KEY
+    require_safe_target(dest)
     prior = state["managed"].get(WALLPAPER_KEY)
-    if dest.is_symlink() or (dest.exists() and (not prior or digest(dest) != prior)):
+    if dest.exists() and (not prior or digest(dest) != prior):
         raise RuntimeError(f"Refusing unowned or modified wallpaper: {dest}")
+    # Reject output collisions before installing any new assets.
+    stage_files(SOURCES, state)
     dest.parent.mkdir(parents=True, exist_ok=True)
     fd, tempname = tempfile.mkstemp(prefix="nemesis-wallpaper.", suffix=".png", dir=dest.parent)
     os.close(fd)
@@ -254,6 +400,7 @@ def status() -> None:
     state = load_state()
     print(f"User data directory: {DATA}")
     print(f"Active KDE scheme: {current_scheme() or 'unknown'}")
+    print(f"Active Plasma Style: {current_style() or 'unknown'}")
     print(f"Managed assets: {len(state['managed'])}")
     for relpath, known_hash in sorted(state["managed"].items()):
         target = DATA / relpath
@@ -261,6 +408,8 @@ def status() -> None:
         print(f"  {status_label:20} {target}")
     print(f"Installer-applied: {state.get('applied', False)}")
     print(f"Saved previous scheme: {state.get('previous_scheme') or 'none'}")
+    print(f"Installer-applied style: {state.get('style_applied', False)}")
+    print(f"Saved previous style: {state.get('previous_style') or 'none'}")
 
 
 def plan() -> None:
@@ -275,16 +424,59 @@ def plan() -> None:
         else:
             action = "NEW"
         print(f"  {action:14} {source} -> {target}")
-    print("Apply affects only the KDE color scheme; Plasma panels, Garuda global look-and-feel, Kvantum and login graphics are not modified")
+    print("Apply switches only KDE colors; apply-style is a separate opt-in. Global theme, panels, Kvantum and login graphics are not modified")
+
+
+def doctor() -> None:
+    """Read-only compatibility diagnostics without usernames or machine identifiers."""
+    state = load_state()
+    desktop = os.environ.get("XDG_CURRENT_DESKTOP", "unknown")
+    session = os.environ.get("XDG_SESSION_TYPE", "unknown")
+    plasma = "KDE" in desktop.upper() or bool(os.environ.get("KDE_FULL_SESSION"))
+    print(f"Desktop: {desktop} | session: {session}")
+    print(f"Plasma session: {'YES' if plasma else 'NO (apply unavailable)'}")
+    for tool in ("plasma-apply-colorscheme", "plasma-apply-desktoptheme", "rsvg-convert"):
+        print(f"{tool}: {'AVAILABLE' if shutil.which(tool) else 'MISSING (optional for relevant command)'}")
+    print(f"KDE color: {current_scheme() or 'unknown'} | Plasma Style: {current_style() or 'unknown'}")
+    print(f"Owned files: {len(state['managed'])} | colors applied: {state.get('applied')} | style applied: {state.get('style_applied')}")
+    print(f"Plasma wallpaper using Nemesis: {has_active_wallpaper()}")
+    print(f"Konsole profile using Nemesis: {has_active_konsole_scheme()}")
+    problems = []
+    for relpath, src in SOURCES.items():
+        target = DATA / relpath
+        try:
+            require_safe_target(target)
+        except RuntimeError as err:
+            problems.append(str(err))
+            continue
+        if not src.is_file():
+            problems.append(f"Source missing: {src.name}")
+        if target.exists() and relpath not in state['managed']:
+            problems.append(f"Unowned filename collision: {relpath}")
+        if target.is_file() and relpath in state['managed'] and digest(target) != state['managed'][relpath]:
+            problems.append(f"Edited managed file: {relpath}")
+    for problem in problems:
+        print(f"BLOCK: {problem}")
+    if not problems:
+        print("Asset preflight: OK")
+    print("Garuda's Kvantum may reset the accent after relogin; test both sessions")
+    print("No system files or desktop settings were changed")
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("action", choices=["plan", "install", "apply", "restore", "uninstall", "render-wallpaper", "status"])
+    parser.add_argument("action", choices=["plan", "doctor", "install", "apply", "apply-style", "restore", "restore-style", "uninstall", "render-wallpaper", "status"])
     action = parser.parse_args().action
-    actions = {"plan": plan, "install": stage, "apply": apply, "restore": restore, "uninstall": uninstall, "render-wallpaper": render_wallpaper, "status": status}
+    actions = {"plan": plan, "doctor": doctor, "install": stage, "apply": apply,
+               "apply-style": apply_style, "restore": restore, "restore-style": restore_style,
+               "uninstall": uninstall, "render-wallpaper": render_wallpaper, "status": status}
     try:
-        actions[action]()
+        if action in ("install", "apply", "apply-style", "restore", "restore-style", "uninstall", "render-wallpaper"):
+            require_user()
+            with exclusive_install_lock():
+                actions[action]()
+        else:
+            actions[action]()
     except (OSError, ValueError, RuntimeError, subprocess.CalledProcessError) as err:
         print(f"Nemesis error: {err}", file=sys.stderr)
         return 1
