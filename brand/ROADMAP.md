@@ -14,7 +14,7 @@ Statuses: NOT STARTED, READY, IN PROGRESS, BLOCKED, REVIEW, ACCEPTED, DEFERRED.
 | B06 | Garuda Dragonized theme staging and rollback | REVIEW — preview CLI implemented; five fixture tests passed locally, **no actual Garuda test** |
 | B07 | Creative Theme Developer agent | REVIEW — instructions documented |
 | B08 | Approved binary assets versioned in repo and hashed | NOT STARTED |
-| B09 | Brand CI and release acceptance | IN PROGRESS — workflow proposed; GitHub result to be inspected |
+| B09 | Brand CI and release acceptance | REVIEW — brand CI and repository static CI passed; live Dragonized gate still pending |
 
 ## B06-P02: Dragonized preview deployment
 
@@ -31,3 +31,11 @@ Statuses: NOT STARTED, READY, IN PROGRESS, BLOCKED, REVIEW, ACCEPTED, DEFERRED.
 **Next pass B06-P03:** run on an actual Dragonized desktop, compare Dr460nized/Kvantum effects, verify focus/contrast and record versioned acceptance evidence. Parallel B04-P03: replace schematic wallpaper with polished cinematic masters (do not overwrite original approved board). Next B08-P02: import reviewed binaries with hashes.
 
 The distro ISO and Intel Mac hardware gates M01–M05 are unchanged.
+
+## 2026-11-19 verification update
+
+- GitHub commit `e57a887d477e0170d718045f275363f35c243238` committed the stage/apply/restore scripts, source wallpapers, Plasma style, tests, and runbook.
+- Brand preview checks: **PASS** — https://github.com/pskeffington/nemesis/actions/runs/44607050004
+- Root static checks: **PASS** — https://github.com/pskeffington/nemesis/actions/runs/44607050005
+- Draft integration PR: https://github.com/pskeffington/nemesis/pull/5 — no merge until real workstation acceptance.
+- B06 physical acceptance remains REVIEW, never ACCEPTED based only on mock XDG tests.

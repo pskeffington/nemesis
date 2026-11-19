@@ -13,6 +13,7 @@ These are **versioned role instructions for Codex and human contributors**, not 
 | [evidence-librarian.md](evidence-librarian.md) | Literature matrix, source conflicts and provenance | source-to-test traceability |
 | [security-release-reviewer.md](security-release-reviewer.md) | Package signatures, firmware rights, privacy and release | accept/reject safety review |
 | [build-qa-engineer.md](build-qa-engineer.md) | Deterministic tests, CI and artifact verification | acceptance log and test defects |
+| [arch-theme-creative-developer.md](arch-theme-creative-developer.md) | Original Nemesis branding, reversible Plasma/Konsole preview, wallpaper and test assets | versioned theme pack, visual review, rollback evidence |
 
 ## Dispatch and handoff
 
