@@ -1,0 +1,23 @@
+[General]
+Description=Nemesis Dark
+Opacity=0.94
+[Background]
+Color=11,14,20
+[Foreground]
+Color=215,217,222
+[Color0]
+Color=11,14,20
+[Color1]
+Color=243,85,105
+[Color2]
+Color=85,222,156
+[Color3]
+Color=242,184,74
+[Color4]
+Color=0,168,255
+[Color5]
+Color=136,61,255
+[Color6]
+Color=43,213,222
+[Color7]
+Color=215,217,222
