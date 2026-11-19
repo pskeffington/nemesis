@@ -9,6 +9,7 @@ Read in this order: `README.md`, `AGENTS.md`, `ROADMAP.md`, `docs/FOUNDATION_PRI
 
 ## Active task allocation
 - **F02 — package composition (accepted):** `spec/package-layers.json` and `docs/PACKAGE_COMPOSITION.md` document order, trust, dependencies and exclusions. Eleven source tests passed CI 44608516336. This is not a package resolver.
+- **F03-A — MacBook Air first:** read `docs/FIELD_LAPTOP_ARCHITECTURE.md`, `spec/macbook-air-field.json`, `docs/research/MACBOOK_AIR_FIELD_MATRIX.md` and `codex/MACBOOK_AIR_FIELD_PASS.md`. Build an opt-in profile design without altering the Docker-verified default rescue ISO; never claim field ISO or physical hardware acceptance.
 - **F03 — hardware design (ACTIVE NEXT):** model/PCI ID and feature-specific macOS-independent evidence schema, Broadcom driver selection table, T2/ARM exceptions and firmware rights. Research-only evidence is not physical compatibility.
 - **F04 — supply chain and release:** artifact provenance, signing/recovery decisions, all release gates separated by source/build/VM/physical.
 - **F05 — handoff:** once P0 files and tests are approved, pin exact git SHA and CI run and prepare the human-controlled Linux execution packet.

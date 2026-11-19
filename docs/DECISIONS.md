@@ -67,3 +67,10 @@
 **Reason:** prove that the committed profile and scripts produce a real bootable-media *artifact* before handing a distro build to local Garuda, without using the user's workstation.
 
 **Scope:** [Docker validation runbook](DOCKER_ISO_VALIDATION.md) and [issue #12](https://github.com/pskeffington/nemesis/issues/12). A passing build/hash/El Torito metadata proves **assembly**, not UEFI boot, Mac drivers, installer safety or a release; local hardware phase remains NO-GO.
+
+## ADR-011 — MacBook Air field-laptop first, optional and conservative (2026-11-19)
+**Decision:** prioritize Intel MacBookAir7,2, 6,2 and 6,1 before other Mac form factors. Introduce a separately selected source layer of signed Arch tools, read-only battery/thermal/wireless inventory and a model-level acceptance matrix. Do not change the Docker-verified rescue image, load a universal Broadcom `wl` driver, enable competing power daemons, override fans, or apply aggressive USB autosuspend by default.
+
+**Reason:** older Air laptops have limited memory/storage, Broadcom network dependencies, no built-in wired Ethernet and potentially fragile USB, sleep and battery behavior. Field reliability and offline recovery must precede cosmetic tuning or RF tool volume.
+
+**Consequence:** F03-A source tests accepted in GitHub, with a separate pending optional profile-integration gate. ISO/VM/Mac field results remain unverified. See `docs/FIELD_LAPTOP_ARCHITECTURE.md`.

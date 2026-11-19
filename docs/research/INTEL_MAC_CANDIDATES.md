@@ -2,7 +2,11 @@
 
 **Last reviewed:** 2026-11-19. **Evidence class:** ArchWiki community model reports (S2). No Mac listed below has been booted with Nemesis. This document identifies high-value validation candidates; the first test device depends on real hardware availability and safe external-boot access.
 
-## Prioritized non-T2 candidate families
+## New MacBook Air-first priority (F03-A)
+
+The first field-laptop test cohort is **MacBookAir7,2 → MacBookAir6,2/6,1 → MacBookAir7,1 → MacBookAir5,2/5,1**. Every item remains NOT TESTED; see [source-linked MacBook Air matrix](MACBOOK_AIR_FIELD_MATRIX.md). Existing MacBook Pro entries below are secondary cross-model coverage, not the first deployment priority.
+
+## Previously catalogued non-T2 candidates
 
 | Candidate model | Reason for testing | Upstream/community note to verify | Specific Nemesis gate | Status |
 | --- | --- | --- | --- | --- |

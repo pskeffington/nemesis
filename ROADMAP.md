@@ -9,7 +9,8 @@
 | P0 | F00 | Baseline source/CI and upstream distro recon | distro-architect | versioned research and prior source CI | ACCEPTED |
 | P0 | F01 | Edition and platform contract | distro-architect | `spec/editions.json` + GitHub source test | ACCEPTED — [CI 44608135155](https://github.com/pskeffington/nemesis/actions/runs/44608135155) |
 | P0 | F02 | Package composition, manifest dependencies/conflicts | archiso-build-engineer | source-owned policy + deterministic checks | **ACCEPTED (repo source design)** — [CI 44608516336](https://github.com/pskeffington/nemesis/actions/runs/44608516336) |
-| P0 | F02-V01 | Docker CI compile of baseline Intel ISO, checksum and UEFI image metadata | archiso-build-engineer | real trusted-container mkarchiso exit, hash, inspected image report | **IN PROGRESS**, [#12](https://github.com/pskeffington/nemesis/issues/12) — not boot tested |
+| P0 | F02-V01 | Docker CI compile of baseline Intel ISO, checksum and UEFI image metadata | archiso-build-engineer | real mkarchiso 0, SHA-256 checked and UEFI metadata present | **ACCEPTED (assembly only)** — [CI 44610122687](https://github.com/pskeffington/nemesis/actions/runs/44610122687); not booted |
+| P0 | F03-A01 | MacBook Air field source profile, offline/power diagnostics | macbook-air-field-engineer | six Air models, optional manifest, read-only script, fixture CI | **SOURCE/STATIC ACCEPTED** — [CI 44612120052](https://github.com/pskeffington/nemesis/actions/runs/44612120052); no field ISO |
 | P0 | F03 | Mac device/firmware support and compatibility evidence schema | intel-mac-compatibility | source-linked feature-level contract, no false PASS claims | **READY — ACTIVE NEXT**, [#9](https://github.com/pskeffington/nemesis/issues/9) |
 | P0 | F04 | Build provenance, release security, recovery policy | security-release-reviewer | signed-source/rollback/artifact design review | NOT STARTED |
 | P1 | F05 | Complete and approve Codex handoff packet | build-qa-engineer | all P0 gates + explicit user GO | NOT STARTED / NO-GO |
@@ -53,7 +54,7 @@ M02 ISO -> M03 virtual UEFI -> M04 physical Intel Mac.
 
 ## Active next pass — F03
 - **Owner:** intel-mac-compatibility with T2/Asahi and security reviewers.
-- **Scope:** model/device/feature evidence fields, driver and firmware license policy, static validation only.
+- **Scope:** MacBookAir7,2 and 6,x first; optional field package layer and read-only battery/thermal/wireless readiness tool, with source-only contract and driver/firmware license policy. No physical evidence or auto power tuning.
 - **Acceptance:** no invented PASS hardware, no T2/ARM crossover, no firmware/host changes, passing GitHub source CI.
 - **Issue:** [F03 #9](https://github.com/pskeffington/nemesis/issues/9).
 
@@ -63,7 +64,9 @@ M02 ISO -> M03 virtual UEFI -> M04 physical Intel Mac.
 - Comparative source review covered ArchISO, EndeavourOS, CachyOS, RebornOS, Garuda, t2linux and Asahi; see [source matrix](docs/research/UPSTREAM_DISTRO_RECON.md). A source-head SHA is not a tested runtime.
 - New repo-only edition contract source test passed [run 44608135155](https://github.com/pskeffington/nemesis/actions/runs/44608135155).
 - **F02 package-layer source policy** [commit 9105adc](https://github.com/pskeffington/nemesis/commit/9105adc5d62d6d3fac623822a3d5579166e2bda5) accepted from [11 GitHub contract tests](https://github.com/pskeffington/nemesis/actions/runs/44608516336), plus [static CI](https://github.com/pskeffington/nemesis/actions/runs/44608516293). No runtime package integration.
-- **At this commit:** GitHub Docker validation [issue #12](https://github.com/pskeffington/nemesis/issues/12) has been configured and triggered; ISO compilation result pending. No UEFI VM/Mac boot, installation, T2/ARM release or theme-on-Garuda session acceptance has occurred.
+- **Docker ISO pass:** [run 44610122687](https://github.com/pskeffington/nemesis/actions/runs/44610122687) successfully built a ~1.3-GB Intel ISO, verified its SHA-256 twice and detected UEFI El Torito metadata; source was `cc93fd9f`. The ISO was not uploaded as a release, nor booted in QEMU or on a Mac.
+- **Air field source pass:** [commit c3cd977](https://github.com/pskeffington/nemesis/commit/c3cd977535a5d41ef9e9befe9bd4d0c0ede54240) added optional field profile source and tests; [foundation CI 44612120052](https://github.com/pskeffington/nemesis/actions/runs/44612120052) and [static CI 44612120050](https://github.com/pskeffington/nemesis/actions/runs/44612120050) passed. The field layer remains **unselected** in the default image.
+- **No field ISO, UEFI VM/Mac boot, installation, T2/ARM release or on-device theme acceptance has occurred.**
 - Separate visual work exists in [PR #5](https://github.com/pskeffington/nemesis/pull/5); its physical Garuda proof [issue #6](https://github.com/pskeffington/nemesis/issues/6) remains future work.
 
 ## Risks and authority

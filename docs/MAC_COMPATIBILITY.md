@@ -1,6 +1,6 @@
 # Mac hardware compatibility — evidence-based matrix
 
-**No Nemesis ISO has been physically tested yet.** See [candidate Intel models](research/INTEL_MAC_CANDIDATES.md) for a source-only test prioritization, not a support certification. A proposed target is not a verified working machine. Do not publish 'supported' labels until model-specific acceptance results exist.
+**No Nemesis ISO has been physically tested yet.** The next priority is Intel MacBook Air7,2 and 6,x; see [Air field research](research/MACBOOK_AIR_FIELD_MATRIX.md). The successful [Docker image assembly](https://github.com/pskeffington/nemesis/actions/runs/44610122687) is **not** device support proof. See [candidate Intel models](research/INTEL_MAC_CANDIDATES.md) for a source-only test prioritization, not a support certification. A proposed target is not a verified working machine. Do not publish 'supported' labels until model-specific acceptance results exist.
 
 | Hardware family | CPU / boot | Nemesis build lane | Current claim | Verification |
 | --- | --- | --- | --- | --- |

@@ -10,6 +10,7 @@ These are **versioned role instructions for Codex and human contributors**, not 
 | [archiso-build-engineer.md](archiso-build-engineer.md) | Releng overlay, package delta, ISO assembly | reproducible script and build evidence |
 | [uefi-boot-validator.md](uefi-boot-validator.md) | UEFI image, VM, recovery and boot-chain checks | boot-test evidence |
 | [intel-mac-compatibility.md](intel-mac-compatibility.md) | Intel non-T2 device inventory and drivers | physical feature matrix |
+| [macbook-air-field-engineer.md](macbook-air-field-engineer.md) | Older Intel MacBook Air offline and power-aware field design | optional Air edition and device validation contract |
 | [t2-platform-engineer.md](t2-platform-engineer.md) | T2 kernel/firmware integration research | feasibility decision; no unreviewed release |
 | [asahi-platform-engineer.md](asahi-platform-engineer.md) | M-series ARM64/Asahi platform assessment | separate ARM ADR and SoC matrix |
 | [evidence-librarian.md](evidence-librarian.md) | Literature matrix, source conflicts and provenance | source-to-test traceability |

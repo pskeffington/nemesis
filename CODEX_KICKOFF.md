@@ -12,7 +12,7 @@ The objective is to prepare all distro architecture, package manifests, Mac hard
 4. [Literature](docs/research/LITERATURE_MATRIX.md), [upstream distro recon](docs/research/UPSTREAM_DISTRO_RECON.md), [decision register](docs/DECISIONS.md).
 5. [AGENTS.md](AGENTS.md), [agent roster](agents/README.md), and [pass queue](codex/PASS_QUEUE.md).
 
-## Active task
+## Active task — MacBook Air first
 
 Execute **F03 — Mac hardware evidence and firmware policy**, entirely within GitHub. F02 package-source design was accepted by [11 GitHub CI tests](https://github.com/pskeffington/nemesis/actions/runs/44608516336). Create model/PCI-ID evidence, driver selection, licensing, per-feature status and source-only validators. Do not probe real hardware. Preserve `mac-intel` source and brand PR #5.
 

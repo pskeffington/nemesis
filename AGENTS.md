@@ -11,6 +11,7 @@ Read in order: `README.md`, `docs/FOUNDATION_PRIORITY_PLAN.md`, `ROADMAP.md`, `s
 ## Roles and work partition
 
 - [Agent roster](agents/README.md); [source research](docs/research/LITERATURE_MATRIX.md) and [distro source recon](docs/research/UPSTREAM_DISTRO_RECON.md).
+- Air field priority: [MacBook Air engineering agent](agents/macbook-air-field-engineer.md), [architecture](docs/FIELD_LAPTOP_ARCHITECTURE.md) and [F03-A Codex queue](codex/MACBOOK_AIR_FIELD_PASS.md). Prioritize Air7,2/6,x, offline USB network fallback, battery/thermal and radio USB stability; no default Broadcom driver, power manager or fan override.
 - One accountable implementation agent per pass. Design, security and evidence reviewers may inspect independently.
 - F02 package contract passed 11 GitHub source tests ([run 44608516336](https://github.com/pskeffington/nemesis/actions/runs/44608516336)). **F03 Mac model/device/firmware evidence schema is the next critical path**, then F04 release/provenance and F05 handoff with explicit approval.
 - The independent [brand PR #5](https://github.com/pskeffington/nemesis/pull/5) is optional P2. Do not overwrite, merge or bake it into `mac-intel` to accelerate boot work.

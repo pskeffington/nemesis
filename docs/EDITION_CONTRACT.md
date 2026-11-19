@@ -42,3 +42,7 @@ Changes to `spec/editions.json` need an ADR, a foundation/edition task ID and a 
 ## F02 package-layer extension
 
 The [package composition contract](PACKAGE_COMPOSITION.md) and [`spec/package-layers.json`](../spec/package-layers.json) define dependency ordering, fail-closed conflicts, signed-source defaults and platform exclusions. Eleven GitHub source tests passed [CI 44608516336](https://github.com/pskeffington/nemesis/actions/runs/44608516336). The contract is **not consumed by the current builder** and does not change the ISO.
+
+## MacBook Air optional field edition
+
+The `macbook-air-field` edition has an optional `macbook-air-field-tools` layer, a [source contract](../spec/macbook-air-field.json), a four-package official-Arch manifest and a [read-only readiness script](../profiles/macbook-air-field/airootfs/usr/local/bin/nemesis-field-check). The edition remains **planned**; build/profile paths are null and no field ISO was built. Source tests enforce that this overlay is not selected by the `mac-intel` rescue edition or T2/ARM lanes. See [field architecture](FIELD_LAPTOP_ARCHITECTURE.md).

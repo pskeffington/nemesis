@@ -6,7 +6,7 @@
 
 Deliver a coherent, source-controlled Mac-first Arch distro specification that an implementation Codex can execute without having to invent platform boundaries, package trust, module dependencies, release standards or rollback behavior. Success in this phase means **reviewable files, declared dependencies, passing source-only CI, and a pinned handoff packet**, not a functioning distro.
 
-Keep the first execution target **non-T2 64-bit EFI Intel Macs**. Intel T2 and Apple Silicon have independent research/design lanes. The visual identity is optional and never blocks a bootable rescue baseline.
+Keep the first execution target **non-T2 64-bit EFI Intel Macs**, prioritizing MacBookAir7,2 and MacBookAir6,x for field laptop design and MacBookAir5,x as secondary. Intel T2 and Apple Silicon have independent research/design lanes. The visual identity is optional and never blocks a bootable rescue baseline.
 
 ## P0 → P2 priority table
 
@@ -16,6 +16,7 @@ Keep the first execution target **non-T2 64-bit EFI Intel Macs**. Intel T2 and A
 | P0-1 | F01 Edition and platform contract | distro-architect | `spec/editions.json`; `docs/EDITION_CONTRACT.md`; `tests/test_foundation.py` | GitHub foundation CI green, no future-platform support claims | ACCEPTED (CI source check) |
 | P0-2 | F02 Package composition specification | archiso-build-engineer | `spec/package-layers.json`, `docs/PACKAGE_COMPOSITION.md`, source tests | 11 source tests [CI 44608516336](https://github.com/pskeffington/nemesis/actions/runs/44608516336) | ACCEPTED (repo contract) |
 | P0-2b | F02-V01 Docker ISO CI validation | archiso-build-engineer | `docker/archiso/`, workflow, build log and checksum | real mkarchiso/sha256/xorriso in trusted GitHub Docker; no boot claim | IN PROGRESS — [#12](https://github.com/pskeffington/nemesis/issues/12) |
+| P0-3a | F03-A MacBook Air first field profile | macbook-air-field-engineer | optional signed package/diagnostic source and six-model matrix | source CI passed; field ISO/physical gate pending | ACCEPTED source design, next optional staging review |
 | P0-3 | F03 Mac hardware support specification | intel-mac-compatibility | Per-model/PCI ID matrix, EFI/input/display/audio/network/thermals/sleep evidence contract, T2/ARM exclusions | Source-backed, no false PASS devices; no firmware redistribution | READY — ACTIVE NEXT, [#9](https://github.com/pskeffington/nemesis/issues/9) |
 | P0-4 | F04 Build provenance and release policy | security-release-reviewer | Signed package/update boundaries, artifact manifest, checksums, SBOM candidate, rollback and test-level separation | Reviewable release criteria; no unsigned trust bypass | NOT STARTED |
 | P1-1 | F05 Codex execution handoff | build-qa-engineer | `codex/HANDOFF_CONTRACT.md`, task pass queue, exact future commands and stop rules, pinned refs | All P0 gates accepted and human explicitly approves moving to execution | NOT STARTED — packet template now prepared |

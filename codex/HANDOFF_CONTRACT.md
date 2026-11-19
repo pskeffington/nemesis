@@ -62,3 +62,7 @@ A handoff is accepted when the source authority, dependency and safety decisions
 ## 6. Docker CI evidence is not workstation approval
 
 The separately authorized [GitHub-hosted Docker build validation](../docs/DOCKER_ISO_VALIDATION.md) may establish an ISO assembly and checksum result for one source commit. It does **not** satisfy the human-controlled phase transition, specific Garuda host preflight or privilege approval, QEMU VM boot, physical Mac boot, installer or release gates. Any Docker run must be linked by immutable commit and actual CI result; do not substitute its artifact for an accepted Mac hardware test.
+
+## Air field target gate
+
+Prefer non-T2 MacBookAir7,2 then 6,2/6,1 for future supervised acceptance; model/PCI ID, battery health, offline USB-network fallback and safe recovery must be recorded. The optional Air field source layer is **not a built image** and does not permit workstation access. See `docs/FIELD_LAPTOP_ARCHITECTURE.md` and `codex/MACBOOK_AIR_FIELD_PASS.md`.
