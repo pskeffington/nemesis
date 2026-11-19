@@ -31,3 +31,11 @@
 - Verify supply-chain/release policy separately under F04.
 
 **Report:** current source SHA, role, changed files, exact GitHub CI results, separate build/boot/hardware gates, unresolved model issues and next repo-only pass.
+
+## F03-A02b — field service hardening verification
+
+A field build must not auto-enable inherited `sshd.service` or `ModemManager.service` from releng. The staged Air profile must retain upstream `iwd.service` and `systemd-networkd.service` and avoid activating a competing NetworkManager backend by default. Run source fixture and actual packaged-ArchISO staging checks, inspect diff against generic rescue and confirm no unexpected unit file mutation. This is a **source/ISO policy gate** and not evidence of field communications or user security acceptance.
+
+## F03-A02c — inspect built Air ISO payload
+
+After a real trusted-container `mkarchiso` build, run `docker/archiso/check-air-payload.sh` to inspect the same run's SquashFS and confirm the ISO rootfs entry. Assert the field diagnostic is present and service policy is encoded in the image. Save sanitized inventory with CI evidence; continue to mark UEFI boot and physical field-laptop compatibility NOT TESTED.

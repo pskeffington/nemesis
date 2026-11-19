@@ -43,6 +43,11 @@ iso="${isos[0]}"
 file "$iso" | tee "$evidence/file.txt"
 xorriso -indev "$iso" -report_el_torito plain > "$evidence/eltorito.txt" 2>&1 || die "El Torito scan failed"
 grep -Eiq 'UEFI|EFI' "$evidence/eltorito.txt" || die "UEFI metadata not detected"
+
+# Inspect the actual SquashFS produced by mkarchiso. The ISO's rootfs entry
+# is checked separately; neither observation is a virtual/physical boot.
+bash docker/archiso/check-air-payload.sh "$iso" "$evidence"
+
 {
   printf 'iso_filename=%s\n' "${iso##*/}"
   printf 'iso_bytes=%s\n' "$(stat -c '%s' "$iso")"

@@ -38,6 +38,38 @@ awk '
 mv "$temp" "$dest/packages.x86_64"
 cp -a "$overlay/." "$dest/airootfs/"
 
+# ---------------------------------------------------------------------
+# Field services are opt-in. Official releng may enable an SSH server and
+# ModemManager via symlinks; both are unsuitable as field-media defaults.
+# Only remove inherited service enablement from the disposable Air staging
+# copy, never the installed ArchISO profile or generic mac-intel edition.
+# Keep upstream iwd/systemd-networkd and local console recovery intact.
+# ---------------------------------------------------------------------
+wants="$dest/airootfs/etc/systemd/system/multi-user.target.wants"
+for unit in sshd.service ModemManager.service; do
+  entry="$wants/$unit"
+  if [[ -L "$entry" ]]; then
+    rm -- "$entry"
+  elif [[ -e "$entry" ]]; then
+    die "refusing to change a non-symlink unit in staged profile: $entry"
+  fi
+done
+
+# ModemManager can also be requested by D-Bus despite having no startup
+# symlink. Remove its inherited D-Bus alias and mask the canonical unit
+# inside this field image. Future modem use requires a reviewed opt-in profile.
+unit_dir="$dest/airootfs/etc/systemd/system"
+alias="$unit_dir/dbus-org.freedesktop.ModemManager1.service"
+if [[ -L "$alias" ]]; then
+  rm -- "$alias"
+elif [[ -e "$alias" ]]; then
+  die "unexpected non-symlink ModemManager D-Bus alias in Air staging"
+fi
+if [[ -e "$unit_dir/ModemManager.service" || -L "$unit_dir/ModemManager.service" ]]; then
+  die "unexpected pre-existing ModemManager unit in staged Air profile"
+fi
+ln -s /dev/null "$unit_dir/ModemManager.service"
+
 [[ -f "$dest/airootfs/usr/local/bin/nemesis-field-check" ]] || die "readiness tool missing"
 bash -n "$dest/profiledef.sh"
 printf 'Prepared opt-in macbook-air-field profile: %s\n' "$dest"

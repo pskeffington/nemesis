@@ -122,6 +122,7 @@ class MacBookAirFieldContractTests(unittest.TestCase):
         self.assertIn("MacBookAir7,2", result.stdout)
         self.assertIn("capacity=63%", result.stdout)
         self.assertIn("temperature_mC=45000", result.stdout)
+        self.assertIn("network", result.stdout.lower())
         self.assertIn("no configuration, device", result.stdout.lower())
 
 

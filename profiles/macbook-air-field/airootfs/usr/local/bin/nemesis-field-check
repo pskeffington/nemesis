@@ -76,6 +76,22 @@ if command -v nmcli >/dev/null 2>&1; then
 else
   printf 'NetworkManager state: tool unavailable\n'
 fi
+# A releng-based field image normally uses iwd plus systemd-networkd, even
+# when NetworkManager binaries are also available. Report actual services.
+if command -v systemctl >/dev/null 2>&1; then
+  net_service_count=0
+  for unit in iwd.service systemd-networkd.service NetworkManager.service; do
+    if systemctl is-active --quiet "$unit" 2>/dev/null; then
+      printf 'Active network service: %s\n' "$unit"
+      net_service_count=$((net_service_count + 1))
+    fi
+  done
+  if (( net_service_count == 0 )); then
+    printf 'Active network services: none detected (or systemd unavailable)\n'
+  fi
+else
+  printf 'Network service status: unavailable\n'
+fi
 
 printf '\n=== Power management conflict check ===\n'
 if command -v systemctl >/dev/null 2>&1; then

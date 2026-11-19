@@ -20,7 +20,9 @@ scripts=(
   scripts/prepare-air-field-profile.sh
   scripts/build-air-field-iso.sh
   docker/archiso/validate-air-build.sh
+  docker/archiso/check-air-payload.sh
   tests/test-air-profile.sh
+  tests/test-installed-air-profile.sh
   profiles/mac-intel/airootfs/usr/local/bin/nemesis-hw-report
 )
 for script in "${scripts[@]}"; do

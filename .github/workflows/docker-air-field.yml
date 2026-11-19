@@ -9,6 +9,7 @@ on:
       - '.github/workflows/docker-air-field.yml'
       - 'scripts/prepare-air-field-profile.sh'
       - 'scripts/build-air-field-iso.sh'
+      - 'docker/archiso/check-air-payload.sh'
       - 'docker/archiso/validate-air-build.sh'
       - 'profiles/macbook-air-field/**'
 
@@ -17,7 +18,9 @@ permissions:
 
 concurrency:
   group: nemesis-docker-air-field-${{ github.ref }}
-  cancel-in-progress: true
+  # Keep one trusted pinned build running while newer source is queued.
+  # Image assembly evidence should never be lost to an unrelated push.
+  cancel-in-progress: false
 
 jobs:
   air-image-assembly:

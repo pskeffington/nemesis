@@ -9,7 +9,13 @@ tmp="$(mktemp -d)"
 trap 'rm -rf -- "$tmp"' EXIT
 fixture="$tmp/releng"
 stage="$tmp/air"
-mkdir -p "$fixture/airootfs"
+mkdir -p "$fixture/airootfs/etc/systemd/system/multi-user.target.wants"
+wants="$fixture/airootfs/etc/systemd/system/multi-user.target.wants"
+for unit in sshd.service ModemManager.service iwd.service systemd-networkd.service; do
+  ln -s "/usr/lib/systemd/system/$unit" "$wants/$unit"
+done
+ln -s /usr/lib/systemd/system/ModemManager.service \
+  "$fixture/airootfs/etc/systemd/system/dbus-org.freedesktop.ModemManager1.service"
 cat > "$fixture/profiledef.sh" <<'EOF'
 #!/usr/bin/env bash
 iso_name="archlinux"
@@ -31,6 +37,17 @@ EOF
 ARCHISO_RELENG_PROFILE="$fixture" bash "$root/scripts/prepare-air-field-profile.sh" "$stage"
 [[ -f "$stage/airootfs/usr/local/bin/nemesis-hw-report" ]]
 [[ -f "$stage/airootfs/usr/local/bin/nemesis-field-check" ]]
+
+# Inherited remote-login and modem probing cannot start automatically on
+# field laptops. Leave upstream wireless/network service wiring unchanged.
+air_wants="$stage/airootfs/etc/systemd/system/multi-user.target.wants"
+[[ ! -e "$air_wants/sshd.service" && ! -L "$air_wants/sshd.service" ]]
+[[ ! -e "$air_wants/ModemManager.service" && ! -L "$air_wants/ModemManager.service" ]]
+[[ -L "$air_wants/iwd.service" && -L "$air_wants/systemd-networkd.service" ]]
+[[ "$(readlink "$stage/airootfs/etc/systemd/system/ModemManager.service")" == "/dev/null" ]]
+[[ ! -L "$stage/airootfs/etc/systemd/system/dbus-org.freedesktop.ModemManager1.service" ]]
+[[ -L "$wants/sshd.service" && -L "$wants/ModemManager.service" ]]
+
 [[ "$(grep -xc 'bluez' "$stage/packages.x86_64")" -eq 1 ]]
 for pkg in bluez-utils powertop wireguard-tools intel-ucode; do
   grep -Fxq "$pkg" "$stage/packages.x86_64"
