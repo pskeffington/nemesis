@@ -32,7 +32,7 @@
 
 ## Work selected
 
-**M01-P03 (research):** this comparative source registry, role instructions and Codex runbook. **M01-P04 (engineering):** create an Arch container CI test for actual installed releng profile staging. The full `mkarchiso` execution remains **M02-P01**, not a consequence of passing CI. Do not import themes, unsigned package sources, T2 firmware tools or Asahi installer internals in this pass.
+**M01-P03 (research):** accepted source registry, role instructions and Codex runbook. **M01-P04 (engineering):** accepted native Arch container test of packaged releng under ArchISO 92-1 ([CI run 44607322858](https://github.com/pskeffington/nemesis/actions/runs/44607322858)). Full `mkarchiso` execution is **M02-P01** and remains untested. Do not import themes, unsigned package sources, T2 firmware tools or Asahi installer internals in this pass.
 
 ## Repeatable reconnaissance
 

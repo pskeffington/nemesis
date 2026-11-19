@@ -32,4 +32,4 @@
 6. Update ROADMAP.md, decisions/matrix as needed, and hand off `Pass | files | command/result | evidence | status | next`.
 7. When blocked, document why and select the highest-priority independent READY pass; do not invent success or skip a failed gate.
 
-Default active work is M01-P04 native ArchISO packaged-releng staging CI and M01-P02 gate closure, then M02-P01 real ISO build on x86_64 Arch/Garuda. Source recon M01-P03 has been documented.
+M01 source and native ArchISO staging gates were accepted in CI (run 44607322858; archiso 92-1). Default active work is **M02-P01**: validate again on local x86_64 Arch/Garuda, run actual `mkarchiso`, verify checksum and retain build evidence. M03 virtual UEFI and M04 physical Mac remain untested.

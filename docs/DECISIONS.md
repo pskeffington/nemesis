@@ -40,7 +40,7 @@
 
 **Reason:** a synthetic fixture cannot detect actual upstream boot/profile schema drift. The Arch job is a contract test, not a costly privileged image build.
 
-**Consequence:** keep M02 real mkarchiso and M03 UEFI boot as distinct gates. When upstream releng changes, diagnose and update the staging contract rather than loosening it.
+**Consequence:** keep M02 real mkarchiso and M03 UEFI boot as distinct gates. When upstream releng changes, diagnose and update the staging contract rather than loosening it. **Acceptance evidence:** run 44607322858 passed on 2026-11-19 with signed ArchISO 92-1; no actual ISO build was performed.
 
 ## ADR-005 — No automatic Mac disk or firmware writes
 **Decision:** building, diagnostics and initial boot acceptance are read-only relative to internal Mac drives. Installer work requires a separate explicit safety review.

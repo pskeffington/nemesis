@@ -21,7 +21,7 @@ If the repository already exists: `cd nemesis && git pull --ff-only`; do not rec
 
 ## Immediate assignment
 
-**M01-P02:** run static/fixture validation and repair any profile/manifest defects. Then **M02-P01:** build the first Intel non-T2 ISO on the x86_64 host, produce a checksum and log, and document result without calling it boot-tested.
+**M01 source/static and packaged ArchISO staging tests passed in GitHub Actions** (run 44607322858; packaged ArchISO 92-1). **M02-P01 is the immediate task:** on this x86_64 Arch/Garuda workstation, rerun static checks and `bash tests/test-installed-releng.sh`, then build the first Intel non-T2 ISO, produce a checksum and log, and document result without calling it boot-tested.
 
 Proceed to **M03-P01** only when the ISO build gate passes. Do not run USB flashing, repartition, firmware updates, T2 installer actions or Apple Silicon provisioning without explicit hardware review and user-controlled device selection.
 

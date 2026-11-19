@@ -2,7 +2,7 @@
 
 **Nemesis** is a **Mac-first Arch-based GNU/Linux distribution under development**. Its first image targets **64-bit Intel Macs without Apple T2**, especially older hardware that benefits from a lean, repairable Linux environment. Planned T2 and Apple Silicon editions are *independent technical lanes*.
 
-**Current state:** documented engineering scaffold. No Nemesis ISO build or physical Mac boot has been accepted.
+**Current state:** source/fixture CI and a **real packaged ArchISO 92-1 releng staging** contract have passed in GitHub Actions. No Nemesis ISO has yet been compiled, booted in UEFI, or tested on a physical Mac.
 
 ## Development lanes
 | Lane | Boot/platform | Stage |
