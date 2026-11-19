@@ -4,7 +4,7 @@
 
 ## Authority and boundaries
 
-`spec/editions.json` is the machine-readable contract for candidate platforms and planned editions. `profiles/mac-intel/` remains the *actual* source overlay for the current scaffold. `scripts/prepare-profile.sh` is still the only implemented profile staging path. A future resolver may consume this JSON **after review and tests**, but must not silently change image contents.
+`spec/editions.json` is the machine-readable contract for candidate platforms and planned editions. `profiles/mac-intel/` remains the *actual* source overlay for the current scaffold. `scripts/prepare-profile.sh` remains the generic rescue staging path, with a separate opt-in `scripts/prepare-air-field-profile.sh` that composes only the Air field variant. A future resolver may consume this JSON **after review and tests**, but must not silently change image contents.
 
 ### Layering
 
@@ -45,4 +45,4 @@ The [package composition contract](PACKAGE_COMPOSITION.md) and [`spec/package-la
 
 ## MacBook Air optional field edition
 
-The `macbook-air-field` edition has an optional `macbook-air-field-tools` layer, a [source contract](../spec/macbook-air-field.json), a four-package official-Arch manifest and a [read-only readiness script](../profiles/macbook-air-field/airootfs/usr/local/bin/nemesis-field-check). The edition remains **planned**; build/profile paths are null and no field ISO was built. Source tests enforce that this overlay is not selected by the `mac-intel` rescue edition or T2/ARM lanes. See [field architecture](FIELD_LAPTOP_ARCHITECTURE.md).
+The `macbook-air-field` edition has an optional `macbook-air-field-tools` layer, a [source contract](../spec/macbook-air-field.json), a four-package official-Arch manifest and a [read-only readiness script](../profiles/macbook-air-field/airootfs/usr/local/bin/nemesis-field-check). The Air edition is now `source-scaffold` with named independent prepare/build scripts and manifest; actual field ISO compilation and boot require separate observed tests. Source tests enforce that this overlay is not selected by the `mac-intel` rescue edition or T2/ARM lanes. See [field architecture](FIELD_LAPTOP_ARCHITECTURE.md).

@@ -59,4 +59,4 @@ These are inputs for F03/F04 and, later, a separately approved image resolver—
 
 ## MacBook Air optional field layer
 
-`macbook-air-field-tools` depends on `intel-hardware-overlay` but is **not selected** in the existing `mac-intel` build. Its candidate package list (`bluez`, `bluez-utils`, `powertop`, `wireguard-tools`) comes from official Arch repositories; this source-only edition has no service auto-enable, Broadcom `wl`, TLP, fan controller or USB autosuspend override. Future integration needs a separately reviewed named profile and Docker gate.
+`macbook-air-field-tools` depends on `intel-hardware-overlay` but is **not selected** in the existing `mac-intel` build. Its candidate package list (`bluez`, `bluez-utils`, `powertop`, `wireguard-tools`) comes from official Arch repositories; this source-only edition has no service auto-enable, Broadcom `wl`, TLP, fan controller or USB autosuspend override. An opt-in `scripts/prepare-air-field-profile.sh` stages this layer and `scripts/build-air-field-iso.sh` builds a separate `nemesis-air` image. The Docker gate is independently tracked by issue #15; the generic rescue build remains unchanged.

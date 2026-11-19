@@ -74,3 +74,10 @@
 **Reason:** older Air laptops have limited memory/storage, Broadcom network dependencies, no built-in wired Ethernet and potentially fragile USB, sleep and battery behavior. Field reliability and offline recovery must precede cosmetic tuning or RF tool volume.
 
 **Consequence:** F03-A source tests accepted in GitHub, with a separate pending optional profile-integration gate. ISO/VM/Mac field results remain unverified. See `docs/FIELD_LAPTOP_ARCHITECTURE.md`.
+
+## ADR-012 — Separate field-laptop build path (2026-11-19)
+**Decision:** build an opt-in `macbook-air-field` image from the validated Intel ArchISO releng overlay via a distinct profile preparation and Docker builder. Keep default `mac-intel` builder unchanged. Add only signed official package candidates and a read-only field diagnostic.
+
+**Reason:** an independent field ISO permits battery, connectivity and receiver stability validation without jeopardizing the rescue baseline or silently enabling power and wireless policies.
+
+**Consequence:** require source/fixture verification and independent Docker ISO/SHA/EFI evidence; physical MacBook Air and virtual UEFI results remain separate unrun gates. See issue [#15](https://github.com/pskeffington/nemesis/issues/15).

@@ -8,13 +8,13 @@
 
 **Gate:** GitHub Python/fixture/ShellCheck all pass, existing `mac-intel` package manifest and builder unchanged, Air field layer remains unselected and T2/ARM excluded. **Source-only gate**; not an ISO build or hardware acceptance.
 
-## F03-A02 — opt-in edition integration (next engineering design)
+## F03-A02 — opt-in Air ISO builder (source committed, Docker acceptance pending)
 
-1. Inspect actual installed ArchISO `releng` and `baseline` source contracts.
+1. Inspect `scripts/prepare-air-field-profile.sh`, `scripts/build-air-field-iso.sh`, `tests/test-air-profile.sh` and installed ArchISO `releng`/`baseline` source contracts.
 2. Propose a named `macbook-air-field` staging path that adds *only* the optional four-package delta and read-only diagnostic; never modify the verified default Intel rescue profile.
 3. Require schema and source tests for package deduplication, profile identity and diagnostic executable permission, no default power daemon, no auto Broadcom driver and no boot-entry mutation.
 4. Document exact expected ISO delta, package origins, user-space service behavior and source rollback.
-5. Stage in native Arch CI and, **only after an explicitly scoped approval**, attempt a new isolated Docker ISO build. Do not infer success from prior generic Intel build.
+5. Verify current GitHub static/fixture source checks and the [isolated Air Docker build](https://github.com/pskeffington/nemesis/actions/runs/44612684836). Do not infer success from prior generic Intel build and never claim actual Mac boot.
 
 ## F03-A03 — field hardware and network readiness (future authorization required)
 

@@ -1,6 +1,6 @@
 # Nemesis — MacBook Air field-laptop architecture
 
-**Mode:** GitHub repository preparation, 2026-11-19. The existing Intel rescue ISO assembled and passed SHA/EFI-metadata checks in [Docker CI 44610122687](https://github.com/pskeffington/nemesis/actions/runs/44610122687). **The optional MacBook Air field layer has NOT been integrated, built, booted or physically tested.**
+**Mode:** GitHub repository preparation, 2026-11-19. The existing Intel rescue ISO assembled and passed SHA/EFI-metadata checks in [Docker CI 44610122687](https://github.com/pskeffington/nemesis/actions/runs/44610122687). **The optional Air layer now has an independently selected ArchISO profile and builder.** Its Docker image result and physical boot/compatibility are pending separate acceptance gates; generic Intel rescue ISO is unchanged.
 
 ## First deployment targets
 - **P0:** MacBookAir7,2 (2015/2017 13-inch), then MacBookAir6,2 (2013–2014 13-inch) and 6,1 (11-inch)
@@ -54,6 +54,6 @@ Model IDs, chipset IDs, boot firmware and recovery pathways must be verified on 
 7. Perform a disconnected offline workflow and check local evidence hashes and storage recovery.
 8. Verify a return to macOS. Never publish raw serials, MACs, SSIDs, locations or captures.
 
-The next **repo-only** pass is an independently gated, opt-in field-layer staging design, with fixture tests and a separately authorized Docker ISO build. The existing rescue ISO, UEFI VM and Mac physical gates must remain distinct.
+The opt-in Air edition is now stageable with a separate image builder and has a source fixture test. A distinct GitHub Docker build is underway; its ISO, checksum and EFI-metadata acceptance must be observed before claiming image assembly. The existing rescue ISO, UEFI VM and Mac physical gates must remain distinct.
 
 **Upstream:** [Apple laptop models](https://wiki.archlinux.org/title/Laptop/Apple); [Debian Air6,2](https://wiki.debian.org/InstallingDebianOn/Apple/MacBookAir/6-2); [Air7,2 Arch report](https://github.com/AdhamNasr/MacBookAir-ArchLinux-i3); [Power management](https://wiki.archlinux.org/title/Power_management); [TLP](https://wiki.archlinux.org/title/TLP); [ArchISO](https://wiki.archlinux.org/title/archiso).
