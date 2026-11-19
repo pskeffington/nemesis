@@ -31,7 +31,7 @@ previous=( "$out"/nemesis-*-x86_64.iso )
 (( ${#previous[@]} == 0 )) || die "existing Nemesis ISO in $out; inspect/archive it before rebuilding"
 
 mkdir -p "$root/.build" "$out"
-bash "$root/scripts/prepare-profile.sh" "$edition" "$stage"
+env -u ARCHISO_RELENG_PROFILE bash "$root/scripts/prepare-profile.sh" "$edition" "$stage"
 printf 'Building Nemesis %s from installed archiso releng.\n' "$edition"
 mkarchiso -v -w "$work" -o "$out" "$stage"
 
