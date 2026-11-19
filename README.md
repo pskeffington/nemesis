@@ -50,3 +50,7 @@ Nemesis is not an official Arch Linux or Apple distribution. The repository reta
 ## Experimental theme ISO staging (GitHub CI only)
 
 The separate, opt-in `mac-intel-theme-preview` target adds Nemesis KDE artwork and signed-repository package names without modifying the default rescue ISO. See [theme ISO integration](docs/THEME_ISO_PREVIEW.md) and [non-privileged Docker staging](.github/workflows/theme-iso-stage.yml). A real theme ISO build requires an explicit trusted-main Docker dispatch; boot and graphical login remain untested.
+
+## Nemesis interactive theme controls (optional)
+
+The draft [brand/](brand/) track now includes a Plasma 6 icon/object inspector with eight selectable themed objects, keyboard/mouse feedback, accent and high-focus controls, and reset. Its [Qt6 Docker test](https://github.com/pskeffington/nemesis/actions/runs/44613035058) passed; it is only included in the opt-in `mac-intel-theme-preview` staged image and not in `mac-intel` rescue. Real graphical login, Plasma/Kvantum interaction, themed ISO boot, and Mac hardware remain untested.

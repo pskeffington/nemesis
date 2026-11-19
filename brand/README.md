@@ -34,3 +34,7 @@ The Mac-first ISO can stage an optional KDE preview from this same asset source 
 ## Interactive object inspector (B11)
 
 The [Plasma 6 Theme Inspector](plasmoid/org.nemesis.themecontrols/) makes all eight icon objects interactive inside an opt-in widget: selection, hover, pressed and keyboard focus, cyan/purple accent, strong-focus toggle and functional reset. The widget never issues hardware commands or reads user telemetry. [Object behavior and tests](INTERACTIVE_OBJECTS.md) document the state contract. The Dragonized installer stages the widget under user XDG directories without adding it to a panel; the separate ISO preview copies the same package to /usr/share/plasma/plasmoids.
+
+## B11 source-gate result
+
+The self-contained [interactive Plasma widget](plasmoid/org.nemesis.themecontrols/) and eight icon objects passed [headless Qt6 interaction + ArchISO staging in Docker](https://github.com/pskeffington/nemesis/actions/runs/44613035058). The widget is still a preview requiring explicit addition to a Plasma desktop; no automatic object actions, remote device I/O or system theme switching are enabled.

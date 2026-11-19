@@ -41,3 +41,9 @@ In a noncritical Plasma 6 user session, preview via `plasmoidviewer -a brand/pla
 - KDE Plasma 6 porting: https://develop.kde.org/docs/plasma/widget/porting_kf6/
 - KDE widget testing: https://develop.kde.org/docs/plasma/widget/testing/
 - Qt Quick Controls: https://doc.qt.io/qt-6/qtquickcontrols-index.html
+
+## Source and headless interaction acceptance — 2026-11-19
+
+**ACCEPTED at the source/component gate, not the physical GUI gate.** [GitHub Arch Docker run 44613035058](https://github.com/pskeffington/nemesis/actions/runs/44613035058) installed official Qt 6.12 packages in an ephemeral, unprivileged container, parsed the QML, executed eight interaction assertions (10 total including QtTest lifecycle), and staged the widget/icons into a separate ArchISO profile with unchanged baseline rescue contents. Python tests also verified all eight mirrored SVGs, QML metadata, accessible labels, minimum color contrast and no hidden shell/network/device actions. [Brand fixture CI 44613035166](https://github.com/pskeffington/nemesis/actions/runs/44613035166) passed.
+
+The initial QtTest run failed pointer tests because its `TestCase` root was invisible. The fixture now specifies `visible: true` and retains strict pointer click and intermediate-state assertions; the passing run exercises actual mouse and keyboard events. Do not interpret this as proof of a working Plasma panel or Garuda workstation. Physical review remains in [issue #6](https://github.com/pskeffington/nemesis/issues/6).

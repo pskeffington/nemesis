@@ -65,3 +65,7 @@ References: ArchISO profile schema https://github.com/archlinux/archiso/blob/mas
 The optional `mac-intel-theme-preview` stage also carries the self-contained Plasma 6 applet package `/usr/share/plasma/plasmoids/org.nemesis.themecontrols/` (metadata, three QML source files and eight icon SVGs), plus separately named `nemesis-*.svg` icons under `/usr/share/icons/hicolor/scalable/apps/`. Both are absent from the default mac-intel rescue stage. The widget is **not activated** and no panel, autologin or network service is configured.
 
 The unprivileged Arch Docker test now validates copied source equality for the whole widget; Qt6's headless `qmltestrunner` tests click, keyboard selection, accent and reset behavior. This is a source/package/runtime-component gate, not a successful Plasma shell session or a bootable desktop test. See [object behavior spec](../brand/INTERACTIVE_OBJECTS.md). Hardware and privileged full ISO gates remain unchanged.
+
+## Interactive widget source gate — 2026-11-19
+
+[Unprivileged Docker staging and Qt6 interaction run 44613035058](https://github.com/pskeffington/nemesis/actions/runs/44613035058) **passed**: QML parse, eight functional event tests, Qt Test lifecycle, six independent Python source contracts and source-equivalent `org.nemesis.themecontrols` payload copied into the themed profile. The default `mac-intel` stage contained no interactive applet. The next ISO build-rootfs gate [#14](https://github.com/pskeffington/nemesis/issues/14) is not fulfilled by this container staging pass.
