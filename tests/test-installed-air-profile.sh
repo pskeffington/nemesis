@@ -51,6 +51,7 @@ for unit in sshd.service ModemManager.service; do
     [[ -L "$base_wants/$unit" ]] || die "upstream service entry unexpectedly changed: $unit"
   fi
 done
+[[ "$(readlink "$stage/airootfs/etc/systemd/system/ModemManager.service")" == "/dev/null" ]] || die "ModemManager is not masked"
 for unit in iwd.service systemd-networkd.service; do
   if [[ -L "$base_wants/$unit" ]]; then
     [[ -L "$air_wants/$unit" ]] || die "upstream network service missing: $unit"

@@ -42,6 +42,7 @@ air_wants="$stage/airootfs/etc/systemd/system/multi-user.target.wants"
 [[ ! -e "$air_wants/sshd.service" && ! -L "$air_wants/sshd.service" ]]
 [[ ! -e "$air_wants/ModemManager.service" && ! -L "$air_wants/ModemManager.service" ]]
 [[ -L "$air_wants/iwd.service" && -L "$air_wants/systemd-networkd.service" ]]
+[[ "$(readlink "$stage/airootfs/etc/systemd/system/ModemManager.service")" == "/dev/null" ]]
 [[ -L "$wants/sshd.service" && -L "$wants/ModemManager.service" ]]
 
 [[ "$(grep -xc 'bluez' "$stage/packages.x86_64")" -eq 1 ]]

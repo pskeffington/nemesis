@@ -55,6 +55,16 @@ for unit in sshd.service ModemManager.service; do
   fi
 done
 
+# ModemManager can also be requested by D-Bus despite having no startup
+# symlink. Mask the unit inside the field image so it cannot probe serial
+# peripherals unexpectedly; future approved modem use can deliberately
+# reverse the mask in a separate, device-specific profile.
+unit_dir="$dest/airootfs/etc/systemd/system"
+if [[ -e "$unit_dir/ModemManager.service" || -L "$unit_dir/ModemManager.service" ]]; then
+  die "unexpected pre-existing ModemManager unit in staged Air profile"
+fi
+ln -s /dev/null "$unit_dir/ModemManager.service"
+
 [[ -f "$dest/airootfs/usr/local/bin/nemesis-field-check" ]] || die "readiness tool missing"
 bash -n "$dest/profiledef.sh"
 printf 'Prepared opt-in macbook-air-field profile: %s\n' "$dest"
