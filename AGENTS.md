@@ -5,8 +5,9 @@
 ## Agent dispatch
 - Role index: [agents/README.md](agents/README.md). Roles are written instructions for task delegation, not active background agents.
 - Codex entry: [CODEX_KICKOFF.md](CODEX_KICKOFF.md); [session prompt](codex/SESSION_PROMPT.md); [pass queue](codex/PASS_QUEUE.md).
-- Literature authority: [docs/research/LITERATURE_MATRIX.md](docs/research/LITERATURE_MATRIX.md); [method](docs/research/METHODOLOGY.md); [model candidates](docs/research/INTEL_MAC_CANDIDATES.md).
+- Literature authority: [docs/research/LITERATURE_MATRIX.md](docs/research/LITERATURE_MATRIX.md); [method](docs/research/METHODOLOGY.md); [model candidates](docs/research/INTEL_MAC_CANDIDATES.md); [distro source recon](docs/research/UPSTREAM_DISTRO_RECON.md).
 - One implementation owner/pass. Research and security can independently review but cannot approve unrun build/physical tests.
+- External distro repositories are **read-only references** by default: inspect canonical source/revision, license and targeted paths; reuse a pattern only after an independent Nemesis implementation and test. Never copy a mirror's kernel/package repository by assumption.
 
 ## Hardware scope
 1. **mac-intel**: x86_64 Intel Macs without T2; current *candidate* baseline uses stock installed ArchISO releng.
@@ -31,4 +32,4 @@
 6. Update ROADMAP.md, decisions/matrix as needed, and hand off `Pass | files | command/result | evidence | status | next`.
 7. When blocked, document why and select the highest-priority independent READY pass; do not invent success or skip a failed gate.
 
-Default next work is M01-P02 static/fixture validation, then M02-P01 build and SHA-256 verification on x86_64 Garuda.
+Default active work is M01-P04 native ArchISO packaged-releng staging CI and M01-P02 gate closure, then M02-P01 real ISO build on x86_64 Arch/Garuda. Source recon M01-P03 has been documented.

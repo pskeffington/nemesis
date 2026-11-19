@@ -19,3 +19,16 @@ jobs:
           sudo apt-get install -y shellcheck
       - name: Validate scripts and manifest
         run: bash scripts/validate.sh
+
+  archiso-profile:
+    name: Current packaged ArchISO releng contract
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:base-devel
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v5
+      - name: Install signed ArchISO package
+        run: pacman -Syu --noconfirm --needed archiso
+      - name: Stage official releng with Nemesis overlay
+        run: bash tests/test-installed-releng.sh

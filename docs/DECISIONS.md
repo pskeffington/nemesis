@@ -28,6 +28,20 @@
 
 **Consequence:** record archiso version and resulting ISO SHA for every build; build is currently not bit-for-bit pinned.
 
+## ADR-006 — Compare distro sources without wholesale imports (2026-11-19)
+**Decision:** treat EndeavourOS, CachyOS, Garuda, RebornOS, T2 and Asahi implementations as source-pinned architectural precedents. Keep official ArchISO as Nemesis build substrate. Require license/package trust, CPU baseline and platform-specific review before importing code or dependencies.
+
+**Reason:** related distros solve different installer, performance, boot and firmware constraints. A successful upstream design is not a validated Nemesis component.
+
+**Consequence:** record inspected commit/path, take design patterns rather than blindly copy source, and gate all new components by direct tests. See docs/research/UPSTREAM_DISTRO_RECON.md.
+
+## ADR-007 — Native ArchISO profile compatibility CI (2026-11-19)
+**Decision:** supplement Ubuntu Bash/ShellCheck fixtures with a native Arch Linux container job installing real packaged archiso and staging releng.
+
+**Reason:** a synthetic fixture cannot detect actual upstream boot/profile schema drift. The Arch job is a contract test, not a costly privileged image build.
+
+**Consequence:** keep M02 real mkarchiso and M03 UEFI boot as distinct gates. When upstream releng changes, diagnose and update the staging contract rather than loosening it.
+
 ## ADR-005 — No automatic Mac disk or firmware writes
 **Decision:** building, diagnostics and initial boot acceptance are read-only relative to internal Mac drives. Installer work requires a separate explicit safety review.
 

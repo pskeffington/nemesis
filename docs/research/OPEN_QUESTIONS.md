@@ -12,4 +12,6 @@
 | Q-08 | Source reproducibility | How will input package versions and upstream profile revision be captured and release-locked? | ARC-01..05 | build-qa-engineer | Emit manifest, package lock evidence and provenance | READY |
 | Q-09 | Hardware privacy | Can diagnostic logs be reduced to non-identifying IDs before contributing to compatibility table? | methodology | security-release-reviewer | Redaction review and a safe recording template | READY |
 
+Additional recon issues: **Q-10 (upstream contract):** does installed releng on current signed ArchISO retain EFI/syslinux/grub semantics after Nemesis staging? Owner build-qa-engineer, next `tests/test-installed-releng.sh` in Arch CI. **Q-11 (release reproducibility):** which extra package/boot artifact manifests and signing chain are required beyond a portable ISO SHA-256? Owner security-release-reviewer; defer until M02.
+
 Update the decision in docs/DECISIONS.md before turning a research idea into a build dependency. **No Q item is an accepted hardware result.**

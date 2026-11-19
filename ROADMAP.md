@@ -8,7 +8,7 @@ Statuses: `NOT STARTED`, `READY`, `IN PROGRESS`, `BLOCKED`, `REVIEW`, `ACCEPTED`
 | --- | --- | --- | --- |
 | M00 | Repository/authority baseline inspected | Existing main branch | ACCEPTED — 2026-11-19 repo inspection |
 | M01 | Mac-first architecture, research matrix, roles, Codex instructions and source validation | M00 | IN PROGRESS — CI static passed; installed Arch profile and ISO not yet exercised |
-| M02 | Arch/Garuda x86_64 mkarchiso creates verified ISO with provenance | M01 static gate | NOT STARTED |
+| M02 | Arch/Garuda x86_64 mkarchiso creates verified ISO with provenance | M01 installed-profile gate | NOT STARTED |
 | M03 | ISO boots to live shell under x86_64 OVMF/UEFI QEMU | M02 | NOT STARTED |
 | M04 | Real non-T2 Intel Mac external boot, per-device functional tests and recovery | M03, test Mac | BLOCKED on physical test model |
 | M05 | Safe KDE/accessible desktop and installer with Mac recovery plan | M04 | DEFERRED |
@@ -16,11 +16,14 @@ Statuses: `NOT STARTED`, `READY`, `IN PROGRESS`, `BLOCKED`, `REVIEW`, `ACCEPTED`
 | M07 | Separate Apple Silicon ARM64 boot-design feasibility | Asahi upstream + model-specific device | DEFERRED |
 | M08 | Optional field/RF/security editions, without inflating core | M05 | DEFERRED |
 
-## Active pass: M01-P02 — installed ArchISO profile acceptance
-- **Owner:** build-qa-engineer. **Inputs:** ARC-01..05, installed ArchISO or minimal fixture, current scripts.
-- **Tasks:** Ubuntu CI Bash/ShellCheck/fixtures succeeded; now inspect and stage the *installed* ArchISO releng profile on Garuda, compare package/boot files, and record actual host evidence.
+## Completed research: M01-P03 — upstream distro repo reconnaissance
+- **Owner:** upstream-distro-recon. **Evidence:** `docs/research/UPSTREAM_DISTRO_RECON.md` records eight source-pinned GitHub repos (plus Garuda canonical GitLab profiles), source paths, license findings, adoption/rejection decisions and CI implementation rationale. **Status:** ACCEPTED as research, not code/hardware execution.
+
+## Active pass: M01-P04 — native ArchISO profile acceptance
+- **Owner:** build-qa-engineer. **Inputs:** ARC-01..05 and UP-01..05, installed signed ArchISO package, current scripts.
+- **Tasks:** Ubuntu CI Bash/ShellCheck/fixtures succeeded. Add native Arch container staging with real packaged releng; compare boot folders, pacman.conf, profile identity and package uniqueness. Repeat on local Garuda where possible.
 - **Deliverables:** `scripts/validate.sh` evidence, test scripts, repair commits if needed.
-- **Gate:** CI and real Arch/Garuda releng staging checks recorded; CI fixtures alone are insufficient for full M01 acceptance.
+- **Gate:** current GitHub native Arch CI green with official releng version/hash recorded; current static CI green. Local Garuda build and full mkarchiso remain M02 separately.
 - **Failure/rollback:** preserve worktree/evidence, fix one defect and rerun; no Mac disk operations.
 
 ## Next pass: M02-P01 — first real Intel ISO
@@ -50,6 +53,7 @@ Statuses: `NOT STARTED`, `READY`, `IN PROGRESS`, `BLOCKED`, `REVIEW`, `ACCEPTED`
 ## Evidence register
 - **2026-11-19:** Found existing README + GPL-3.0; committed Mac-first scaffold at `4186a95de37007e9bbe9187d1dc222177f14012a`.
 - **2026-11-19:** Reviewed upstream ArchISO, ArchWiki, t2linux, Asahi and Apple documentation; matrix is *source evidence only*.
+- **2026-11-19:** Recon compared ArchISO, EndeavourOS, CachyOS, RebornOS, t2linux T2 images and Asahi installer at pinned GitHub HEADs, plus Garuda canonical ISO profiles on GitLab. Source patterns added; no foreign code or unreviewed package repositories imported.
 - **2026-11-19:** Static CI succeeded at https://github.com/pskeffington/nemesis/actions/runs/44602678472 (Bash syntax, ShellCheck, package checks, fixture staging, SHA-256 and corruption test). Original failures uncovered a quoting warning and an associative-array fixture mismatch; both repaired. Real Arch releng staging still PENDING.
 - **Still pending:** staging against installed ArchISO on x86_64 Garuda, actual ISO build, OVMF boot log and any physical Mac test. Tracking issues: [M01-P02](https://github.com/pskeffington/nemesis/issues/1), [M02-P01](https://github.com/pskeffington/nemesis/issues/2), [M03-P01](https://github.com/pskeffington/nemesis/issues/3), [M04-P01](https://github.com/pskeffington/nemesis/issues/4).
 

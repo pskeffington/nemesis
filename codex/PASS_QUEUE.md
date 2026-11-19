@@ -5,12 +5,20 @@ Every pass has one implementing owner and one observable gate. Sources refer to 
 | Pass | Owner | Inputs | Deliverable | Acceptance | Status |
 | --- | --- | --- | --- | --- | --- |
 | M01-P02 | build-qa-engineer | Existing scaffold, ARC-01..05 | verified staging/manifest tests, CI lint results | CI fixture checks passed; installed Arch profile staging remains | REVIEW |
+| M01-P03 | upstream-distro-recon | canonical upstream repo heads/readmes/build sources | source-pinned [upstream repo matrix](../docs/research/UPSTREAM_DISTRO_RECON.md), risk/adoption decisions | source review documented, no execution claims | ACCEPTED (source research) |
+| M01-P04 | build-qa-engineer | official installed ArchISO releng, GitHub CI | actual packaged-profile staging job | boot folders unchanged, profile eval and package delta checked | IN PROGRESS |
 | M02-P01 | archiso-build-engineer | M01-P02, Arch/Garuda x86_64, network | ISO, SHA-256, build manifest/log | real mkarchiso exit 0 and checksum verified | NOT STARTED |
 | M03-P01 | uefi-boot-validator | M02-P01, QEMU/OVMF | firmware-to-live-shell boot record | live shell and diagnostics observed | NOT STARTED |
 | M04-P01 | intel-mac-compatibility | M03-P01 and non-T2 Intel Mac | physical device-compatibility sheet | external boot, no internal writes, return to macOS | BLOCKED on physical host |
 | M05-P01 | distro-architect | M04-P01 | desktop/installer scoped ADR | selected installer safety and rollback reviewed | DEFERRED |
 | M06-P01 | t2-platform-engineer | T2 research matrix and trusted package sources | T2 feasibility/security ADR | driver and signature provenance reviewed | DEFERRED |
 | M07-P01 | asahi-platform-engineer | ARM rows and selected M-series Mac | separate ARM boot/installer ADR | boot-policy/recovery design approved | DEFERRED |
+
+## M01-P04 — packaged-releng compatibility gate
+1. On an actual Arch x86_64 host with signed archiso package, run `bash tests/test-installed-releng.sh`.
+2. CI container must install `archiso` and stage its real releng profile; compare source versus staged EFI/syslinux/grub files, `pacman.conf`, package uniqueness and executable overlay.
+3. Record ArchISO package version, source-profile hash, CI job URL and failures. Do not claim full ISO or Mac boot.
+4. Accept after green current-head Arch CI; if it fails, repair source instead of disabling the contract.
 
 ## M01-P02 — validate current scaffold
 1. Run `git status --short`, inspect all scripts/manifest and installed archiso releng. Do not overwrite user changes.

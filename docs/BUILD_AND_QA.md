@@ -14,6 +14,9 @@ sudo bash scripts/build-iso.sh mac-intel
 
 Validation includes Bash syntax, package manifest checks, ShellCheck (when installed), a **fixture releng profile staging test** and a **relative SHA-256 portability/corruption test**. If ShellCheck is unavailable, the script says NOT RUN; the complete static gate has not passed.
 
+## Installed ArchISO staging CI
+GitHub Actions runs a second `archlinux:base-devel` container job, installs the signed `archiso` package, and executes `bash tests/test-installed-releng.sh`. The test checks the actual releng `profiledef.sh`, Boot folders, package uniqueness, copied pacman configuration and executable overlay. **This job does not run mkarchiso or produce an ISO.** Local Garuda staging can be checked with the same script.
+
 ## Profile staging, isolation and root safety
 - Normal builder copies `/usr/share/archiso/configs/releng` into ignored `.build/profile-mac-intel` and leaves ArchISO's installed files untouched.
 - `ARCHISO_RELENG_PROFILE` override is used **only by trusted fixtures** in tests. Real builds use installed releng; don't pass unreviewed profile trees to a root process.
