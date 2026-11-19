@@ -1,0 +1,115 @@
+{
+  "contract_version": 1,
+  "mode": "repo-foundation",
+  "applied_by_builder": false,
+  "default_release_enabled": false,
+  "default_package_source": "official-signed-arch",
+  "composition_policy": {
+    "ordering": "upstream-first-then-layer-order",
+    "duplicates": "deduplicate-exact-package-name",
+    "unknown_upstream_overlaps": "resolved-at-profile-staging-only",
+    "declared_conflicts": "fail-closed-requires-adjudication",
+    "optional_layers": "excluded-from-intel-live-by-default",
+    "AUR_in_core": false,
+    "signed_repositories_required": true,
+    "auto_enable_hardware_drivers": false,
+    "automatic_firmware_extraction": false,
+    "do_not_modify_upstream_profile": true
+  },
+  "layers": [
+    {
+      "id": "arch-releng",
+      "order": 0,
+      "depends_on": [],
+      "origin": "signed-upstream",
+      "status": "external-upstream",
+      "manifest": null,
+      "optional": false,
+      "selected_in_active_scaffold": true,
+      "license_status": "upstream-own-licenses"
+    },
+    {
+      "id": "intel-hardware-overlay",
+      "order": 10,
+      "depends_on": [
+        "arch-releng"
+      ],
+      "origin": "official-arch-delta",
+      "status": "scaffold-committed",
+      "manifest": "profiles/mac-intel/packages.x86_64",
+      "optional": false,
+      "selected_in_active_scaffold": true,
+      "license_status": "evaluate-packages-individually"
+    },
+    {
+      "id": "mac-desktop-kde",
+      "order": 20,
+      "depends_on": [
+        "intel-hardware-overlay"
+      ],
+      "origin": "proposed-official-arch",
+      "status": "design-only",
+      "manifest": null,
+      "optional": true,
+      "selected_in_active_scaffold": false,
+      "license_status": "unreviewed"
+    },
+    {
+      "id": "field-operator",
+      "order": 30,
+      "depends_on": [
+        "mac-desktop-kde"
+      ],
+      "origin": "proposed-reviewed-packages",
+      "status": "design-only",
+      "manifest": null,
+      "optional": true,
+      "selected_in_active_scaffold": false,
+      "license_status": "unreviewed"
+    },
+    {
+      "id": "t2-support",
+      "order": 10,
+      "depends_on": [],
+      "origin": "separate-t2-source-under-review",
+      "status": "research-only",
+      "manifest": null,
+      "optional": true,
+      "selected_in_active_scaffold": false,
+      "license_status": "review-required"
+    },
+    {
+      "id": "asahi-platform",
+      "order": 10,
+      "depends_on": [],
+      "origin": "separate-arm64-source-under-review",
+      "status": "research-only",
+      "manifest": null,
+      "optional": true,
+      "selected_in_active_scaffold": false,
+      "license_status": "review-required"
+    }
+  ],
+  "platform_exclusions": {
+    "intel-non-t2": [
+      "t2-support",
+      "asahi-platform"
+    ],
+    "intel-t2": [
+      "intel-hardware-overlay",
+      "asahi-platform"
+    ],
+    "apple-silicon": [
+      "arch-releng",
+      "intel-hardware-overlay",
+      "t2-support"
+    ]
+  },
+  "unreviewed_exceptions": [],
+  "implemented_merge": {
+    "profile": "mac-intel",
+    "current_script": "scripts/prepare-profile.sh",
+    "accepted_semantics": "upstream-package-order-preserved-with-exact-name-dedup",
+    "future_resolver_authorized": false
+  }
+}

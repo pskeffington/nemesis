@@ -14,4 +14,4 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v5
       - name: Validate declarative edition and platform model
-        run: python3 -m unittest discover -s tests -p 'test_foundation.py' -v
+        run: python3 -m unittest discover -s tests -p 'test_*.py' -v
