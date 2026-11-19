@@ -10,6 +10,7 @@ TestCase {
     id: suite
     name: "NemesisObjectInteractivity"
     when: windowShown
+    visible: true
     width: 620
     height: 590
 
@@ -24,7 +25,6 @@ TestCase {
     }
 
     function clickControl(control) {
-        console.log("TEST HIT", control.text, "visible", control.visible, "size", control.width, control.height, "position", control.x, control.y, "board", board.width, board.height, "suite", suite.width, suite.height)
         verify(control.visible && control.width > 20 && control.height > 20)
         mouseMove(control, control.width / 2, control.height / 2)
         wait(8)
