@@ -40,7 +40,7 @@ class DragonizedDeployTests(unittest.TestCase):
         self.assertTrue((self.data/'plasma/desktoptheme/Nemesis/metadata.json').is_file())
         self.assertTrue((self.data/'wallpapers/Nemesis/signal-dusk.svg').is_file())
         self.run_cli('install')
-        self.assertIn('Managed assets: 7', self.run_cli('status').stdout)
+        self.assertIn('Managed assets: 27', self.run_cli('status').stdout)
         self.run_cli('uninstall')
         self.assertFalse((self.data/'color-schemes/Nemesis.colors').exists())
 
@@ -174,6 +174,16 @@ class DragonizedOperabilityTests(unittest.TestCase):
         config.write_text('[Containments][1]\nImage=file:///home/example/.local/share/wallpapers/Nemesis/signal-dusk-3840x2160.png\n')
         self.run_cli('uninstall', ok=False)
         self.assertTrue((self.data/'wallpapers/Nemesis/signal-dusk.svg').is_file())
+        config.unlink()
+        self.run_cli('uninstall')
+
+
+    def test_selected_plasmoid_blocks_uninstall(self):
+        self.run_cli('install')
+        config = self.config/'plasma-org.kde.plasma.desktop-appletsrc'
+        config.write_text('[Containments][1][Applets][2]\nplugin=org.nemesis.themecontrols\n')
+        self.run_cli('uninstall', ok=False)
+        self.assertTrue((self.data/'plasma/plasmoids/org.nemesis.themecontrols/metadata.json').exists())
         config.unlink()
         self.run_cli('uninstall')
 

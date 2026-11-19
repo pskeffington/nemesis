@@ -23,3 +23,20 @@ Inter Display/Inter or openly licensed substitutes for UI, and normal system mon
 - Wallpapers must remain usable behind windows and dock; do not upscale tiny card previews as a substitute for a 4K illustration master.
 - No implied affiliation with films, games, military organizations, or third-party trademarks.
 - A desktop mockup cannot serve as proof of a real installed KDE theme, an ISO boot, or Mac device compatibility.
+
+## Object state and accessible interaction contract
+
+The eight brand icon masters (terminal, radio, database, location, drone, satellite, headphones and shield) are reused *byte-for-byte* in the Plasma Theme Inspector. Each is a selectable preview object, **not a shortcut to operate equipment**.
+
+| State | Observable treatment |
+|---|---|
+| Idle | dark surface (#1B2230), muted border, visible icon and label |
+| Hover | brighter navy surface, cyan border |
+| Selected | violet surface and 2px primary/accent stroke; detail text changes |
+| Pressed | darker plum surface, immediate feedback |
+| Keyboard focus | 3px focus outline, 4px when strong focus enabled |
+| Disabled | dimmed opacity while retaining label and semantic Button state |
+| Alternate accent | cyan replaces purple selected/focus outlines |
+| Reset | restores terminal, primary violet and normal focus |
+
+Qt Quick Controls handle mouse/touch/keyboard activation. Every object has text and an accessible label; contrast and source-integrity checks run in CI. Avoid flashing animations or interaction that silently launches external processes; support reduced-motion users by keeping state changes immediate. Live Plasma rendering and HiDPI remain a separate physical acceptance gate.

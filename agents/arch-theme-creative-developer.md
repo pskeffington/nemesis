@@ -20,3 +20,7 @@ Use `brand/DRAGONIZED_TESTING.md` for the phase-specific runbook. Maintain Pytho
 ## B06-P04 operability responsibility
 
 Use brand/OPERABILITY.md as the test-machine entry point. Validate independent apply/restore of colors and Plasma Style, read-only doctor, collision and tampered-state defenses, and in-use asset protection. Fixture test completion is not a substitute for the Garuda/Kvantum physical validation checklist in issue #6.
+
+## B11 interactive-object pass
+
+Keep `brand/icons/` as the canonical SVG set; the eight bundled applet images must be byte-identical. Implement interactive states in Qt Quick Controls with keyboard navigation and accessible names. Keep `org.nemesis.themecontrols` as a preview-only Plasma 6 widget with no shell commands, network, automatic telemetry, or hardware actions. Staging in Dragonized or ArchISO must be opt-in and reversible; desktop panels and global themes cannot be changed automatically. Require headless Qt6 QML tests, icon/metadata checks, and real Plasma evidence before visual acceptance.

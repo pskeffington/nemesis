@@ -61,3 +61,13 @@ The physical Dr460nized test is **NOT ACCEPTED**; [B06-P03 issue #6](https://git
 ## B10 / F06-ISO-01 — Stage Nemesis assets into an opt-in Intel ArchISO variant
 
 **Status: REVIEW** pending unprivileged Arch Docker source-staging CI. The build variant keeps the default mac-intel rescue image unmodified while installing KDE colors/Plasma Style/Konsole wallpaper and optional package names to its own staging tree. Source: `scripts/prepare-theme-profile.sh`, `profiles/mac-intel-theme-preview/`, `tests/test-theme-iso-staging.sh`; details [theme integration](../docs/THEME_ISO_PREVIEW.md). Trusted-main manual Docker mkarchiso, GUI login and real Mac boot remain separate unaccepted gates. Explicit fallback is baseline `mac-intel`; do not merge the existing draft brand PR without review.
+
+## B11-P01 — Eight Nemesis objects with real interactive states
+
+**Purpose:** Convert the existing eight SVG source icons into a reusable Qt Quick Controls object system rather than merely displaying static mockups.
+
+**Owner:** Arch Theme Creative Developer; peer review by build-qa-engineer. **Artifacts:** `brand/plasmoid/org.nemesis.themecontrols/`, canonical `brand/icons/`, `tests/qml/tst_theme_board.qml`, `tests/test_theme_interactivity.py`, `brand/INTERACTIVE_OBJECTS.md`.
+
+**Functional scope:** eight objects, mouse/touch and Space/Return activation through Qt Quick Controls, visible selected/hover/pressed/focus states, cyan/purple selection and strong focus adjustments, text description updates and reset. Actual remote/hardware/backend operations deliberately excluded.
+
+**Docker gates:** Qt6 QML syntax parsing, headless Qt Quick Test interaction checks, XML/metadata/color contrast source checks, and packaged ArchISO asset checks. **Status:** IN PROGRESS until CI evidence is observed. UI on an actual Dragonized Plasma session, Kvantum integration, and real ISO boot remain REVIEW/NOT TESTED under issues #6 and #14. Rollback: remove the opt-in widget after removing it from Plasma panels or revert B11 source; baseline mac-intel rescue stays unchanged.

@@ -4,12 +4,16 @@ on:
     paths:
       - 'brand/**'
       - 'tests/test_dragonized.py'
+      - 'tests/test_theme_interactivity.py'
+      - 'tests/qml/**'
       - '.github/workflows/brand.yml'
       - 'agents/arch-theme-creative-developer.md'
   pull_request:
     paths:
       - 'brand/**'
       - 'tests/test_dragonized.py'
+      - 'tests/test_theme_interactivity.py'
+      - 'tests/qml/**'
       - '.github/workflows/brand.yml'
 jobs:
   brand-fixtures:
@@ -23,6 +27,8 @@ jobs:
           if command -v shellcheck >/dev/null 2>&1; then shellcheck brand/scripts/dragonized.sh; fi
       - name: Fixture deployment and rollback checks
         run: python3 -m unittest discover -s tests -p test_dragonized.py -v
+      - name: Interactive icon and widget source contracts
+        run: python3 -m unittest discover -s tests -p test_theme_interactivity.py -v
       - name: Verify SVG and Plasma metadata
         run: |
           python3 - <<'PY'

@@ -20,6 +20,7 @@ env -u ARCHISO_RELENG_PROFILE bash "$root/scripts/prepare-theme-profile.sh" "$th
 
 # Default rescue is unchanged; preview has a distinct label and asset set.
 [[ ! -e "$base/airootfs/usr/share/color-schemes/Nemesis.colors" ]] || die "default ISO includes theme"
+[[ ! -e "$base/airootfs/usr/share/plasma/plasmoids/org.nemesis.themecontrols" ]] || die "default ISO includes interactive widget"
 grep -Fxq 'iso_name="nemesis"' "$base/profiledef.sh" || die "default name modified"
 grep -Fxq 'iso_name="nemesis-theme"' "$themed/profiledef.sh" || die "preview ISO name missing"
 grep -Fxq 'iso_label="NEMTHEME_PREVIEW"' "$themed/profiledef.sh" || die "preview ISO label missing"
@@ -42,6 +43,19 @@ for src_dst in \
   dst="$(printf '%s' "$src_dst" | cut -d: -f2)"
   cmp -s "$root/$src" "$themed/airootfs/$dst" || die "asset differs: $dst"
 done
+# Verify real applet package and eight icon objects after profile staging.
+widget="$root/brand/plasmoid/org.nemesis.themecontrols"
+target="$themed/airootfs/usr/share/plasma/plasmoids/org.nemesis.themecontrols"
+cmp -s "$widget/metadata.json" "$target/metadata.json" || die "widget metadata differs"
+for qml in main.qml ModeBoard.qml IconTile.qml; do
+  cmp -s "$widget/contents/ui/$qml" "$target/contents/ui/$qml" || die "QML differs: $qml"
+done
+for icon in terminal radio database location drone satellite headphones shield; do
+  cmp -s "$root/brand/icons/$icon.svg" "$target/contents/images/$icon.svg" || die "widget SVG differs: $icon"
+  cmp -s "$root/brand/icons/$icon.svg" "$themed/airootfs/usr/share/icons/hicolor/scalable/apps/nemesis-$icon.svg" || die "desktop SVG differs: $icon"
+done
+python3 -c 'import json,sys; m=json.load(open(sys.argv[1])); assert m["KPackageStructure"]=="Plasma/Applet" and m["X-Plasma-API-Minimum-Version"]=="6.0"' "$target/metadata.json" || die "widget is not marked Plasma 6 compatible"
+
 png="$themed/airootfs/usr/share/wallpapers/Nemesis/contents/images/3840x2160.png"
 [[ -s "$png" ]] || die "missing rendered wallpaper"
 file -b "$png" | grep -Fq 'PNG image data, 3840 x 2160' || die "invalid 4K PNG"

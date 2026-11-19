@@ -12,6 +12,8 @@ on:
       - 'scripts/prepare-profile.sh'
       - 'scripts/build-iso.sh'
       - 'tests/test-theme-iso-staging.sh'
+      - 'tests/qml/**'
+      - 'tests/test_theme_interactivity.py'
   pull_request:
     paths:
       - '.github/workflows/theme-iso-stage.yml'
@@ -21,6 +23,8 @@ on:
       - 'scripts/prepare-profile.sh'
       - 'scripts/build-iso.sh'
       - 'tests/test-theme-iso-staging.sh'
+      - 'tests/qml/**'
+      - 'tests/test_theme_interactivity.py'
 
 permissions:
   contents: read
@@ -44,6 +48,11 @@ jobs:
             --volume "$PWD:/workspace:ro" --workdir /workspace \
             archlinux:base-devel \
             bash -euo pipefail -c '
-              pacman -Sy --noconfirm --needed archiso librsvg file python diffutils
+              pacman -Sy --noconfirm --needed archiso librsvg file python diffutils qt6-declarative qt6-svg
+              python3 -m unittest discover -s tests -p test_theme_interactivity.py -v
+              for qml in brand/plasmoid/org.nemesis.themecontrols/contents/ui/*.qml tests/qml/*.qml; do
+                /usr/lib/qt6/bin/qmlformat "$qml" >/dev/null
+              done
+              QT_QPA_PLATFORM=offscreen QT_QUICK_BACKEND=software /usr/lib/qt6/bin/qmltestrunner -input tests/qml -platform offscreen
               bash tests/test-theme-iso-staging.sh
             '

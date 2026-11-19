@@ -8,7 +8,9 @@ for path in /usr/share/color-schemes/Nemesis.colors \
   /usr/share/konsole/Nemesis.colorscheme \
   /usr/share/plasma/desktoptheme/Nemesis/metadata.json \
   /usr/share/icons/hicolor/scalable/apps/nemesis.svg \
-  /usr/share/wallpapers/Nemesis/contents/images/3840x2160.png; do
+  /usr/share/wallpapers/Nemesis/contents/images/3840x2160.png \
+  /usr/share/plasma/plasmoids/org.nemesis.themecontrols/metadata.json \
+  /usr/share/icons/hicolor/scalable/apps/nemesis-radio.svg; do
   if [[ -r "$path" ]]; then
     printf 'PRESENT %s\n' "$path"
   else

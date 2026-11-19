@@ -30,3 +30,7 @@ For per-user deployment on Garuda Dr460nized, follow [OPERABILITY.md](OPERABILIT
 ## Experimental ISO artwork staging
 
 The Mac-first ISO can stage an optional KDE preview from this same asset source under the **separate** `mac-intel-theme-preview` build target. See [ISO overlay and Docker test policy](../docs/THEME_ISO_PREVIEW.md). The base rescue image remains unthemed, and only GitHub-hosted Docker tests are authorized; no boot, graphical login, or physical Mac success is implied.
+
+## Interactive object inspector (B11)
+
+The [Plasma 6 Theme Inspector](plasmoid/org.nemesis.themecontrols/) makes all eight icon objects interactive inside an opt-in widget: selection, hover, pressed and keyboard focus, cyan/purple accent, strong-focus toggle and functional reset. The widget never issues hardware commands or reads user telemetry. [Object behavior and tests](INTERACTIVE_OBJECTS.md) document the state contract. The Dragonized installer stages the widget under user XDG directories without adding it to a panel; the separate ISO preview copies the same package to /usr/share/plasma/plasmoids.

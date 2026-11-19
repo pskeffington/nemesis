@@ -29,6 +29,18 @@ for source in \
   [[ -f "$source" && ! -L "$source" ]] || die "missing or linked source: $source"
 done
 
+# Verify the standalone applet and all eight icons before touching a stage.
+widget="$root/brand/plasmoid/org.nemesis.themecontrols"
+[[ -f "$widget/metadata.json" && ! -L "$widget/metadata.json" ]] || die "missing Plasma 6 widget metadata"
+for qml in main.qml ModeBoard.qml IconTile.qml; do
+  [[ -f "$widget/contents/ui/$qml" && ! -L "$widget/contents/ui/$qml" ]] || die "missing QML component: $qml"
+done
+for icon in terminal radio database location drone satellite headphones shield; do
+  [[ -f "$root/brand/icons/$icon.svg" && ! -L "$root/brand/icons/$icon.svg" ]] || die "missing canonical icon: $icon"
+  [[ -f "$widget/contents/images/$icon.svg" && ! -L "$widget/contents/images/$icon.svg" ]] || die "missing bundled icon: $icon"
+  cmp -s "$root/brand/icons/$icon.svg" "$widget/contents/images/$icon.svg" || die "icon source/mirror divergence: $icon"
+done
+
 # The inherited releng override is for trusted CI fixtures only.
 # Production callers must unset ARCHISO_RELENG_PROFILE.
 bash "$root/scripts/prepare-profile.sh" mac-intel "$dest"
@@ -61,6 +73,15 @@ add_asset "$root/brand/theme/plasma/Nemesis/metadata.json" usr/share/plasma/desk
 add_asset "$root/brand/theme/plasma/Nemesis/colors" usr/share/plasma/desktoptheme/Nemesis/colors
 add_asset "$root/brand/theme/plasma/Nemesis/plasmarc" usr/share/plasma/desktoptheme/Nemesis/plasmarc
 add_asset "$root/brand/identity/nemesis_emblem.svg" usr/share/icons/hicolor/scalable/apps/nemesis.svg
+# Standalone Plasma 6 widget and themed application icons. Nothing is activated.
+add_asset "$widget/metadata.json" usr/share/plasma/plasmoids/org.nemesis.themecontrols/metadata.json
+for qml in main.qml ModeBoard.qml IconTile.qml; do
+  add_asset "$widget/contents/ui/$qml" "usr/share/plasma/plasmoids/org.nemesis.themecontrols/contents/ui/$qml"
+done
+for icon in terminal radio database location drone satellite headphones shield; do
+  add_asset "$root/brand/icons/$icon.svg" "usr/share/icons/hicolor/scalable/apps/nemesis-$icon.svg"
+  add_asset "$widget/contents/images/$icon.svg" "usr/share/plasma/plasmoids/org.nemesis.themecontrols/contents/images/$icon.svg"
+done
 add_asset "$root/brand/theme/wallpaper/Nemesis/metadata.json" usr/share/wallpapers/Nemesis/metadata.json
 add_asset "$root/brand/wallpapers/signal-dusk.svg" usr/share/nemesis/brand/signal-dusk.svg
 add_asset "$root/LICENSE" usr/share/licenses/nemesis-theme-preview/LICENSE

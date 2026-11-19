@@ -36,6 +36,26 @@ SOURCES = {
     "plasma/desktoptheme/Nemesis/colors": ROOT / "brand/theme/plasma/Nemesis/colors",
     "plasma/desktoptheme/Nemesis/plasmarc": ROOT / "brand/theme/plasma/Nemesis/plasmarc",
     "icons/hicolor/scalable/apps/nemesis.svg": ROOT / "brand/identity/nemesis_emblem.svg",
+    "plasma/plasmoids/org.nemesis.themecontrols/metadata.json": ROOT / "brand/plasmoid/org.nemesis.themecontrols/metadata.json",
+    "plasma/plasmoids/org.nemesis.themecontrols/contents/ui/main.qml": ROOT / "brand/plasmoid/org.nemesis.themecontrols/contents/ui/main.qml",
+    "plasma/plasmoids/org.nemesis.themecontrols/contents/ui/ModeBoard.qml": ROOT / "brand/plasmoid/org.nemesis.themecontrols/contents/ui/ModeBoard.qml",
+    "plasma/plasmoids/org.nemesis.themecontrols/contents/ui/IconTile.qml": ROOT / "brand/plasmoid/org.nemesis.themecontrols/contents/ui/IconTile.qml",
+    "plasma/plasmoids/org.nemesis.themecontrols/contents/images/terminal.svg": ROOT / "brand/plasmoid/org.nemesis.themecontrols/contents/images/terminal.svg",
+    "plasma/plasmoids/org.nemesis.themecontrols/contents/images/radio.svg": ROOT / "brand/plasmoid/org.nemesis.themecontrols/contents/images/radio.svg",
+    "plasma/plasmoids/org.nemesis.themecontrols/contents/images/database.svg": ROOT / "brand/plasmoid/org.nemesis.themecontrols/contents/images/database.svg",
+    "plasma/plasmoids/org.nemesis.themecontrols/contents/images/location.svg": ROOT / "brand/plasmoid/org.nemesis.themecontrols/contents/images/location.svg",
+    "plasma/plasmoids/org.nemesis.themecontrols/contents/images/drone.svg": ROOT / "brand/plasmoid/org.nemesis.themecontrols/contents/images/drone.svg",
+    "plasma/plasmoids/org.nemesis.themecontrols/contents/images/satellite.svg": ROOT / "brand/plasmoid/org.nemesis.themecontrols/contents/images/satellite.svg",
+    "plasma/plasmoids/org.nemesis.themecontrols/contents/images/headphones.svg": ROOT / "brand/plasmoid/org.nemesis.themecontrols/contents/images/headphones.svg",
+    "plasma/plasmoids/org.nemesis.themecontrols/contents/images/shield.svg": ROOT / "brand/plasmoid/org.nemesis.themecontrols/contents/images/shield.svg",
+    "icons/hicolor/scalable/apps/nemesis-terminal.svg": ROOT / "brand/icons/terminal.svg",
+    "icons/hicolor/scalable/apps/nemesis-radio.svg": ROOT / "brand/icons/radio.svg",
+    "icons/hicolor/scalable/apps/nemesis-database.svg": ROOT / "brand/icons/database.svg",
+    "icons/hicolor/scalable/apps/nemesis-location.svg": ROOT / "brand/icons/location.svg",
+    "icons/hicolor/scalable/apps/nemesis-drone.svg": ROOT / "brand/icons/drone.svg",
+    "icons/hicolor/scalable/apps/nemesis-satellite.svg": ROOT / "brand/icons/satellite.svg",
+    "icons/hicolor/scalable/apps/nemesis-headphones.svg": ROOT / "brand/icons/headphones.svg",
+    "icons/hicolor/scalable/apps/nemesis-shield.svg": ROOT / "brand/icons/shield.svg",
     "wallpapers/Nemesis/signal-dusk.svg": ROOT / "brand/wallpapers/signal-dusk.svg",
 }
 WALLPAPER_KEY = "wallpapers/Nemesis/signal-dusk-3840x2160.png"
@@ -144,6 +164,14 @@ def has_active_wallpaper() -> bool:
         return False
     data = path.read_text(encoding="utf-8", errors="replace")
     return "signal-dusk-3840x2160.png" in data or "wallpapers/Nemesis/signal-dusk.svg" in data
+
+
+def has_active_plasmoid() -> bool:
+    """Protect an applet still selected on the user's Plasma desktop/panel."""
+    path = CONFIG / "plasma-org.kde.plasma.desktop-appletsrc"
+    if not path.is_file():
+        return False
+    return "org.nemesis.themecontrols" in path.read_text(encoding="utf-8", errors="replace")
 
 
 def has_active_konsole_scheme() -> bool:
@@ -343,6 +371,8 @@ def uninstall() -> None:
             raise RuntimeError(f"Refusing to remove modified file: {target}")
     if current_style() == STYLE and not state.get("style_applied"):
         raise RuntimeError("Nemesis Plasma Style is active without a recorded backup; switch to your prior style first")
+    if has_active_plasmoid():
+        raise RuntimeError("Nemesis Theme Inspector is active; remove it from desktop/panel before uninstall")
     if has_active_wallpaper():
         raise RuntimeError("Nemesis wallpaper is selected; choose another wallpaper before uninstall")
     if has_active_konsole_scheme():
@@ -440,6 +470,7 @@ def doctor() -> None:
     print(f"KDE color: {current_scheme() or 'unknown'} | Plasma Style: {current_style() or 'unknown'}")
     print(f"Owned files: {len(state['managed'])} | colors applied: {state.get('applied')} | style applied: {state.get('style_applied')}")
     print(f"Plasma wallpaper using Nemesis: {has_active_wallpaper()}")
+    print(f"Plasma widget using Nemesis: {has_active_plasmoid()}")
     print(f"Konsole profile using Nemesis: {has_active_konsole_scheme()}")
     problems = []
     for relpath, src in SOURCES.items():

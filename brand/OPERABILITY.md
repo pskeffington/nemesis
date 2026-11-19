@@ -67,3 +67,13 @@ Check the console and actual Plasma UI before/after applying and after relogin: 
 **Static fixture checks do not establish live KDE acceptance.** Track the remaining physical gate in https://github.com/pskeffington/nemesis/issues/6 and do not merge draft PR #5 until evidence is reviewed.
 
 References: https://develop.kde.org/docs/plasma/theme/theme-details/ and https://wiki.garudalinux.org/en/customization/dr460nized/
+
+## Interactive Plasma object test (optional)
+
+The theme installer now stages `org.nemesis.themecontrols` (Plasma 6 metadata and QML) and eight extra hicolor SVG icons. This is an **inspectable theme preview**, not an operator-control dashboard.
+
+After installing the theme with `bash brand/scripts/dragonized.sh install`, a user in a Plasma 6 test session can choose **Add Widgets → Nemesis Theme Inspector** and inspect selection, hover, focus, accent, reset, keyboard Space and Enter. Alternatively run `plasmawindowed org.nemesis.themecontrols` in the user session if supported. Neither action is executed automatically by the installer.
+
+Before uninstalling, remove that widget from any desktop/panel; the installer refuses to delete an applet still referenced in Plasma's user configuration. Existing manual wallpaper/Konsole and Plasma Style restoration rules still apply.
+
+See [object contract](INTERACTIVE_OBJECTS.md). GitHub's headless Qt6 tests do not prove real Plasma/Kvantum integration or panel behavior.
