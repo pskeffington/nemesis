@@ -49,3 +49,11 @@ New operations: doctor, apply-style and restore-style. The color and Plasma Styl
 Acceptance evidence: 16 non-root fixture tests on temporary XDG folders, plus Python compilation. GitHub CI must pass on this commit before source-gate acceptance. Physical test still requires actual Garuda Dr460nized Plasma, Kvantum, panels, wallpaper and recovery verification. See brand/OPERABILITY.md.
 
 Rollback: restore-style, restore, uninstall, with manually chosen wallpaper and Konsole profile selections reverted in System Settings. Never force removal of an active UI resource.
+
+## B06-P04 acceptance evidence (2026-11-19)
+
+**ACCEPTED for source + fixture gates only.** The committed CLI and 16 non-root temporary-XDG tests passed the dedicated [brand CI workflow](https://github.com/pskeffington/nemesis/actions/runs/44609458263); the [root static checks](https://github.com/pskeffington/nemesis/actions/runs/44609457998) also passed for commit `38a4e14609e1782f5a6c501d2482aafd1c57746d`.
+
+The physical Dr460nized test is **NOT ACCEPTED**; [B06-P03 issue #6](https://github.com/pskeffington/nemesis/issues/6) remains open for real KDE color/style, Konsole, wallpaper, Kvantum relogin and restore evidence. [Draft PR #5](https://github.com/pskeffington/nemesis/pull/5) stays unmerged.
+
+**Next executable pass:** obtain the noncritical Garuda machine evidence using `brand/OPERABILITY.md`, fix any observed compatibility defects, and retain screenshots/commands in the physical acceptance issue.
