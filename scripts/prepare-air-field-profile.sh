@@ -56,10 +56,15 @@ for unit in sshd.service ModemManager.service; do
 done
 
 # ModemManager can also be requested by D-Bus despite having no startup
-# symlink. Mask the unit inside the field image so it cannot probe serial
-# peripherals unexpectedly; future approved modem use can deliberately
-# reverse the mask in a separate, device-specific profile.
+# symlink. Remove its inherited D-Bus alias and mask the canonical unit
+# inside this field image. Future modem use requires a reviewed opt-in profile.
 unit_dir="$dest/airootfs/etc/systemd/system"
+alias="$unit_dir/dbus-org.freedesktop.ModemManager1.service"
+if [[ -L "$alias" ]]; then
+  rm -- "$alias"
+elif [[ -e "$alias" ]]; then
+  die "unexpected non-symlink ModemManager D-Bus alias in Air staging"
+fi
 if [[ -e "$unit_dir/ModemManager.service" || -L "$unit_dir/ModemManager.service" ]]; then
   die "unexpected pre-existing ModemManager unit in staged Air profile"
 fi

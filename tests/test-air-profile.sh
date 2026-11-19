@@ -14,6 +14,8 @@ wants="$fixture/airootfs/etc/systemd/system/multi-user.target.wants"
 for unit in sshd.service ModemManager.service iwd.service systemd-networkd.service; do
   ln -s "/usr/lib/systemd/system/$unit" "$wants/$unit"
 done
+ln -s /usr/lib/systemd/system/ModemManager.service \
+  "$fixture/airootfs/etc/systemd/system/dbus-org.freedesktop.ModemManager1.service"
 cat > "$fixture/profiledef.sh" <<'EOF'
 #!/usr/bin/env bash
 iso_name="archlinux"
@@ -43,6 +45,7 @@ air_wants="$stage/airootfs/etc/systemd/system/multi-user.target.wants"
 [[ ! -e "$air_wants/ModemManager.service" && ! -L "$air_wants/ModemManager.service" ]]
 [[ -L "$air_wants/iwd.service" && -L "$air_wants/systemd-networkd.service" ]]
 [[ "$(readlink "$stage/airootfs/etc/systemd/system/ModemManager.service")" == "/dev/null" ]]
+[[ ! -L "$stage/airootfs/etc/systemd/system/dbus-org.freedesktop.ModemManager1.service" ]]
 [[ -L "$wants/sshd.service" && -L "$wants/ModemManager.service" ]]
 
 [[ "$(grep -xc 'bluez' "$stage/packages.x86_64")" -eq 1 ]]

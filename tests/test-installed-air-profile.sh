@@ -52,6 +52,7 @@ for unit in sshd.service ModemManager.service; do
   fi
 done
 [[ "$(readlink "$stage/airootfs/etc/systemd/system/ModemManager.service")" == "/dev/null" ]] || die "ModemManager is not masked"
+[[ ! -L "$stage/airootfs/etc/systemd/system/dbus-org.freedesktop.ModemManager1.service" ]] || die "ModemManager D-Bus alias remains enabled"
 for unit in iwd.service systemd-networkd.service; do
   if [[ -L "$base_wants/$unit" ]]; then
     [[ -L "$air_wants/$unit" ]] || die "upstream network service missing: $unit"

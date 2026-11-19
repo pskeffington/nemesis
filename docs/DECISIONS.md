@@ -83,7 +83,7 @@
 **Consequence:** require source/fixture verification and independent Docker ISO/SHA/EFI evidence; physical MacBook Air and virtual UEFI results remain separate unrun gates. See issue [#15](https://github.com/pskeffington/nemesis/issues/15).
 
 ## ADR-013 — Disable inherited remote-login and modem probing on Air field media (2026-11-19)
-**Decision:** in the **staged optional Air image only**, remove upstream releng multi-user target symlinks for `sshd.service` and `ModemManager.service` and mask `ModemManager.service` to prevent unintended D-Bus activation. Preserve `iwd.service`, `systemd-networkd.service`, and all upstream package/boot sources, including the generic Intel rescue edition.
+**Decision:** in the **staged optional Air image only**, remove upstream releng multi-user target symlinks for `sshd.service` and `ModemManager.service` and remove its D-Bus alias and mask `ModemManager.service` to prevent unintended D-Bus activation. Preserve `iwd.service`, `systemd-networkd.service`, and all upstream package/boot sources, including the generic Intel rescue edition.
 
 **Reason:** the current official releng profile may automatically start an SSH listener and probe serial modems. Neither is a safe default for an offline-first mobile communications laptop with field RF/USB devices. Installed NetworkManager tooling is not a reason to start a competing wireless backend.
 
