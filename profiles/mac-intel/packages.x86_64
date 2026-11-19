@@ -1,0 +1,18 @@
+# Nemesis mac-intel additions to the upstream archiso releng live package set.
+# Use official Arch repository packages only. The build deduplicates this list.
+# No universal broadcom-wl package: choose wireless drivers after reading PCI IDs.
+intel-ucode
+linux-firmware
+networkmanager
+iwd
+rfkill
+pciutils
+usbutils
+dmidecode
+efibootmgr
+smartmontools
+nvme-cli
+lm_sensors
+upower
+ethtool
+alsa-utils

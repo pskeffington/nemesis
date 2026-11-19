@@ -1,0 +1,17 @@
+# Generated ArchISO staging, work and outputs
+.build/
+out/
+*.iso
+*.img
+*.qcow2
+*.sha256
+
+# Local operator logs and captures
+*.log
+*.pcap
+*.pcapng
+*.bin
+.env
+.env.*
+!.env.example
+.DS_Store
