@@ -58,3 +58,7 @@ Model IDs, chipset IDs, boot firmware and recovery pathways must be verified on 
 The opt-in Air edition is now stageable with a separate image builder and has a source fixture test. A distinct GitHub Docker build is underway; its ISO, checksum and EFI-metadata acceptance must be observed before claiming image assembly. The existing rescue ISO, UEFI VM and Mac physical gates must remain distinct.
 
 **Upstream:** [Apple laptop models](https://wiki.archlinux.org/title/Laptop/Apple); [Debian Air6,2](https://wiki.debian.org/InstallingDebianOn/Apple/MacBookAir/6-2); [Air7,2 Arch report](https://github.com/AdhamNasr/MacBookAir-ArchLinux-i3); [Power management](https://wiki.archlinux.org/title/Power_management); [TLP](https://wiki.archlinux.org/title/TLP); [ArchISO](https://wiki.archlinux.org/title/archiso).
+
+## Field image payload evidence
+
+The dedicated Docker verifier checks that the image references an `airootfs.sfs` payload and inspects the built SquashFS from the same `mkarchiso` run. This must show the read-only `nemesis-field-check`, preserved `iwd`/networkd service links, **no multi-user autoenable symlink** for SSH/ModemManager, and a `ModemManager.service` mask to `/dev/null`. This is a **build-content test**, not proof that systemd started correctly on a MacBook Air or that any Wi-Fi/SDR peripheral works.
