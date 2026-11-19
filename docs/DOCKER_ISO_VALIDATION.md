@@ -50,3 +50,7 @@ If the build fails because of image package conflicts, resource exhaustion, moun
 - Community reference [privileged Docker mkarchiso in GitHub Actions](https://github.com/marketplace/actions/mkarchiso)
 
 **Repository-phase status:** this is a scoped Docker build test, **not** a broad switch to Linux deployment. The F03 Mac hardware policy and F04 release specification remain on the critical-path handoff plan.
+
+## Optional trusted-main themed edition (F06-ISO-01)
+
+A separate unprivileged [theme-staging workflow](../.github/workflows/theme-iso-stage.yml) runs on the feature branch to confirm ArchISO overlay layout and signed-repository package metadata without mkarchiso. After review and merge, the existing trusted-main-only privileged Docker builder can manually select `mac-intel-theme-preview` via a choice input. Its default is still `mac-intel`, and any produced themed ISO is an **unbooted prototype** with a separate output directory. No QEMU, host deployment or release is authorized. See [theme ISO integration](THEME_ISO_PREVIEW.md).

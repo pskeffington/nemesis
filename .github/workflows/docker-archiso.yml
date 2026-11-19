@@ -7,6 +7,14 @@ name: Nemesis Docker ArchISO ISO build
 on:
   workflow_dispatch:
     inputs:
+      edition:
+        description: "Select trusted GitHub Docker ISO build (theme is experimental)"
+        required: true
+        type: choice
+        options:
+          - mac-intel
+          - mac-intel-theme-preview
+        default: mac-intel
       upload_iso:
         description: "Upload the untested prototype ISO as a workflow artifact"
         required: false
@@ -32,6 +40,8 @@ concurrency:
 jobs:
   docker-iso:
     runs-on: ubuntu-24.04
+    env:
+      NEMESIS_ISO_EDITION: ${{ inputs.edition || 'mac-intel' }}
     timeout-minutes: 90
     steps:
       - name: Checkout trusted main source without stored credentials
@@ -53,6 +63,7 @@ jobs:
         run: |
           docker run --rm --privileged \
             --env NEMESIS_CI_DOCKER=1 \
+            --env NEMESIS_ISO_EDITION \
             --mount "type=bind,source=${{ github.workspace }},target=/workspace" \
             --workdir /workspace \
             nemesis-archiso-builder \
@@ -65,7 +76,7 @@ jobs:
           name: nemesis-docker-build-evidence
           path: |
             out/docker-evidence/
-            out/mac-intel/*.sha256
+            out/*/*.sha256
           if-no-files-found: warn
           retention-days: 7
 
@@ -74,6 +85,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: nemesis-untested-intel-iso
-          path: out/mac-intel/nemesis-*-x86_64.iso
+          path: out/*/nemesis-*-x86_64.iso
           compression-level: 0
           retention-days: 3

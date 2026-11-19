@@ -87,3 +87,7 @@ F05 + explicit human GO ──> M02 (actual ISO build) ──> M03 VM ──> M0
 ## How to work now
 
 Use [repository-phase Codex prompt](../codex/REPOSITORY_PHASE_PROMPT.md). F03 remains the next **design** pass. GitHub-hosted Docker build validation F02-V01 is a separate approved test; it does not authorize local machine work or alter the F05 handoff NO-GO. Do **not** follow `codex/BUILD_RUNBOOK.md` until F05 is approved. For accepted passes, report files/commit/CI/remaining gate; never mark a milestone accepted from a draft alone.
+
+## Scope note — authorized optional theme ISO *source* integration
+
+The user has asked for Nemesis theme integration into an ISO using GitHub Docker tests. This adds an **opt-in F06-ISO-01 source profile and non-privileged Docker staging gate**, with a future manual themed ISO build only in the previously authorized trusted-main privileged CI lane. It does not authorize local workstation execution, an automatic desktop in the rescue image, QEMU, USB, or firmware tests. F02/F03/F04/F05 and the no-go handoff remain authoritative; the feature branch stays draft until acceptance. See [integration specification](THEME_ISO_PREVIEW.md).

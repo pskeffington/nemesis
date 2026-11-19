@@ -46,3 +46,7 @@ When the repository foundation is accepted and an explicit handoff GO is given, 
 Official signed Arch packages by default. No automatic internal Mac disk changes, proprietary firmware redistribution, default remote credentials, or unreviewed package signature bypass. Hardware is verified model-by-model; a successful source check or ISO build is never proof of Mac compatibility.
 
 Nemesis is not an official Arch Linux or Apple distribution. The repository retains GPL-3.0; dependencies and firmware have independent license obligations. Host-specific work remains in [linux_config](https://github.com/pskeffington/linux_config) and is not copied into Nemesis images without review.
+
+## Experimental theme ISO staging (GitHub CI only)
+
+The separate, opt-in `mac-intel-theme-preview` target adds Nemesis KDE artwork and signed-repository package names without modifying the default rescue ISO. See [theme ISO integration](docs/THEME_ISO_PREVIEW.md) and [non-privileged Docker staging](.github/workflows/theme-iso-stage.yml). A real theme ISO build requires an explicit trusted-main Docker dispatch; boot and graphical login remain untested.

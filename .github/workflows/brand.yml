@@ -1,0 +1,40 @@
+name: Nemesis brand preview checks
+on:
+  push:
+    paths:
+      - 'brand/**'
+      - 'tests/test_dragonized.py'
+      - '.github/workflows/brand.yml'
+      - 'agents/arch-theme-creative-developer.md'
+  pull_request:
+    paths:
+      - 'brand/**'
+      - 'tests/test_dragonized.py'
+      - '.github/workflows/brand.yml'
+jobs:
+  brand-fixtures:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Python and shell static checks
+        run: |
+          python3 -m py_compile brand/scripts/dragonized.py
+          bash -n brand/scripts/dragonized.sh
+          if command -v shellcheck >/dev/null 2>&1; then shellcheck brand/scripts/dragonized.sh; fi
+      - name: Fixture deployment and rollback checks
+        run: python3 -m unittest discover -s tests -p test_dragonized.py -v
+      - name: Verify SVG and Plasma metadata
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          import xml.etree.ElementTree as ET
+          root = Path('brand')
+          ET.parse(root / 'wallpapers/signal-dusk.svg')
+          ET.parse(root / 'identity/nemesis_emblem.svg')
+          metadata = json.loads((root / 'theme/plasma/Nemesis/metadata.json').read_text())
+          assert metadata['KPlugin']['Id'] == 'Nemesis'
+          assert metadata['X-Plasma-API'] == '6.0'
+          assert (root / 'theme/plasma/Nemesis/colors').read_text() == (root / 'theme/kde/Nemesis.colors').read_text()
+          print('SVG, metadata, and scheme consistency: PASS')
+          PY

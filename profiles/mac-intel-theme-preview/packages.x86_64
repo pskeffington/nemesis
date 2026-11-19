@@ -1,0 +1,13 @@
+# Experimental signed-Arch KDE preview layer; excluded from rescue baseline.
+# No SDDM auto login, no Garuda packages, AUR, T2 or Apple Silicon firmware.
+plasma-desktop
+plasma-workspace
+breeze
+breeze-icons
+konsole
+dolphin
+plasma-nm
+plasma-pa
+mesa
+qt6-svg
+sddm

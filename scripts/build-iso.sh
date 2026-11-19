@@ -5,9 +5,9 @@
 set -euo pipefail
 
 die() { printf 'nemesis: %s\n' "$*" >&2; exit 1; }
-[[ $# -le 1 ]] || die "usage: sudo bash scripts/build-iso.sh [mac-intel]"
+[[ $# -le 1 ]] || die "usage: bash scripts/build-iso.sh [mac-intel|mac-intel-theme-preview]"
 edition="${1:-mac-intel}"
-[[ "$edition" == "mac-intel" ]] || die "only mac-intel is currently buildable"
+[[ "$edition" == "mac-intel" || "$edition" == "mac-intel-theme-preview" ]] || die "unknown ISO edition"
 [[ "$(uname -m)" == "x86_64" ]] || die "building requires an x86_64 Linux host"
 [[ -f /etc/arch-release ]] || die "building requires an Arch-family Linux host"
 [[ "$(id -u)" -eq 0 ]] || die "run with sudo on a trusted build host"
@@ -31,7 +31,11 @@ previous=( "$out"/nemesis-*-x86_64.iso )
 (( ${#previous[@]} == 0 )) || die "existing Nemesis ISO in $out; inspect/archive it before rebuilding"
 
 mkdir -p "$root/.build" "$out"
-env -u ARCHISO_RELENG_PROFILE bash "$root/scripts/prepare-profile.sh" "$edition" "$stage"
+if [[ "$edition" == "mac-intel-theme-preview" ]]; then
+  env -u ARCHISO_RELENG_PROFILE bash "$root/scripts/prepare-theme-profile.sh" "$stage"
+else
+  env -u ARCHISO_RELENG_PROFILE bash "$root/scripts/prepare-profile.sh" "$edition" "$stage"
+fi
 printf 'Building Nemesis %s from installed archiso releng.\n' "$edition"
 mkarchiso -v -w "$work" -o "$out" "$stage"
 

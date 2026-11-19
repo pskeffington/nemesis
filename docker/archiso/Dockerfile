@@ -5,7 +5,7 @@
 FROM archlinux:base-devel
 
 ENV LANG=C.UTF-8
-RUN pacman -Syu --noconfirm --needed archiso grub git shellcheck file
+RUN pacman -Syu --noconfirm --needed archiso grub git shellcheck file librsvg
 
 WORKDIR /workspace
 CMD ["/bin/bash", "docker/archiso/validate-build.sh"]

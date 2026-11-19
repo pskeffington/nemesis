@@ -75,3 +75,15 @@ M02 ISO -> M03 virtual UEFI -> M04 physical Intel Mac.
 - **R-F05:** design/artwork is separate from core boot and security; no forced merge of active brand PR.
 
 **Future transition:** only after F05 acceptance and explicit user instruction. The inactive [Linux execution prompt](codex/LINUX_EXECUTION_PROMPT.md) and [build runbook](codex/BUILD_RUNBOOK.md) remain reference material until then.
+
+## F06-ISO-01 — Theme-preview isolation and GitHub Docker staging
+
+**Owner:** Arch Theme Creative Developer with ArchISO Build Engineer and security review. **Authority:** user requested optional theme integration into the ISO using GitHub-hosted Docker tests. Default mac-intel rescue packages/boot files remain unchanged. The separate mac-intel-theme-preview source candidate is not an accepted product edition.
+
+**Pass:** stage KDE colors, Konsole preset, Plasma Style, icon and 4K wallpaper into optional ArchISO airootfs; add signed-Arch package list and an unprivileged real-Arch Docker stage/manifest test. Preserve the existing privileged GitHub Docker ISO build gate on trusted main only, with manual edition selection after review.
+
+**Status:** REVIEW until this branch's Docker stage test and static CI pass. The trusted full themed ISO build, GUI login and hardware boot are NOT STARTED. This work does not approve F05 handoff or authorize local-machine execution.
+
+**Files:** [docs/THEME_ISO_PREVIEW.md](docs/THEME_ISO_PREVIEW.md), [theme source](brand/), [preview manifest](profiles/mac-intel-theme-preview/packages.x86_64), [stager](scripts/prepare-theme-profile.sh), [Docker test](tests/test-theme-iso-staging.sh).
+
+**Rollback:** revert the optional layer change; baseline mac-intel remains the default. Physical theme acceptance issue [#6](https://github.com/pskeffington/nemesis/issues/6) is still open.
