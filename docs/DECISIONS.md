@@ -46,3 +46,10 @@
 **Decision:** building, diagnostics and initial boot acceptance are read-only relative to internal Mac drives. Installer work requires a separate explicit safety review.
 
 **Reason:** protect macOS recovery, firmware state and data, particularly on legacy hardware.
+
+## ADR-008 — Repository-first foundation before machine execution (2026-11-19)
+**Decision:** current mode is `REPO_FOUNDATION`; prioritize package composition, Mac hardware design, release/security architecture and explicit handoff instructions. Keep all `mkarchiso`, QEMU, USB and physical Mac execution deferred until P0 specification gates pass and the user explicitly authorizes Linux execution.
+
+**Reason:** a green CI source/profile test is not a complete distro specification or an instruction to touch a workstation. A coherent contract must precede hardware execution.
+
+**Consequences:** `docs/FOUNDATION_PRIORITY_PLAN.md` and `codex/REPOSITORY_PHASE_PROMPT.md` supersede older “build next” language. Existing build runbooks remain future references. The theme PR is optional and isolated.

@@ -1,35 +1,46 @@
-# Nemesis — Codex and contributor contract
+# Nemesis Codex and contributor operating contract
 
-**Authority:** This GitHub repository owns Nemesis distro source, profile deltas, scripts, reproducibility documentation, the hardware evidence matrix and release criteria. Read README.md, ROADMAP.md and docs/ARCHITECTURE.md before editing. The separate linux_config repository is for host-specific configuration and is not copied into ISO images without review.
+## Phase authority — current mode is repository-only
 
-## Agent dispatch
-- Role index: [agents/README.md](agents/README.md). Roles are written instructions for task delegation, not active background agents.
-- Codex entry: [CODEX_KICKOFF.md](CODEX_KICKOFF.md); [session prompt](codex/SESSION_PROMPT.md); [pass queue](codex/PASS_QUEUE.md).
-- Literature authority: [docs/research/LITERATURE_MATRIX.md](docs/research/LITERATURE_MATRIX.md); [method](docs/research/METHODOLOGY.md); [model candidates](docs/research/INTEL_MAC_CANDIDATES.md); [distro source recon](docs/research/UPSTREAM_DISTRO_RECON.md).
-- One implementation owner/pass. Research and security can independently review but cannot approve unrun build/physical tests.
-- External distro repositories are **read-only references** by default: inspect canonical source/revision, license and targeted paths; reuse a pattern only after an independent Nemesis implementation and test. Never copy a mirror's kernel/package repository by assumption.
+**MODE: `REPO_FOUNDATION`.** The repository, its GitHub connector and GitHub-hosted source CI are the active workspace. The developer does **not** yet work on Garuda, Arch, a physical Mac, or any connected machine.
 
-## Hardware scope
-1. **mac-intel**: x86_64 Intel Macs without T2; current *candidate* baseline uses stock installed ArchISO releng.
-2. **mac-t2**: separate future kernel and firmware workflow. Never assume stock profile makes built-in T2 input/audio/wireless functional.
-3. **mac-asahi**: independent Apple Silicon ARM64 boot stack. The x86_64 ISO cannot boot M-series Macs.
-4. **operator layers**: optional packages for engineering, RF and security after core hardware acceptance; avoid unnecessary base ISO bloat.
+Read in order: `README.md`, `docs/FOUNDATION_PRIORITY_PLAN.md`, `ROADMAP.md`, `spec/editions.json`, `docs/EDITION_CONTRACT.md`, `docs/ARCHITECTURE.md`, `codex/PASS_QUEUE.md` and `codex/REPOSITORY_PHASE_PROMPT.md`. This active phase supersedes any older build-next instructions or open ISO issue until an explicit handoff GO.
 
-## Non-negotiable safety
-- No automatic repartitioning, internal-drive formatting, filesystem write, firmware extraction, disabling Apple startup security, or remote boot policy changes.
-- No unauthorized Apple firmware redistribution, unsigned third-party release repos, hard-coded credentials, proprietary capture dumps, secrets, serial numbers, network identity or personal logs in public Git.
-- Reject unreviewed `SigLevel = Never` in package sources. Model-specific Broadcom driver choice starts with actual PCI IDs; no universal `broadcom-wl`.
-- Maintain GPL-3.0 repository LICENSE and check dependency/firmware rights separately.
-- Keep ISO, rootfs worktrees, local logs and VM images out of version control. Do not put commercial valuation or pricing in this repository.
-- Preserve user changes and accepted milestones; no destructive cleanups or force-push.
+**Now:** architecture, hardware/research matrices, package contract, source validators, decisions, agent instructions, security/release specifications and handoff packet. **Not now:** Linux deployment, `sudo`, package installation, `mkarchiso`, QEMU, USB writing, host changes or Mac tests. GitHub Actions source/profile compatibility CI is allowed; it is not an ISO build.
 
-## Repeatable pass contract
-1. Inspect baseline (`git status --short`, current branch, source matrix, previous acceptance evidence).
-2. Name pass ID, goal, owner, files, source rows, expected output, failure/rollback and acceptance command.
-3. Change one coherent unit; keep scripts fail-fast (`set -euo pipefail`), human-readable comments and source anchors.
-4. Execute `bash scripts/validate.sh` and relevant real build/VM/physical tests when available. Record exact commands and exit codes.
-5. Source commit != ISO build; ISO build != VM boot; VM boot != Apple physical boot; driver loaded != peripheral functional.
-6. Update ROADMAP.md, decisions/matrix as needed, and hand off `Pass | files | command/result | evidence | status | next`.
-7. When blocked, document why and select the highest-priority independent READY pass; do not invent success or skip a failed gate.
+## Roles and work partition
 
-M01 source and native ArchISO staging gates were accepted in CI (run 44607322858; archiso 92-1). Default active work is **M02-P01**: validate again on local x86_64 Arch/Garuda, run actual `mkarchiso`, verify checksum and retain build evidence. M03 virtual UEFI and M04 physical Mac remain untested.
+- [Agent roster](agents/README.md); [source research](docs/research/LITERATURE_MATRIX.md) and [distro source recon](docs/research/UPSTREAM_DISTRO_RECON.md).
+- One accountable implementation agent per pass. Design, security and evidence reviewers may inspect independently.
+- F02 package architecture is the next critical path. F03 Mac support policy and F04 release/provenance follow. F05 handoff needs P0 acceptance and explicit user approval.
+- The independent [brand PR #5](https://github.com/pskeffington/nemesis/pull/5) is optional P2. Do not overwrite, merge or bake it into `mac-intel` to accelerate boot work.
+- `linux_config` is a separate host configuration project. Do not import machine-specific secrets/config into this distro without a dependency review.
+
+## Platform contract
+
+1. `mac-intel` — Intel x86_64 without T2, candidate live/rescue profile scaffold, **not built or booted**.
+2. `mac-intel-desktop` / `mac-intel-operator` — planned optional layers; never default-enabled in core.
+3. `mac-t2` — separate T2 kernel and firmware research, no stock-image equivalence.
+4. `mac-asahi` — distinct ARM64/Asahi boot and installer lane, never an x86_64 ISO derivative.
+
+Use `spec/editions.json` as a declarative planning record; it is not a working package resolver.
+
+## Safety and source authority
+
+- No unattended partition/firmware writes, firmware extraction, insecure package signatures, default SSH credentials, secret/serial/network-identifying log commits, or unauthorized Apple firmware redistribution.
+- Default to official signed Arch packages. External/AUR/T2 sources require provenance, license and security decision before any integration.
+- Preserve GPL-3.0 and check third-party licenses independently. Upstream distros are research references, not permission to copy code.
+- Source test != ISO build != VM boot != Apple physical test != release acceptance.
+- Keep human-facing, grep-searchable comments and meaningful separators. Preserve current user/PR changes and never force-push.
+- Repository source has no pricing or commercial valuation data.
+
+## Pass protocol
+
+1. Inspect actual branch/head, previous approved pass and conflicting open issues/PRs.
+2. Choose one P0/F pass; state owner, inputs/dependencies, exact paths, acceptance, rollback and evidence.
+3. Make minimal reversible source/docs changes. Add deterministic tests and run/inspect GitHub CI.
+4. Record pass status only from observed results; commit source change, CI link, open defects and next repo-only pass.
+5. If a gate fails, repair that gate; do not run local machines or silently skip to M02.
+6. Before any future physical execution, complete `codex/HANDOFF_CONTRACT.md` and receive explicit human GO.
+
+**Default next pass:** F02 package composition specification. **Execution status: NO-GO.**

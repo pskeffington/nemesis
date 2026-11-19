@@ -1,3 +1,5 @@
+> **FUTURE EXECUTION / REFERENCE ONLY.** Nemesis is currently in GitHub-only repository foundation mode. Do not run Linux builds, VM boots or physical Mac procedures from this document until F05 handoff acceptance and explicit user GO. See [foundation priorities](../docs/FOUNDATION_PRIORITY_PLAN.md) and [handoff contract](HANDOFF_CONTRACT.md).
+
 # Mac hardware acceptance runbook
 
 Use this only after the preceding build and UEFI-VM gates pass.

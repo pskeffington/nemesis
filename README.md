@@ -1,40 +1,46 @@
 # Nemesis
 
-**Nemesis** is a **Mac-first Arch-based GNU/Linux distribution under development**. Its first image targets **64-bit Intel Macs without Apple T2**, especially older hardware that benefits from a lean, repairable Linux environment. Planned T2 and Apple Silicon editions are *independent technical lanes*.
+**Nemesis** is an independent, Mac-first Arch-based Linux distribution under development. The first eventual execution target is **64-bit EFI Intel Macs without T2**; Intel T2 and Apple Silicon have separate hardware/boot research lanes.
 
-**Current state:** source/fixture CI and a **real packaged ArchISO 92-1 releng staging** contract have passed in GitHub Actions. No Nemesis ISO has yet been compiled, booted in UEFI, or tested on a physical Mac.
+## Current status — repository foundation, not Linux deployment
 
-## Development lanes
-| Lane | Boot/platform | Stage |
-| --- | --- | --- |
-| `mac-intel` | x86_64 / 64-bit EFI Mac without T2 | first live ISO profile and diagnostics |
-| `mac-t2` | x86_64 / Apple T2 with special kernel/firmware needs | separate research and trust review |
-| `mac-asahi` | ARM64 / Asahi boot and device stack | future ARM architecture; **not** an x86_64 ISO |
+**Active work is entirely in this GitHub repository.** We are specifying the distro's architecture, package layers, hardware/firmware policy, automated source checks, upstream provenance, release boundaries and Codex handoff. We are **not** currently deploying to Garuda, building an ISO, booting QEMU or testing Macs.
 
-We optimize EFI, Wi-Fi, GPU/display, trackpad/keyboard, audio, sensors, thermals, power and recoverability before custom themes or optional toolkits.
+The earlier scaffold passed Bash/ShellCheck/fixtures and actual packaged ArchISO 92-1 profile-staging checks in GitHub Actions. **No Nemesis ISO or physical Mac boot has been demonstrated.**
 
-## Build on x86_64 Arch/Garuda
-```bash
-sudo pacman -Syu --needed git archiso shellcheck
-git clone https://github.com/pskeffington/nemesis.git
-cd nemesis
-bash scripts/validate.sh
-sudo bash scripts/build-iso.sh mac-intel
-```
+**Current authority:** [foundation priorities](docs/FOUNDATION_PRIORITY_PLAN.md) → [edition/platform contract](docs/EDITION_CONTRACT.md) → [roadmap](ROADMAP.md) → [Codex repository-phase prompt](codex/REPOSITORY_PHASE_PROMPT.md). The [future Linux handoff contract](codex/HANDOFF_CONTRACT.md) is **NO-GO** until reviewed and explicitly authorized.
 
-Generated files go to ignored `.build/` and `out/`. Build scripts do **not** repartition a Mac, write its internal storage or alter macOS security settings. A generated ISO needs later UEFI and physical Mac checks.
+## Engineering structure
 
-## Project navigation
-- **Plan:** [ROADMAP.md](ROADMAP.md); [architecture](docs/ARCHITECTURE.md); [decision log](docs/DECISIONS.md).
-- **Research:** [Mac/Linux literature matrix](docs/research/LITERATURE_MATRIX.md), [method](docs/research/METHODOLOGY.md), [open questions](docs/research/OPEN_QUESTIONS.md), [model candidates](docs/research/INTEL_MAC_CANDIDATES.md), [comparative distro repository recon](docs/research/UPSTREAM_DISTRO_RECON.md).
-- **Codex:** [kickoff](CODEX_KICKOFF.md), [session prompt](codex/SESSION_PROMPT.md), [pass queue](codex/PASS_QUEUE.md), [build runbook](codex/BUILD_RUNBOOK.md), [hardware runbook](codex/HARDWARE_RUNBOOK.md), [research runbook](codex/RESEARCH_RUNBOOK.md), [upstream distro recon](codex/UPSTREAM_RECON_RUNBOOK.md).
-- **Agents:** [role catalog and handoff](agents/README.md); mandatory [AGENTS.md](AGENTS.md).
-- **Verification:** [build and QA](docs/BUILD_AND_QA.md), [Mac compatibility matrix](docs/MAC_COMPATIBILITY.md).
-- **Source:** `profiles/mac-intel`, `scripts/prepare-profile.sh`, `scripts/build-iso.sh` and `scripts/validate.sh`.
+| Platform / edition | Target | Source readiness | Execution |
+| --- | --- | --- | --- |
+| `mac-intel` | non-T2 Intel x86_64 rescue/live ISO | ArchISO overlay committed, source CI accepted | **Deferred** |
+| `mac-intel-desktop` | optional accessible KDE desktop | design-only | Deferred |
+| `mac-intel-operator` | optional field / RF / engineering edition | design-only | Deferred |
+| `mac-t2` | Intel Macs with T2-specific kernel and device stack | research-only | Deferred |
+| `mac-asahi` | Apple Silicon ARM64/Asahi platform | research-only | Deferred |
 
-## Operating policies
-Official Arch packaging by default; upstream releng is copied to staging, never modified in place. Third-party packages, firmware rights and drivers require review. Mac hardware compatibility is established **model by model**, not from marketing years, virtual machines or successful builds. Raw ISO images, captures, machine identifiers and secrets are not committed.
+Machine-readable scope lives in [`spec/editions.json`](spec/editions.json); source-only tests prevent premature hardware/release claims. This specification is **not automatically consumed by the builder**.
 
-Separate [linux_config](https://github.com/pskeffington/linux_config) handles host-specific research and deployment; Nemesis owns the distribution and only approved manifests cross between repos.
+## Repository navigation
 
-This is an independent project, not an official Arch Linux or Apple distribution. Existing repository license is GPL-3.0; third-party licenses remain their own.
+- **Current planning:** [foundation priority plan](docs/FOUNDATION_PRIORITY_PLAN.md), [ROADMAP.md](ROADMAP.md), [Codex pass queue](codex/PASS_QUEUE.md).
+- **Architecture:** [system design](docs/ARCHITECTURE.md), [edition contract](docs/EDITION_CONTRACT.md), [decisions](docs/DECISIONS.md), [release gates](docs/RELEASE_GATES.md).
+- **Research:** [Mac hardware literature](docs/research/LITERATURE_MATRIX.md), [comparative distro source recon](docs/research/UPSTREAM_DISTRO_RECON.md), [Intel Mac candidates](docs/research/INTEL_MAC_CANDIDATES.md), [open questions](docs/research/OPEN_QUESTIONS.md).
+- **Agent and Codex instructions:** [AGENTS.md](AGENTS.md), [agent catalog](agents/README.md), [repository-phase prompt](codex/REPOSITORY_PHASE_PROMPT.md), [handoff contract](codex/HANDOFF_CONTRACT.md), [CODEX_KICKOFF.md](CODEX_KICKOFF.md).
+- **Existing source:** [profiles/mac-intel](profiles/mac-intel), [prepare-profile.sh](scripts/prepare-profile.sh), [build-iso.sh](scripts/build-iso.sh), [source tests](tests).
+
+## Prior accepted evidence
+
+- Official ArchISO releng staging via CI on signed ArchISO 92-1: [run 44607322858](https://github.com/pskeffington/nemesis/actions/runs/44607322858).
+- Edition contract source CI: [run 44608135155](https://github.com/pskeffington/nemesis/actions/runs/44608135155).
+- Comparable distribution source research: [UPSTREAM_DISTRO_RECON.md](docs/research/UPSTREAM_DISTRO_RECON.md).
+- KDE/Dragonized-inspired visual identity remains a **separate, reversible user-space preview** in [PR #5](https://github.com/pskeffington/nemesis/pull/5), not a core boot dependency.
+
+## Future execution: intentionally not active
+
+When the repository foundation is accepted and an explicit handoff GO is given, the Linux implementation operator will follow [`codex/LINUX_EXECUTION_PROMPT.md`](codex/LINUX_EXECUTION_PROMPT.md) and the existing [build runbook](codex/BUILD_RUNBOOK.md). These files are retained for later execution; **do not treat them as today's instructions**.
+
+Official signed Arch packages by default. No automatic internal Mac disk changes, proprietary firmware redistribution, default remote credentials, or unreviewed package signature bypass. Hardware is verified model-by-model; a successful source check or ISO build is never proof of Mac compatibility.
+
+Nemesis is not an official Arch Linux or Apple distribution. The repository retains GPL-3.0; dependencies and firmware have independent license obligations. Host-specific work remains in [linux_config](https://github.com/pskeffington/linux_config) and is not copied into Nemesis images without review.

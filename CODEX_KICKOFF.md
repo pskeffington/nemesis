@@ -1,30 +1,25 @@
-# Codex kickoff — Nemesis Mac-first Arch distribution
+# Nemesis Codex kickoff — current repository-only phase
 
-Use this at the start of a fresh Codex session on an x86_64 Arch/Garuda Linux development host.
+**Current operating mode: `REPO_FOUNDATION`. Do not execute Linux-machine or Mac-side commands.**
 
-## First workstation preparation
+The objective is to prepare all distro architecture, package manifests, Mac hardware support specifications, release design, agents and acceptance gates in `pskeffington/nemesis` before a later explicit execution handoff.
 
-```bash
-sudo pacman -Syu --needed git archiso shellcheck
-git clone https://github.com/pskeffington/nemesis.git
-cd nemesis
-git status --short
-cat AGENTS.md
-cat ROADMAP.md
-cat codex/SESSION_PROMPT.md
-bash scripts/validate.sh
-```
+## Read first
 
-If the repository already exists: `cd nemesis && git pull --ff-only`; do not reclone or overwrite local changes. Reboot after a system upgrade when the kernel/packages require it, before beginning the ISO build.
+1. [Repository-phase task prompt](codex/REPOSITORY_PHASE_PROMPT.md) — **use this now**.
+2. [Repository work plan](docs/FOUNDATION_PRIORITY_PLAN.md) and [ROADMAP.md](ROADMAP.md).
+3. [Architecture](docs/ARCHITECTURE.md), [edition contract](docs/EDITION_CONTRACT.md), [machine-readable edition spec](spec/editions.json).
+4. [Literature](docs/research/LITERATURE_MATRIX.md), [upstream distro recon](docs/research/UPSTREAM_DISTRO_RECON.md), [decision register](docs/DECISIONS.md).
+5. [AGENTS.md](AGENTS.md), [agent roster](agents/README.md), and [pass queue](codex/PASS_QUEUE.md).
 
-**Codex launch:** run `codex` in the repository after the CLI is installed and authenticated. If an existing Linuxbrew install isn't on PATH, initialize Linuxbrew from its actual installed path first; do not assume all machines have the same location. Paste the exact [session prompt](codex/SESSION_PROMPT.md).
+## Active task
 
-## Immediate assignment
+Execute **F02 — package composition specification**, entirely within GitHub. Create precise package-layer dependencies, conflict rules, official signed-source policy, design notes and CI validators. Do not run `pacman`, `mkarchiso`, QEMU or hardware commands. Preserve the existing `mac-intel` source and brand PR #5.
 
-**M01 source/static and packaged ArchISO staging tests passed in GitHub Actions** (run 44607322858; packaged ArchISO 92-1). **M02-P01 is the immediate task:** on this x86_64 Arch/Garuda workstation, rerun static checks and `bash tests/test-installed-releng.sh`, then build the first Intel non-T2 ISO, produce a checksum and log, and document result without calling it boot-tested.
+Use source-only CI, report exact commits and observed tests, and update status without inventing machine results. F03 hardware design and F04 release policy follow.
 
-Proceed to **M03-P01** only when the ISO build gate passes. Do not run USB flashing, repartition, firmware updates, T2 installer actions or Apple Silicon provisioning without explicit hardware review and user-controlled device selection.
+## Future execution — NOT YET AUTHORIZED
 
-## Handoff contract
+[Codex handoff contract](codex/HANDOFF_CONTRACT.md) contains the future go/no-go checklist. [Linux execution prompt](codex/LINUX_EXECUTION_PROMPT.md), [build runbook](codex/BUILD_RUNBOOK.md), and [hardware runbook](codex/HARDWARE_RUNBOOK.md) are **inactive** until the repository foundation is accepted and the user explicitly requests Linux-side work.
 
-Read [pass queue](codex/PASS_QUEUE.md), [build runbook](codex/BUILD_RUNBOOK.md), [hardware runbook](codex/HARDWARE_RUNBOOK.md) and [agents](agents/README.md). After every pass, commit source/docs, link actual test evidence and update ROADMAP.md statuses. Never commit raw firmware, large ISO images, local machine secrets or identifying logs.
+Do not promote a source-only success into a claim that an ISO builds, boots or works on any Mac.

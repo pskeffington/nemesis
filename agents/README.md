@@ -1,5 +1,7 @@
 # Nemesis engineering agent roster
 
+**Current mode: repository-only foundation.** F02 package composition, F03 hardware design, F04 release policy and F05 approved handoff are the critical path. Do not assign agents workstation setup, ISO compilation, QEMU or Mac hardware work yet. See [foundation priority plan](../docs/FOUNDATION_PRIORITY_PLAN.md).
+
 These are **versioned role instructions for Codex and human contributors**, not automatically running background processes. Start with root [AGENTS.md](../AGENTS.md), then assign one role to an explicit pass in [codex/PASS_QUEUE.md](../codex/PASS_QUEUE.md).
 
 | Role file | Responsibility | Produces |
