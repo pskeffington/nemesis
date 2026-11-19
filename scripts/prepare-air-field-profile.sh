@@ -38,6 +38,23 @@ awk '
 mv "$temp" "$dest/packages.x86_64"
 cp -a "$overlay/." "$dest/airootfs/"
 
+# ---------------------------------------------------------------------
+# Field services are opt-in. Official releng may enable an SSH server and
+# ModemManager via symlinks; both are unsuitable as field-media defaults.
+# Only remove inherited service enablement from the disposable Air staging
+# copy, never the installed ArchISO profile or generic mac-intel edition.
+# Keep upstream iwd/systemd-networkd and local console recovery intact.
+# ---------------------------------------------------------------------
+wants="$dest/airootfs/etc/systemd/system/multi-user.target.wants"
+for unit in sshd.service ModemManager.service; do
+  entry="$wants/$unit"
+  if [[ -L "$entry" ]]; then
+    rm -- "$entry"
+  elif [[ -e "$entry" ]]; then
+    die "refusing to change a non-symlink unit in staged profile: $entry"
+  fi
+done
+
 [[ -f "$dest/airootfs/usr/local/bin/nemesis-field-check" ]] || die "readiness tool missing"
 bash -n "$dest/profiledef.sh"
 printf 'Prepared opt-in macbook-air-field profile: %s\n' "$dest"

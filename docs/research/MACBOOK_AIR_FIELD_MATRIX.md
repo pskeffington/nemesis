@@ -18,3 +18,7 @@
 **Hardware evidence must state** NOT TESTED, PARTIAL, FAIL or PASS with ISO SHA, date, exact model, relevant PCI IDs, kernel/version, and redacted observations. Currently all MacBook Air physical outcomes are **NOT TESTED**. The 1.3-GB Docker ISO result belongs to the generic Intel image, not this field variant.
 
 Follow the source fixture in [field specification](../../spec/macbook-air-field.json), the [field runbook](../../codex/MACBOOK_AIR_FIELD_PASS.md), and [architecture](../FIELD_LAPTOP_ARCHITECTURE.md).
+
+## MAC-A11 — Inherited live-image service policy
+
+[ArchISO upstream releng systemd target wants](https://github.com/archlinux/archiso/tree/master/configs/releng/airootfs/etc/systemd/system/multi-user.target.wants) (S1) includes `sshd.service`, `ModemManager.service`, `iwd.service`, and `systemd-networkd.service` symlinks in the inspected upstream configuration. **Nemesis decision:** on the MacBook Air *field* staging image, remove only the first two enablement symlinks, leaving its upstream networking and the generic Intel rescue edition unchanged. The user still must validate hardware Wi-Fi and USB communications on physical devices. Static proof: `tests/test-air-profile.sh` and `tests/test-installed-air-profile.sh`.

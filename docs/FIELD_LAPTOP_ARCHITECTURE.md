@@ -27,8 +27,9 @@ Model IDs, chipset IDs, boot firmware and recovery pathways must be verified on 
 ## Critical technical constraints
 
 - Many Air 6,x/7,x examples have a Broadcom **BCM4360** card. Some rely on the proprietary/out-of-tree `wl` driver; it is **not bundled** without security, licensing and kernel lifecycle review. Record the exact PCI ID before driver decisions. An Air lacks a conventional built-in Ethernet port; always provision a USB connectivity fallback.
-- NetworkManager uses its upstream backend; do not force the standalone `iwd.service` alongside another wireless manager or preload personal Wi-Fi credentials.
+- The inherited ArchISO `releng` profile enables `iwd.service` and `systemd-networkd.service` by default. The optional field packages include NetworkManager tooling, but **do not automatically enable NetworkManager** or start a competing WLAN manager. Change backend only in a separately tested decision, and never preload personal Wi-Fi credentials.
 - **One laptop power manager at a time:** TLP, power-profiles-daemon and tuned can conflict. No service is auto-enabled in the optional field layer. TLP USB autosuspend can disrupt USB equipment, especially receivers.
+- The Air profile removes inherited `sshd.service` and `ModemManager.service` enablement symlinks **only in its staged copy**. SSH remains available for deliberate operator setup, but no default remote-login listener starts; modem auto-probing is off until device-specific approval. The generic rescue profile remains unchanged.
 - The radio operator stack must not automatically start SDR, upload signals, attach serial devices or mask logs; collection is a separately authorized user action.
 - No APFS mounting, Mac firmware extraction, repartition, blanket graphics kernel parameters, or universal fan rules in the first live image.
 - Actual battery-hour targets are not assigned until battery health, ambient temperature and workload are measured. A source pass cannot establish field runtime.
@@ -39,7 +40,7 @@ Model IDs, chipset IDs, boot firmware and recovery pathways must be verified on 
 - `profiles/macbook-air-field/packages.x86_64`: four optional official-Arch package candidates (`bluez`, `bluez-utils`, `powertop`, `wireguard-tools`).
 - `profiles/macbook-air-field/airootfs/usr/local/bin/nemesis-field-check`: read-only battery, charging, thermal, sleep, wireless PCI-ID and power-manager conflict observations. A fixture environment override supports CI testing.
 - `tests/test_macbook_air_field.py` plus the existing foundation/static CI enforce separation.
-- `spec/editions.json`: `macbook-air-field` remains **planned**. Existing `mac-intel` builder and manifest remain unchanged.
+- `spec/editions.json`: `macbook-air-field` is a separately selected **source-scaffold** with its own staging/build scripts; the generic `mac-intel` builder and manifest remain unchanged.
 
 **Image-size baseline:** approximately 1.3 GB for the full `releng`-derived Intel ISO in Docker. ArchISO also has a small `baseline` profile. A future A/B study should compare rescue functions, bootability, image size, RAM footprint, power and recovery before adopting a smaller independent field profile. Never replace the validated rescue image simply to reduce size.
 

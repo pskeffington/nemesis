@@ -32,3 +32,5 @@ jobs:
         run: pacman -Syu --noconfirm --needed archiso
       - name: Stage official releng with Nemesis overlay
         run: bash tests/test-installed-releng.sh
+      - name: Verify MacBook Air staging and field service hardening
+        run: bash tests/test-installed-air-profile.sh

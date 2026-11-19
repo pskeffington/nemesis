@@ -31,3 +31,7 @@
 - Verify supply-chain/release policy separately under F04.
 
 **Report:** current source SHA, role, changed files, exact GitHub CI results, separate build/boot/hardware gates, unresolved model issues and next repo-only pass.
+
+## F03-A02b — field service hardening verification
+
+A field build must not auto-enable inherited `sshd.service` or `ModemManager.service` from releng. The staged Air profile must retain upstream `iwd.service` and `systemd-networkd.service` and avoid activating a competing NetworkManager backend by default. Run source fixture and actual packaged-ArchISO staging checks, inspect diff against generic rescue and confirm no unexpected unit file mutation. This is a **source/ISO policy gate** and not evidence of field communications or user security acceptance.
