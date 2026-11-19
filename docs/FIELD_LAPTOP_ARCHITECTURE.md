@@ -62,3 +62,5 @@ The opt-in Air edition is now stageable with a separate image builder and has a 
 ## Field image payload evidence
 
 The dedicated Docker verifier checks that the image references an `airootfs.sfs` payload and inspects the built SquashFS from the same `mkarchiso` run. This must show the read-only `nemesis-field-check`, preserved `iwd`/networkd service links, **no multi-user autoenable symlink** for SSH/ModemManager, and a `ModemManager.service` mask to `/dev/null`. This is a **build-content test**, not proof that systemd started correctly on a MacBook Air or that any Wi-Fi/SDR peripheral works.
+
+**Readiness-probe network correction:** the field diagnostic reports current `iwd`, `systemd-networkd`, and NetworkManager service states separately. Merely having `nmcli` installed does not mean NetworkManager is running or managing Wi-Fi. The probe never starts these services, scans SSIDs, or changes credentials.
