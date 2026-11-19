@@ -4,7 +4,7 @@ Every pass has one implementing owner and one observable gate. Sources refer to 
 
 | Pass | Owner | Inputs | Deliverable | Acceptance | Status |
 | --- | --- | --- | --- | --- | --- |
-| M01-P02 | build-qa-engineer | Existing scaffold, ARC-01..05 | verified staging/manifest tests, CI lint results | tests run and pass; errors documented | IN PROGRESS |
+| M01-P02 | build-qa-engineer | Existing scaffold, ARC-01..05 | verified staging/manifest tests, CI lint results | CI fixture checks passed; installed Arch profile staging remains | REVIEW |
 | M02-P01 | archiso-build-engineer | M01-P02, Arch/Garuda x86_64, network | ISO, SHA-256, build manifest/log | real mkarchiso exit 0 and checksum verified | NOT STARTED |
 | M03-P01 | uefi-boot-validator | M02-P01, QEMU/OVMF | firmware-to-live-shell boot record | live shell and diagnostics observed | NOT STARTED |
 | M04-P01 | intel-mac-compatibility | M03-P01 and non-T2 Intel Mac | physical device-compatibility sheet | external boot, no internal writes, return to macOS | BLOCKED on physical host |

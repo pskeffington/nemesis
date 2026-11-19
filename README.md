@@ -26,7 +26,7 @@ Generated files go to ignored `.build/` and `out/`. Build scripts do **not** rep
 
 ## Project navigation
 - **Plan:** [ROADMAP.md](ROADMAP.md); [architecture](docs/ARCHITECTURE.md); [decision log](docs/DECISIONS.md).
-- **Research:** [Mac/Linux literature matrix](docs/research/LITERATURE_MATRIX.md), [method](docs/research/METHODOLOGY.md), [open questions](docs/research/OPEN_QUESTIONS.md).
+- **Research:** [Mac/Linux literature matrix](docs/research/LITERATURE_MATRIX.md), [method](docs/research/METHODOLOGY.md), [open questions](docs/research/OPEN_QUESTIONS.md), [model candidates](docs/research/INTEL_MAC_CANDIDATES.md).
 - **Codex:** [kickoff](CODEX_KICKOFF.md), [session prompt](codex/SESSION_PROMPT.md), [pass queue](codex/PASS_QUEUE.md), [build runbook](codex/BUILD_RUNBOOK.md), [hardware runbook](codex/HARDWARE_RUNBOOK.md), [research runbook](codex/RESEARCH_RUNBOOK.md).
 - **Agents:** [role catalog and handoff](agents/README.md); mandatory [AGENTS.md](AGENTS.md).
 - **Verification:** [build and QA](docs/BUILD_AND_QA.md), [Mac compatibility matrix](docs/MAC_COMPATIBILITY.md).

@@ -7,7 +7,7 @@ Statuses: `NOT STARTED`, `READY`, `IN PROGRESS`, `BLOCKED`, `REVIEW`, `ACCEPTED`
 | ID | Acceptance checkpoint | Prerequisite | Status |
 | --- | --- | --- | --- |
 | M00 | Repository/authority baseline inspected | Existing main branch | ACCEPTED — 2026-11-19 repo inspection |
-| M01 | Mac-first architecture, research matrix, roles, Codex instructions and source validation | M00 | IN PROGRESS — source exists; local/CI acceptance unobserved |
+| M01 | Mac-first architecture, research matrix, roles, Codex instructions and source validation | M00 | IN PROGRESS — CI static passed; installed Arch profile and ISO not yet exercised |
 | M02 | Arch/Garuda x86_64 mkarchiso creates verified ISO with provenance | M01 static gate | NOT STARTED |
 | M03 | ISO boots to live shell under x86_64 OVMF/UEFI QEMU | M02 | NOT STARTED |
 | M04 | Real non-T2 Intel Mac external boot, per-device functional tests and recovery | M03, test Mac | BLOCKED on physical test model |
@@ -16,11 +16,11 @@ Statuses: `NOT STARTED`, `READY`, `IN PROGRESS`, `BLOCKED`, `REVIEW`, `ACCEPTED`
 | M07 | Separate Apple Silicon ARM64 boot-design feasibility | Asahi upstream + model-specific device | DEFERRED |
 | M08 | Optional field/RF/security editions, without inflating core | M05 | DEFERRED |
 
-## Active pass: M01-P02 — validate preparation and fixture tests
+## Active pass: M01-P02 — installed ArchISO profile acceptance
 - **Owner:** build-qa-engineer. **Inputs:** ARC-01..05, installed ArchISO or minimal fixture, current scripts.
-- **Tasks:** script syntax; ShellCheck; fixture profile staging; package delta dedup; checksum correctness; CI status.
+- **Tasks:** Ubuntu CI Bash/ShellCheck/fixtures succeeded; now inspect and stage the *installed* ArchISO releng profile on Garuda, compare package/boot files, and record actual host evidence.
 - **Deliverables:** `scripts/validate.sh` evidence, test scripts, repair commits if needed.
-- **Gate:** actual passing tests and staged profile checks recorded; source being present is insufficient.
+- **Gate:** CI and real Arch/Garuda releng staging checks recorded; CI fixtures alone are insufficient for full M01 acceptance.
 - **Failure/rollback:** preserve worktree/evidence, fix one defect and rerun; no Mac disk operations.
 
 ## Next pass: M02-P01 — first real Intel ISO
@@ -50,6 +50,7 @@ Statuses: `NOT STARTED`, `READY`, `IN PROGRESS`, `BLOCKED`, `REVIEW`, `ACCEPTED`
 ## Evidence register
 - **2026-11-19:** Found existing README + GPL-3.0; committed Mac-first scaffold at `4186a95de37007e9bbe9187d1dc222177f14012a`.
 - **2026-11-19:** Reviewed upstream ArchISO, ArchWiki, t2linux, Asahi and Apple documentation; matrix is *source evidence only*.
-- **Still pending:** local fixture test output, GitHub Actions job result, an actual Arch/Garuda ISO build, OVMF boot log and any physical Mac test.
+- **2026-11-19:** Static CI succeeded at https://github.com/pskeffington/nemesis/actions/runs/44602678472 (Bash syntax, ShellCheck, package checks, fixture staging, SHA-256 and corruption test). Original failures uncovered a quoting warning and an associative-array fixture mismatch; both repaired. Real Arch releng staging still PENDING.
+- **Still pending:** staging against installed ArchISO on x86_64 Garuda, actual ISO build, OVMF boot log and any physical Mac test. Tracking issues: [M01-P02](https://github.com/pskeffington/nemesis/issues/1), [M02-P01](https://github.com/pskeffington/nemesis/issues/2), [M03-P01](https://github.com/pskeffington/nemesis/issues/3), [M04-P01](https://github.com/pskeffington/nemesis/issues/4).
 
 Additional detailed execution rules: [codex/PASS_QUEUE.md](codex/PASS_QUEUE.md) and [agents/README.md](agents/README.md).

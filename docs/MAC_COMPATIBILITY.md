@@ -1,6 +1,6 @@
 # Mac hardware compatibility — evidence-based matrix
 
-**No Nemesis ISO has been physically tested yet.** A proposed target is not a verified working machine. Do not publish 'supported' labels until model-specific acceptance results exist.
+**No Nemesis ISO has been physically tested yet.** See [candidate Intel models](research/INTEL_MAC_CANDIDATES.md) for a source-only test prioritization, not a support certification. A proposed target is not a verified working machine. Do not publish 'supported' labels until model-specific acceptance results exist.
 
 | Hardware family | CPU / boot | Nemesis build lane | Current claim | Verification |
 | --- | --- | --- | --- | --- |

@@ -5,7 +5,7 @@
 ## Agent dispatch
 - Role index: [agents/README.md](agents/README.md). Roles are written instructions for task delegation, not active background agents.
 - Codex entry: [CODEX_KICKOFF.md](CODEX_KICKOFF.md); [session prompt](codex/SESSION_PROMPT.md); [pass queue](codex/PASS_QUEUE.md).
-- Literature authority: [docs/research/LITERATURE_MATRIX.md](docs/research/LITERATURE_MATRIX.md); [method](docs/research/METHODOLOGY.md).
+- Literature authority: [docs/research/LITERATURE_MATRIX.md](docs/research/LITERATURE_MATRIX.md); [method](docs/research/METHODOLOGY.md); [model candidates](docs/research/INTEL_MAC_CANDIDATES.md).
 - One implementation owner/pass. Research and security can independently review but cannot approve unrun build/physical tests.
 
 ## Hardware scope
