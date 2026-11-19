@@ -1,5 +1,7 @@
 # Contributing to Nemesis
 
+**Current scope is repository-only.** Contributions should focus on architecture, package/hardware contracts, source tests, research, security, and Codex handoff. ISO/VM/Mac execution instructions are future references, not active contribution steps. See [foundation priorities](docs/FOUNDATION_PRIORITY_PLAN.md).
+
 Start with AGENTS.md, CODEX_KICKOFF.md, ROADMAP.md and docs/research/LITERATURE_MATRIX.md.
 
 1. Choose one pass from codex/PASS_QUEUE.md and identify the responsible agent in agents/README.md.

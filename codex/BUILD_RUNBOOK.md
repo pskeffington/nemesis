@@ -1,3 +1,5 @@
+> **FUTURE EXECUTION / REFERENCE ONLY.** Nemesis is currently in GitHub-only repository foundation mode. Do not run Linux builds, VM boots or physical Mac procedures from this document until F05 handoff acceptance and explicit user GO. See [foundation priorities](../docs/FOUNDATION_PRIORITY_PLAN.md) and [handoff contract](HANDOFF_CONTRACT.md).
+
 # Intel Mac ISO — build operator runbook
 
 **Host:** x86_64 Arch Linux/Garuda Linux. **Output:** one Nemesis ISO in ignored `out/mac-intel/`. **Target:** Intel non-T2 only. No installer or partition writer is run.

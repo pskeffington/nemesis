@@ -9,6 +9,8 @@
 - Record source revision/date when available; the visit date is *not* a publication date. Hardware changes and rolling-release regressions require fresh verification before a release.
 - Evidence sequence: source checked -> requirement documented -> implementation built -> VM booted -> actual Mac booted -> observed peripheral checks -> accepted. Never skip a tier.
 
+**Comparable distro repositories:** [source-pinned recon and adoption decisions](UPSTREAM_DISTRO_RECON.md) (UP-01..UP-08). These supplement source rows ARC/ARM/T2 and do not add hardware pass claims.
+
 ## Evidence-to-decision matrix
 
 | ID | Topic | Source/tier | Source-backed finding | Nemesis decision | Next observable gate |

@@ -1,0 +1,9 @@
+# repository|default_branch; canonical Garuda ISO profiles are hosted on GitLab
+archlinux/archiso|master
+endeavouros-team/EndeavourOS-ISO|main
+CachyOS/CachyOS-Live-ISO|master
+RebornOS-Team/rebornos-iso|main
+t2linux/archiso-t2|senpai
+t2linux/EndeavourOS-ISO-t2|senpai
+AsahiLinux/asahi-installer|main
+garuda-linux/garuda-tools|deployiso

@@ -12,4 +12,6 @@
 | Q-08 | Source reproducibility | How will input package versions and upstream profile revision be captured and release-locked? | ARC-01..05 | build-qa-engineer | Emit manifest, package lock evidence and provenance | READY |
 | Q-09 | Hardware privacy | Can diagnostic logs be reduced to non-identifying IDs before contributing to compatibility table? | methodology | security-release-reviewer | Redaction review and a safe recording template | READY |
 
+Additional recon issues: **Q-10 (upstream contract): RESOLVED at the staged-profile level** for signed ArchISO 92-1 in run 44607322858: EFI/syslinux/grub and pacman.conf copied intact; package overlay and identity validated. Real ISO build/boot remain Q-01/M02/M03. **Q-11 (release reproducibility):** which extra package/boot artifact manifests and signing chain are required beyond a portable ISO SHA-256? Owner security-release-reviewer; defer until M02.
+
 Update the decision in docs/DECISIONS.md before turning a research idea into a build dependency. **No Q item is an accepted hardware result.**

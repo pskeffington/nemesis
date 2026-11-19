@@ -1,3 +1,5 @@
+> **FUTURE LOCAL EXECUTION / REFERENCE ONLY.** Nemesis remains in repository foundation mode. A separate user-authorized [GitHub-hosted Docker ISO build test](DOCKER_ISO_VALIDATION.md) is allowed; no physical machine, QEMU, firmware or USB test is authorized. Do not run these local-machine instructions until F05 acceptance and explicit GO. See [foundation priorities](FOUNDATION_PRIORITY_PLAN.md) and [handoff contract](../codex/HANDOFF_CONTRACT.md).
+
 # Build and verification — Mac Intel edition
 
 ## Prerequisites
@@ -13,6 +15,9 @@ sudo bash scripts/build-iso.sh mac-intel
 ```
 
 Validation includes Bash syntax, package manifest checks, ShellCheck (when installed), a **fixture releng profile staging test** and a **relative SHA-256 portability/corruption test**. If ShellCheck is unavailable, the script says NOT RUN; the complete static gate has not passed.
+
+## Installed ArchISO staging CI
+GitHub Actions runs a second `archlinux:base-devel` container job, installs the signed `archiso` package, and executes `bash tests/test-installed-releng.sh`. The test checks the actual releng `profiledef.sh`, Boot folders, package uniqueness, copied pacman configuration and executable overlay. **This job does not run mkarchiso or produce an ISO.** Run 44607322858 on 2026-11-19 **passed** with official ArchISO `92-1` and source profile SHA-256 `2fffd7ba3226102ce0db59918df4509cb571792e6953de44145badfe7534a475`. Local Garuda staging can be checked with the same script before the real build.
 
 ## Profile staging, isolation and root safety
 - Normal builder copies `/usr/share/archiso/configs/releng` into ignored `.build/profile-mac-intel` and leaves ArchISO's installed files untouched.

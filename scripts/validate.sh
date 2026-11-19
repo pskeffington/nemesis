@@ -13,6 +13,9 @@ scripts=(
   scripts/validate.sh
   tests/test-prepare-profile.sh
   tests/test-checksums.sh
+  tests/test-installed-releng.sh
+  scripts/recon-upstreams.sh
+  docker/archiso/validate-build.sh
   profiles/mac-intel/airootfs/usr/local/bin/nemesis-hw-report
 )
 for script in "${scripts[@]}"; do

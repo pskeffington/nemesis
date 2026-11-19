@@ -1,0 +1,79 @@
+name: Nemesis Docker ArchISO ISO build
+
+# ---------------------------------------------------------------------
+# Explicitly isolated GitHub-hosted Docker validation (no local Mac/Garuda).
+# Never build an untrusted pull request with --privileged.
+# ---------------------------------------------------------------------
+on:
+  workflow_dispatch:
+    inputs:
+      upload_iso:
+        description: "Upload the untested prototype ISO as a workflow artifact"
+        required: false
+        type: boolean
+        default: false
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/docker-archiso.yml'
+      - 'docker/archiso/**'
+      - 'scripts/build-iso.sh'
+      - 'scripts/prepare-profile.sh'
+      - 'scripts/write-checksums.sh'
+      - 'profiles/mac-intel/**'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docker-archiso-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  docker-iso:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - name: Checkout trusted main source without stored credentials
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Inspect ephemeral runner resources
+        run: |
+          uname -m
+          df -h .
+          free -h
+          docker version --format '{{.Server.Version}}'
+
+      - name: Build ArchISO Docker builder from official Arch image
+        run: docker build --pull --tag nemesis-archiso-builder -f docker/archiso/Dockerfile .
+
+      - name: Execute privileged ISO build inside ephemeral Docker
+        run: |
+          docker run --rm --privileged \
+            --env NEMESIS_CI_DOCKER=1 \
+            --mount "type=bind,source=${{ github.workspace }},target=/workspace" \
+            --workdir /workspace \
+            nemesis-archiso-builder \
+            bash docker/archiso/validate-build.sh
+
+      - name: Upload small build evidence, including errors
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nemesis-docker-build-evidence
+          path: |
+            out/docker-evidence/
+            out/mac-intel/*.sha256
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Optionally upload prototype ISO (never a release)
+        if: ${{ success() && github.event_name == 'workflow_dispatch' && inputs.upload_iso }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: nemesis-untested-intel-iso
+          path: out/mac-intel/nemesis-*-x86_64.iso
+          compression-level: 0
+          retention-days: 3

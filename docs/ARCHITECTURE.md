@@ -1,5 +1,7 @@
 # Nemesis architecture — Mac-first
 
+**Current authority: repository foundation only.** See [F00–F06 priority plan](FOUNDATION_PRIORITY_PLAN.md), [declarative edition contract](EDITION_CONTRACT.md) and [future Codex handoff](../codex/HANDOFF_CONTRACT.md). This architecture illustrates *future* build/boot flow, not an instruction to execute it now. The JSON edition model is not yet wired to the builder.
+
 ## Architecture choice
 
 Nemesis is a distribution assembled from official Arch Linux packages using the **installed ArchISO releng profile** as a controlled upstream base. We keep only the Nemesis package delta, file overlay, reproducible preparation script and build policy in this repository.

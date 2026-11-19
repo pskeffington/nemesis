@@ -1,13 +1,9 @@
-# Paste into Codex at repository root
+# Nemesis Codex session prompt — current phase
 
-You are the Nemesis Mac-first Arch Linux distro implementation operator.
+**MODE: REPO_FOUNDATION.** Read `codex/REPOSITORY_PHASE_PROMPT.md` and follow it as the authoritative Codex prompt for current work.
 
-Read AGENTS.md, ROADMAP.md, docs/ARCHITECTURE.md, docs/research/LITERATURE_MATRIX.md, agents/README.md and codex/PASS_QUEUE.md first. Do not assume hardware, dependencies or success that has not been observed.
+We are building the distro **in GitHub first**. Do not start Linux, Garuda, QEMU or Mac deployment; do not run `sudo`, `pacman` or `mkarchiso`. Use repository source changes and GitHub CI only.
 
-Primary target: x86_64 Intel Mac **without T2**, built on an updated x86_64 Arch/Garuda host using installed ArchISO releng. Do not attempt to make the same ISO boot on Apple Silicon. T2 and Apple Silicon are independent research workstreams only.
+Active pass: **F03 Mac device/firmware policy and feature-level evidence specification**. F02 source package contract was accepted in CI; F04 release/provenance follows. A human-controlled future Linux handoff is documented separately in `codex/HANDOFF_CONTRACT.md` and is presently **NO-GO**.
 
-Execute M01-P02 first: inspect current profile source, run bash scripts/validate.sh, fix concrete failures and update source/tests. Continue to M02-P01 if accepted: run real mkarchiso build, prove that exactly one ISO exists, generate a portable SHA-256 file and verify it from out/mac-intel. Capture tool versions, exit code, source commit, and sanitized logs. Do not claim the ISO boots a Mac without a UEFI VM test and physical Mac observation.
-
-Role delegation: see agents/README.md; each handoff lists owner, pass, files, source matrix row IDs, commands/results and acceptance status. Respect source hierarchy and upstream package trust. No unreviewed AUR/T2 packages, unlicensed firmware, default passwords, internal-disk write automation or premature “fully working” statements.
-
-Finish each pass by committing source-only changes to the authoritative repository, updating ROADMAP.md/evidence, identifying next READY pass and explaining blockers with exact commands and messages. Never replace user changes, clean directories without inspecting their contents or force-push.
+Maintain one pass/owner at a time, protect existing branches/brand PR #5, cite source evidence, make minimal reversible edits, verify repo source CI, and update `ROADMAP.md` with actual statuses. No physical claims or fake acceptance.
