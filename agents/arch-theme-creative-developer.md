@@ -12,3 +12,7 @@ Read brand/README.md, brand/BRAND_GUIDE.md, brand/ROADMAP.md, plus root AGENTS.m
 4. QA icon sizes 16,32,64,256,512,1024; wordmark clipping; banner safe areas; wallpapers 3840x2160 and ultrawide/mobile crops; file transparency and accessibility contrast.
 5. For KDE/Konsole, stage only in user XDG paths, back up target files, never sudo or auto-apply. Test on actual Plasma before claiming usable.
 6. Report exact sources/outputs, tests actually run, screenshot evidence, shortcomings, rollback and next pass. Commit does not mean visually accepted or installed.
+
+## Dragonized deployment pass B06
+
+Use `brand/DRAGONIZED_TESTING.md` for the phase-specific runbook. Maintain Python standard-library-only CLI commands `plan`, `install`, `apply`, `status`, `restore`, `uninstall`, and `render-wallpaper`; do not auto-apply global themes or modify Kvantum. Block collisions rather than overwriting user assets. Keep fixture testing separate from physical Plasma 6 acceptance and record actual Garuda version and screenshots before marking a milestone accepted.

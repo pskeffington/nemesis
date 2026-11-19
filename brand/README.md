@@ -4,6 +4,10 @@ This track converts the approved Nemesis branding board into separate, versioned
 
 **Visual reference:** purple angular Nemesis emblem, dark hooded raptor, misty mountains and communications station, cyan signal/radar HUD, silver wordmark. Use original artwork and avoid external copyrighted character or logo designs.
 
+## Garuda Dr460nized preview deployment
+
+The phase B06 test kit is staged from this branch without replacing Garuda's theme. See [Dragonized deployment and rollback](DRAGONIZED_TESTING.md). Use `bash brand/scripts/dragonized.sh plan`, then `install` and optionally `apply` inside KDE; use `restore` and `uninstall` afterward. The experimental Plasma style and vector wallpaper are separate optional layers; live Dragonized validation remains pending.
+
 ## Deliverable directory
 | ID | Segment | Deliverable | State |
 |---|---|---|---|

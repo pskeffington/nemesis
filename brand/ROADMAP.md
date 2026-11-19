@@ -1,18 +1,33 @@
 # Nemesis branding milestone register
 
-Status vocabulary: NOT STARTED, READY, IN PROGRESS, REVIEW, ACCEPTED, BLOCKED, DEFERRED.
+Statuses: NOT STARTED, READY, IN PROGRESS, BLOCKED, REVIEW, ACCEPTED, DEFERRED.
 
-| Milestone | Checkpoint | Status |
+**Objective:** preserve the approved Nemesis brand while producing testable, reversible user-space appearances for Garuda Dr460nized / KDE Plasma 6, independently of Mac-first ISO readiness.
+
+| ID | Checkpoint | Observed state |
 |---|---|---|
-| B01 | Emblem SVG, wordmark, palette and lockups visually approved | REVIEW |
-| B02 | Social icon set reviewed across sizes and shapes | REVIEW |
-| B03 | Platform banners confirmed safe on desktop/mobile | REVIEW |
-| B04 | Four 4K wallpapers approved, no 1:1 rendering artifacts | REVIEW |
-| B05 | Eight coordinated SVG operator glyphs approved | REVIEW |
-| B06 | KDE + Konsole appearance loaded, legible, reversible on test machine | REVIEW — physical test pending |
-| B07 | Creative Developer agent and provenance/manifest QA verified | REVIEW |
-| B08 | Approved binary assets promoted from local export pack to Git | NOT STARTED |
+| B01 | Emblem/wordmark source and palette reviewed at native sizes | REVIEW — source assets in Git |
+| B02 | App/social avatars crop-tested | REVIEW — conversation ZIP; not imported to repo |
+| B03 | Social banners mobile safe-area reviewed | REVIEW — conversation ZIP; not imported |
+| B04 | Four cinematic 4K wallpaper masters | REVIEW — original ZIP; new vector signal dusk visually previewed at 1080p |
+| B05 | Eight operator SVG glyphs and app icon | REVIEW — source files in Git |
+| B06 | Garuda Dragonized theme staging and rollback | REVIEW — preview CLI implemented; five fixture tests passed locally, **no actual Garuda test** |
+| B07 | Creative Theme Developer agent | REVIEW — instructions documented |
+| B08 | Approved binary assets versioned in repo and hashed | NOT STARTED |
+| B09 | Brand CI and release acceptance | IN PROGRESS — workflow proposed; GitHub result to be inspected |
 
-**Active visual pass B01-P02:** inspect source board, emblem, wordmark and 16/32/64px icons. Log exact changes; approve one primary mark. Rollback: retain prior SVG and reference board.
+## B06-P02: Dragonized preview deployment
 
-**Next:** B03-P02 safe-area crops; B04-P02 cinematic wallpaper polish; B06-P02 run user-space KDE preview on noncritical session; B08-P02 add reviewed raster assets and SHA-256 manifest. Separate distro M01–M05 Mac boot/security gates must not be bypassed.
+**Owner:** Arch Theme Creative Developer. **Scope:** stage KDE colors, Konsole scheme, Breeze-fallback Plasma style, scalable app icon and vector wallpaper only in XDG user paths; optional color apply after storing previous scheme. **Exclusions:** system packages, Kvantum, GTK, full icon-theme replacement, panels, PLM/SDDM, boot graphics and ISO image.
+
+**Files:** brand/scripts/dragonized.py, brand/scripts/dragonized.sh, brand/theme/plasma/Nemesis/, brand/wallpapers/signal-dusk.svg, tests/test_dragonized.py, brand/DRAGONIZED_TESTING.md.
+
+**Executed local tests:** 2026-11-19 fixture suite (non-root fake XDG home), 5/5 PASS: read-only plan, idempotent install/uninstall, collision block, post-install modification guard, apply/restore through a stubbed Plasma tool. Bash syntax and Python compile passed locally. Vector wallpaper rendered for preview at 1920×1080 and was visually inspected. Real KDE/Garuda test remains pending.
+
+**Acceptance gate:** actual Dr460nized Plasma session can apply/revert colors without harming its global theme or panels; inspect wallpaper output from rsvg-convert at 3840×2160 and record screenshot evidence. Do not advance to ACCEPTED before physical validation.
+
+**Rollback:** bash brand/scripts/dragonized.sh restore then bash brand/scripts/dragonized.sh uninstall; manually undo any independently selected desktop style, wallpaper or Konsole profile.
+
+**Next pass B06-P03:** run on an actual Dragonized desktop, compare Dr460nized/Kvantum effects, verify focus/contrast and record versioned acceptance evidence. Parallel B04-P03: replace schematic wallpaper with polished cinematic masters (do not overwrite original approved board). Next B08-P02: import reviewed binaries with hashes.
+
+The distro ISO and Intel Mac hardware gates M01–M05 are unchanged.

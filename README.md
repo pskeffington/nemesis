@@ -38,3 +38,7 @@ Official Arch packaging by default; upstream releng is copied to staging, never 
 Separate [linux_config](https://github.com/pskeffington/linux_config) handles host-specific research and deployment; Nemesis owns the distribution and only approved manifests cross between repos.
 
 This is an independent project, not an official Arch Linux or Apple distribution. Existing repository license is GPL-3.0; third-party licenses remain their own.
+
+## Branding preview (separate from ISO acceptance)
+
+The user-space Garuda Dr460nized / KDE Plasma 6 theme development and reversible testing runbook live under [brand/](brand/README.md) and [brand/DRAGONIZED_TESTING.md](brand/DRAGONIZED_TESTING.md). This is not evidence of a Nemesis ISO or physical Mac boot.
