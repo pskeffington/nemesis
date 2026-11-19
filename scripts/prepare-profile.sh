@@ -31,9 +31,10 @@ for key in iso_name iso_label iso_publisher iso_application; do
   grep -q "^$key=" "$dest/profiledef.sh" || die "upstream profile changed: missing $key"
 done
 grep -q '^file_permissions=(' "$dest/profiledef.sh" || die "upstream profile changed: missing file_permissions"
+iso_label="$(date -u +NEMESIS_%Y%m)"
 sed -i \
   -e 's/^iso_name=.*/iso_name="nemesis"/' \
-  -e 's/^iso_label=.*/iso_label="NEMESIS_$(date -u +%Y%m)"/' \
+  -e "s/^iso_label=.*/iso_label=\"$iso_label\"/" \
   -e 's|^iso_publisher=.*|iso_publisher="Nemesis contributors"|' \
   -e 's|^iso_application=.*|iso_application="Nemesis Intel Mac live environment"|' \
   -e '/^file_permissions=(/a\["/usr/local/bin/nemesis-hw-report"]="0:0:755"' \
