@@ -82,7 +82,7 @@ M02 ISO -> M03 virtual UEFI -> M04 physical Intel Mac.
 
 **Pass:** stage KDE colors, Konsole preset, Plasma Style, icon and 4K wallpaper into optional ArchISO airootfs; add signed-Arch package list and an unprivileged real-Arch Docker stage/manifest test. Preserve the existing privileged GitHub Docker ISO build gate on trusted main only, with manual edition selection after review.
 
-**Status:** REVIEW until this branch's Docker stage test and static CI pass. The trusted full themed ISO build, GUI login and hardware boot are NOT STARTED. This work does not approve F05 handoff or authorize local-machine execution.
+**Status:** ACCEPTED for unprivileged Docker profile staging and static source checks only: [Arch Docker stage 44611079852](https://github.com/pskeffington/nemesis/actions/runs/44611079852), [final static CI 44611206411](https://github.com/pskeffington/nemesis/actions/runs/44611206411), [foundation CI 44611206246](https://github.com/pskeffington/nemesis/actions/runs/44611206246), [brand tests 44611080263](https://github.com/pskeffington/nemesis/actions/runs/44611080263). Full themed ISO compilation, in-image asset verification, GUI login and hardware boot are NOT STARTED; [next gate #14](https://github.com/pskeffington/nemesis/issues/14). This work does not approve F05 handoff or authorize local-machine execution.
 
 **Files:** [docs/THEME_ISO_PREVIEW.md](docs/THEME_ISO_PREVIEW.md), [theme source](brand/), [preview manifest](profiles/mac-intel-theme-preview/packages.x86_64), [stager](scripts/prepare-theme-profile.sh), [Docker test](tests/test-theme-iso-staging.sh).
 

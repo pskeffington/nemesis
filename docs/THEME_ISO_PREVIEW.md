@@ -53,3 +53,9 @@ The standalone scripts/build-iso.sh mac-intel-theme-preview is a source-controll
 Rollback for source only: revert this opt-in branch commit. Baseline rescue build remains default and separately named. Preserve Docker logs and checksums only as test evidence; never publish preview ISO as an accepted release.
 
 References: ArchISO profile schema https://github.com/archlinux/archiso/blob/master/docs/README.profile.rst and KDE style layout https://develop.kde.org/docs/plasma/theme/theme-details/.
+
+## Verified source-stage gate (2026-11-19)
+
+**F06-ISO-S ACCEPTED — source and unprivileged Arch container staging only.** [GitHub Docker run 44611079852](https://github.com/pskeffington/nemesis/actions/runs/44611079852) verified copied ArchISO releng, the isolated theme payload, official package metadata lookups, actual 3840×2160 render, unchanged baseline rescue profile and boot files, and non-overwrite protection. [Static CI 44611206411](https://github.com/pskeffington/nemesis/actions/runs/44611206411) passed after a ShellCheck provenance-log formatting correction; [foundation CI 44611206246](https://github.com/pskeffington/nemesis/actions/runs/44611206246) also passed. This status does not certify a completed ISO file.
+
+**Next gate:** [F06-ISO-B01 issue #14](https://github.com/pskeffington/nemesis/issues/14) requests an explicitly selected trusted-main Docker image compilation after PR review, SHA-256 verification and inspection of the **built** squashfs for theme files. The desktop boot, Dragonized UI acceptance and physical Intel Mac remain untested.
