@@ -20,6 +20,15 @@ TestCase {
 
     function init() {
         board.resetPreview()
+        wait(35)
+    }
+
+    function clickControl(control) {
+        verify(control.visible && control.width > 20 && control.height > 20)
+        mouseMove(control, control.width / 2, control.height / 2)
+        wait(8)
+        mouseClick(control, control.width / 2, control.height / 2)
+        wait(8)
     }
 
     function test_defaultState() {
@@ -43,7 +52,7 @@ TestCase {
 
     function test_clickSelectsAndUpdatesContent() {
         const radio = board.tileAt(1)
-        mouseClick(radio)
+        clickControl(radio)
         compare(board.selectedKey, "radio")
         compare(board.selectedTitle, "Signals")
         verify(board.selectedDescription.indexOf("No receiver") >= 0)
@@ -61,22 +70,25 @@ TestCase {
     }
 
     function test_cyanAccentControl() {
-        mouseClick(board.cyanControl)
+        clickControl(board.cyanControl)
         compare(board.useCyan, true)
         compare(board.tileAt(0).accentColor, board.cyan)
     }
 
     function test_highContrastControl() {
-        mouseClick(board.contrastControl)
+        clickControl(board.contrastControl)
         compare(board.highContrast, true)
         compare(board.tileAt(0).highContrast, true)
     }
 
     function test_resetIsFunctional() {
-        mouseClick(board.tileAt(5))
-        mouseClick(board.cyanControl)
-        mouseClick(board.contrastControl)
-        mouseClick(board.resetControl)
+        clickControl(board.tileAt(5))
+        compare(board.selectedKey, "satellite")
+        clickControl(board.cyanControl)
+        compare(board.useCyan, true)
+        clickControl(board.contrastControl)
+        compare(board.highContrast, true)
+        clickControl(board.resetControl)
         compare(board.selectedKey, "terminal")
         compare(board.useCyan, false)
         compare(board.highContrast, false)
