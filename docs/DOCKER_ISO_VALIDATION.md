@@ -50,3 +50,10 @@ If the build fails because of image package conflicts, resource exhaustion, moun
 - Community reference [privileged Docker mkarchiso in GitHub Actions](https://github.com/marketplace/actions/mkarchiso)
 
 **Repository-phase status:** this is a scoped Docker build test, **not** a broad switch to Linux deployment. The F03 Mac hardware policy and F04 release specification remain on the critical-path handoff plan.
+
+## Initial CI evidence and control notes (2026-11-19)
+
+- [Initial trusted Docker job 44610122687](https://github.com/pskeffington/nemesis/actions/runs/44610122687), source commit `cc93fd9f0b135d8f3847177f6fe6b056c1ba4a0c`. The **Docker image build** succeeded; the real `mkarchiso`/artifact validation gate must be judged from the eventual job result and evidence artifact, not from the image-creation step.
+- An independent repository lint gate reported ShellCheck SC2129 for repeated append redirections in the evidence script; this was repaired in [PR #13](https://github.com/pskeffington/nemesis/pull/13), and the corrected branch passed [static checks](https://github.com/pskeffington/nemesis/actions/runs/44610495916). The correction groups log writes and does not change the ISO package/profile contents.
+- Merging that nonfunctional cleanup used a single `[skip ci]` commit to avoid canceling the already-running expensive Docker build. This docs-only follow-up restores normal main-branch source CI without starting another Docker build. **Do not use CI skips as a substitute for source validation.**
+- A GitHub-hosted runner has finite disk space; if full releng compilation exhausts space, record `BLOCKED_BY_RUNNER_RESOURCES` and either size a suitable disposable runner or design a separately labeled small smoke profile. Never mark a reduced profile as proof the full distribution assembled.
