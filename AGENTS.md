@@ -1,30 +1,34 @@
-# Nemesis contributor / Codex operating contract
+# Nemesis — Codex and contributor contract
 
-## Source of truth
-- Work in this repository for distro profiles, source, build scripts, compatibility claims and release evidence.
-- Read README.md, ROADMAP.md and docs/ARCHITECTURE.md before changing architecture.
-- `linux_config` is related machine configuration, not a source of unreviewed files to bake into ISOs.
-- Preserve existing GPL-3.0 LICENSE and attribution; review upstream dependencies and firmware redistribution terms.
+**Authority:** This GitHub repository owns Nemesis distro source, profile deltas, scripts, reproducibility documentation, the hardware evidence matrix and release criteria. Read README.md, ROADMAP.md and docs/ARCHITECTURE.md before editing. The separate linux_config repository is for host-specific configuration and is not copied into ISO images without review.
 
-## Platform boundaries
-- First implemented image: x86_64 Intel Macs **without T2** via official ArchISO releng.
-- T2 support requires its own reviewed kernel, firmware and physical hardware gates; never claim the stock kernel solves T2 input/audio/Wi-Fi.
-- Apple Silicon requires a distinct ARM64 boot architecture and upstream Asahi evaluation; never claim an x86_64 ISO boots M-series Macs.
-- Prioritize Mac EFI, Broadcom chipset identification, audio, GPU, trackpad, thermal and battery diagnostics before GUI theming.
-- Never automatically extract Apple firmware, distribute unlicensed firmware, disable secure-boot policies, or alter internal disks.
+## Agent dispatch
+- Role index: [agents/README.md](agents/README.md). Roles are written instructions for task delegation, not active background agents.
+- Codex entry: [CODEX_KICKOFF.md](CODEX_KICKOFF.md); [session prompt](codex/SESSION_PROMPT.md); [pass queue](codex/PASS_QUEUE.md).
+- Literature authority: [docs/research/LITERATURE_MATRIX.md](docs/research/LITERATURE_MATRIX.md); [method](docs/research/METHODOLOGY.md).
+- One implementation owner/pass. Research and security can independently review but cannot approve unrun build/physical tests.
 
-## Every executable pass
-1. Inspect existing code and compatibility matrix.
-2. Implement one reversible, testable change with named file paths.
-3. Run `bash scripts/validate.sh`; run `mkarchiso` and VM/physical hardware checks when the environment permits.
-4. Update ROADMAP.md evidence and docs/MAC_COMPATIBILITY.md for any newly tested hardware.
-5. Mark `ACCEPTED` only with identifiable evidence; otherwise label `READY`, `IN PROGRESS` or `BLOCKED`.
-6. Exclude secrets, local network topology, Mac serial numbers, user data, raw firmware dumps and proprietary captures from commits.
+## Hardware scope
+1. **mac-intel**: x86_64 Intel Macs without T2; current *candidate* baseline uses stock installed ArchISO releng.
+2. **mac-t2**: separate future kernel and firmware workflow. Never assume stock profile makes built-in T2 input/audio/wireless functional.
+3. **mac-asahi**: independent Apple Silicon ARM64 boot stack. The x86_64 ISO cannot boot M-series Macs.
+4. **operator layers**: optional packages for engineering, RF and security after core hardware acceptance; avoid unnecessary base ISO bloat.
 
-## Build and review guardrails
-- No host install scripts that write to Mac partition tables or firmware as a default.
-- Every script: `set -euo pipefail`, human-facing comments, explicit prerequisites and predictable failures.
-- Validate syntax with `bash -n`, lint with ShellCheck, inspect output artifacts, record SHA-256.
-- Use official Arch packages by default; external AUR, T2 and Asahi sources require explicit provenance review.
-- Distinguish upstream documentation, proposed compatibility and observed physical testing.
-- Do not add repo pricing or business valuation data.
+## Non-negotiable safety
+- No automatic repartitioning, internal-drive formatting, filesystem write, firmware extraction, disabling Apple startup security, or remote boot policy changes.
+- No unauthorized Apple firmware redistribution, unsigned third-party release repos, hard-coded credentials, proprietary capture dumps, secrets, serial numbers, network identity or personal logs in public Git.
+- Reject unreviewed `SigLevel = Never` in package sources. Model-specific Broadcom driver choice starts with actual PCI IDs; no universal `broadcom-wl`.
+- Maintain GPL-3.0 repository LICENSE and check dependency/firmware rights separately.
+- Keep ISO, rootfs worktrees, local logs and VM images out of version control. Do not put commercial valuation or pricing in this repository.
+- Preserve user changes and accepted milestones; no destructive cleanups or force-push.
+
+## Repeatable pass contract
+1. Inspect baseline (`git status --short`, current branch, source matrix, previous acceptance evidence).
+2. Name pass ID, goal, owner, files, source rows, expected output, failure/rollback and acceptance command.
+3. Change one coherent unit; keep scripts fail-fast (`set -euo pipefail`), human-readable comments and source anchors.
+4. Execute `bash scripts/validate.sh` and relevant real build/VM/physical tests when available. Record exact commands and exit codes.
+5. Source commit != ISO build; ISO build != VM boot; VM boot != Apple physical boot; driver loaded != peripheral functional.
+6. Update ROADMAP.md, decisions/matrix as needed, and hand off `Pass | files | command/result | evidence | status | next`.
+7. When blocked, document why and select the highest-priority independent READY pass; do not invent success or skip a failed gate.
+
+Default next work is M01-P02 static/fixture validation, then M02-P01 build and SHA-256 verification on x86_64 Garuda.

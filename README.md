@@ -1,21 +1,19 @@
 # Nemesis
 
-**Nemesis** is a Mac-first, Arch-based GNU/Linux distribution under active development. The initial release target is a live/install ISO for **64-bit Intel Macs without an Apple T2 chip**, particularly hardware that benefits from a lean, repairable Linux system.
+**Nemesis** is a **Mac-first Arch-based GNU/Linux distribution under development**. Its first image targets **64-bit Intel Macs without Apple T2**, especially older hardware that benefits from a lean, repairable Linux environment. Planned T2 and Apple Silicon editions are *independent technical lanes*.
 
-**Status:** foundation source only. No Nemesis ISO has been built, boot-tested, or released yet.
+**Current state:** documented engineering scaffold. No Nemesis ISO build or physical Mac boot has been accepted.
 
-## Hardware development lanes
-
-| Lane | Target | Current state |
+## Development lanes
+| Lane | Boot/platform | Stage |
 | --- | --- | --- |
-| `mac-intel` | x86_64 Intel Macs without T2 | First build profile; physical support not yet verified |
-| `mac-t2` | Intel Macs with Apple T2 | Research / separate kernel, firmware and input-device gates |
-| `mac-asahi` | Apple Silicon ARM64 | Future independent boot/platform workstream; not an archiso x86_64 variant |
+| `mac-intel` | x86_64 / 64-bit EFI Mac without T2 | first live ISO profile and diagnostics |
+| `mac-t2` | x86_64 / Apple T2 with special kernel/firmware needs | separate research and trust review |
+| `mac-asahi` | ARM64 / Asahi boot and device stack | future ARM architecture; **not** an x86_64 ISO |
 
-The objective is a maintainable distribution, not a blanket assertion that every Mac works. Hardware compatibility will be proved model by model.
+We optimize EFI, Wi-Fi, GPU/display, trackpad/keyboard, audio, sensors, thermals, power and recoverability before custom themes or optional toolkits.
 
-## First build on Arch Linux or Garuda Linux (x86_64)
-
+## Build on x86_64 Arch/Garuda
 ```bash
 sudo pacman -Syu --needed git archiso shellcheck
 git clone https://github.com/pskeffington/nemesis.git
@@ -24,29 +22,19 @@ bash scripts/validate.sh
 sudo bash scripts/build-iso.sh mac-intel
 ```
 
-The builder copies the installed Arch `releng` profile, applies only the Nemesis overlay and package additions, then calls `mkarchiso`. It does **not** repartition a Mac, install to internal storage, or modify macOS.
+Generated files go to ignored `.build/` and `out/`. Build scripts do **not** repartition a Mac, write its internal storage or alter macOS security settings. A generated ISO needs later UEFI and physical Mac checks.
 
-Generated ISO(s), SHA-256 files, work trees and staging profiles live in ignored `out/` and `.build/` directories. The builder refuses to reuse existing work/stage directories; inspect and remove those directories manually before another attempt.
+## Project navigation
+- **Plan:** [ROADMAP.md](ROADMAP.md); [architecture](docs/ARCHITECTURE.md); [decision log](docs/DECISIONS.md).
+- **Research:** [Mac/Linux literature matrix](docs/research/LITERATURE_MATRIX.md), [method](docs/research/METHODOLOGY.md), [open questions](docs/research/OPEN_QUESTIONS.md).
+- **Codex:** [kickoff](CODEX_KICKOFF.md), [session prompt](codex/SESSION_PROMPT.md), [pass queue](codex/PASS_QUEUE.md), [build runbook](codex/BUILD_RUNBOOK.md), [hardware runbook](codex/HARDWARE_RUNBOOK.md), [research runbook](codex/RESEARCH_RUNBOOK.md).
+- **Agents:** [role catalog and handoff](agents/README.md); mandatory [AGENTS.md](AGENTS.md).
+- **Verification:** [build and QA](docs/BUILD_AND_QA.md), [Mac compatibility matrix](docs/MAC_COMPATIBILITY.md).
+- **Source:** `profiles/mac-intel`, `scripts/prepare-profile.sh`, `scripts/build-iso.sh` and `scripts/validate.sh`.
 
-The output is an **initial live environment**, not a polished desktop release or proven installer. See [build and QA](docs/BUILD_AND_QA.md) for acceptance gates.
+## Operating policies
+Official Arch packaging by default; upstream releng is copied to staging, never modified in place. Third-party packages, firmware rights and drivers require review. Mac hardware compatibility is established **model by model**, not from marketing years, virtual machines or successful builds. Raw ISO images, captures, machine identifiers and secrets are not committed.
 
-## Repository
+Separate [linux_config](https://github.com/pskeffington/linux_config) handles host-specific research and deployment; Nemesis owns the distribution and only approved manifests cross between repos.
 
-- [Architecture and hardware strategy](docs/ARCHITECTURE.md)
-- [Mac hardware matrix](docs/MAC_COMPATIBILITY.md)
-- [Build and validation](docs/BUILD_AND_QA.md)
-- [Roadmap and acceptance status](ROADMAP.md)
-- [Technical decisions](docs/DECISIONS.md)
-- [Contributor and agent instructions](AGENTS.md)
-
-**Related work:** [linux_config](https://github.com/pskeffington/linux_config) contains machine-level Linux configuration and system research. Nemesis owns its distribution image, build pipeline, hardware policies and releases. Do not copy host-specific secrets or unreviewed machine configs into a public ISO.
-
-## Principles
-
-1. Mac hardware first: EFI, Wi-Fi, GPU, trackpad, audio, sensors, thermals, power, suspend and recoverability.
-2. Preserve a safe boot and recovery path; no unattended internal-disk writes.
-3. Use official Arch packaging and a traceable upstream build. Vendor patches only by explicit, reviewed decision.
-4. Treat T2 and Apple Silicon as different boot/support platforms, not optional package flags.
-5. Record actual build, VM, physical boot and hardware verification separately; never infer acceptance from source changes alone.
-
-This is an independent project, not an official Arch Linux or Apple distribution. The repository carries the existing GPL-3.0 license; third-party packages and firmware retain their own licenses.
+This is an independent project, not an official Arch Linux or Apple distribution. Existing repository license is GPL-3.0; third-party licenses remain their own.
