@@ -18,7 +18,9 @@ permissions:
 
 concurrency:
   group: nemesis-docker-air-field-${{ github.ref }}
-  cancel-in-progress: true
+  # Keep one trusted pinned build running while newer source is queued.
+  # Image assembly evidence should never be lost to an unrelated push.
+  cancel-in-progress: false
 
 jobs:
   air-image-assembly:
