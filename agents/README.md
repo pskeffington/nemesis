@@ -26,3 +26,7 @@ Every handoff reports: `Pass ID | goal | paths changed | exact checks and result
 Stop for missing core boot input, altered partition/firmware state, unsigned third-party release packages, leaked secrets or unexpected root filesystem changes. Keep research/output logs outside the public repo until redacted.
 
 See [Codex kickoff](../CODEX_KICKOFF.md) and [session prompt](../codex/SESSION_PROMPT.md).
+
+## Visual ISO integration role
+
+[arch-theme-creative-developer.md](arch-theme-creative-developer.md) owns original visual source and the **opt-in** `mac-intel-theme-preview` staging pass F06-ISO-01 with ArchISO build/security review. It never changes the baseline rescue image or authorizes real-device execution. The Docker source gate and the trusted-main ISO build gate must report separate evidence.

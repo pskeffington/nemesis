@@ -26,3 +26,7 @@ See [brand guide](BRAND_GUIDE.md) and [delivery gates](ROADMAP.md).
 ## Test-machine operability
 
 For per-user deployment on Garuda Dr460nized, follow [OPERABILITY.md](OPERABILITY.md). Begin with the read-only doctor and plan checks. Colors and Plasma Style can be explicitly applied and separately restored. Testing on an actual Plasma 6 desktop remains open in GitHub issue #6.
+
+## Experimental ISO artwork staging
+
+The Mac-first ISO can stage an optional KDE preview from this same asset source under the **separate** `mac-intel-theme-preview` build target. See [ISO overlay and Docker test policy](../docs/THEME_ISO_PREVIEW.md). The base rescue image remains unthemed, and only GitHub-hosted Docker tests are authorized; no boot, graphical login, or physical Mac success is implied.

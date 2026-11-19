@@ -8,10 +8,13 @@ root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$root"
 scripts=(
   scripts/prepare-profile.sh
+  scripts/prepare-theme-profile.sh
   scripts/build-iso.sh
   scripts/write-checksums.sh
   scripts/validate.sh
   tests/test-prepare-profile.sh
+  tests/test-theme-iso-staging.sh
+  profiles/mac-intel-theme-preview/nemesis-theme-report
   tests/test-checksums.sh
   tests/test-installed-releng.sh
   scripts/recon-upstreams.sh

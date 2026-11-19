@@ -1,0 +1,49 @@
+name: Nemesis theme ISO staging (unprivileged Docker)
+
+# Experimental KDE payload profile tests: no privileged containers or secrets.
+on:
+  push:
+    branches: [feat/nemesis-brand-v0-1]
+    paths:
+      - '.github/workflows/theme-iso-stage.yml'
+      - 'brand/**'
+      - 'profiles/mac-intel-theme-preview/**'
+      - 'scripts/prepare-theme-profile.sh'
+      - 'scripts/prepare-profile.sh'
+      - 'scripts/build-iso.sh'
+      - 'tests/test-theme-iso-staging.sh'
+  pull_request:
+    paths:
+      - '.github/workflows/theme-iso-stage.yml'
+      - 'brand/**'
+      - 'profiles/mac-intel-theme-preview/**'
+      - 'scripts/prepare-theme-profile.sh'
+      - 'scripts/prepare-profile.sh'
+      - 'scripts/build-iso.sh'
+      - 'tests/test-theme-iso-staging.sh'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: theme-iso-source-staging
+  cancel-in-progress: true
+
+jobs:
+  arch-theme-profile:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - name: Checkout source without persisted credentials
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - name: Validate ArchISO profile in non-privileged Arch Docker container
+        run: |
+          docker run --rm --security-opt no-new-privileges \
+            --volume "$PWD:/workspace:ro" --workdir /workspace \
+            archlinux:base-devel \
+            bash -euo pipefail -c '
+              pacman -Sy --noconfirm --needed archiso librsvg file python diffutils
+              bash tests/test-theme-iso-staging.sh
+            '

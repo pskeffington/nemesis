@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# ---------------------------------------------------------------------
+# Read-only report of assets expected inside the Nemesis theme ISO variant.
+# ---------------------------------------------------------------------
+set -euo pipefail
+printf 'Nemesis KDE theme-preview resources:\n'
+for path in /usr/share/color-schemes/Nemesis.colors \
+  /usr/share/konsole/Nemesis.colorscheme \
+  /usr/share/plasma/desktoptheme/Nemesis/metadata.json \
+  /usr/share/icons/hicolor/scalable/apps/nemesis.svg \
+  /usr/share/wallpapers/Nemesis/contents/images/3840x2160.png; do
+  if [[ -r "$path" ]]; then
+    printf 'PRESENT %s\n' "$path"
+  else
+    printf 'MISSING %s\n' "$path"
+  fi
+done
+printf 'No desktop login, global theme change, or disk installation was performed.\n'

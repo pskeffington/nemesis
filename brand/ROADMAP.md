@@ -57,3 +57,7 @@ Rollback: restore-style, restore, uninstall, with manually chosen wallpaper and 
 The physical Dr460nized test is **NOT ACCEPTED**; [B06-P03 issue #6](https://github.com/pskeffington/nemesis/issues/6) remains open for real KDE color/style, Konsole, wallpaper, Kvantum relogin and restore evidence. [Draft PR #5](https://github.com/pskeffington/nemesis/pull/5) stays unmerged.
 
 **Next executable pass:** obtain the noncritical Garuda machine evidence using `brand/OPERABILITY.md`, fix any observed compatibility defects, and retain screenshots/commands in the physical acceptance issue.
+
+## B10 / F06-ISO-01 — Stage Nemesis assets into an opt-in Intel ArchISO variant
+
+**Status: REVIEW** pending unprivileged Arch Docker source-staging CI. The build variant keeps the default mac-intel rescue image unmodified while installing KDE colors/Plasma Style/Konsole wallpaper and optional package names to its own staging tree. Source: `scripts/prepare-theme-profile.sh`, `profiles/mac-intel-theme-preview/`, `tests/test-theme-iso-staging.sh`; details [theme integration](../docs/THEME_ISO_PREVIEW.md). Trusted-main manual Docker mkarchiso, GUI login and real Mac boot remain separate unaccepted gates. Explicit fallback is baseline `mac-intel`; do not merge the existing draft brand PR without review.
