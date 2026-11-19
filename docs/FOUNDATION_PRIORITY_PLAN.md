@@ -1,6 +1,6 @@
 # Nemesis foundation — current repository-only work plan
 
-**Effective 2026-11-19.** This document governs active work until an explicit Linux handoff authorization is issued. The GitHub repository is the **current work environment**; a local Arch/Garuda system is **not** the active environment. No work item in this phase authorizes root access, ISO compilation, QEMU, USB flashing, macOS/EFI changes or physical deployment.
+**Effective 2026-11-19.** This document governs active work until an explicit Linux handoff authorization is issued. The GitHub repository is the **current work environment**; a local Arch/Garuda system is **not** the active environment. **Exception:** user explicitly authorized real ISO compilation **inside an ephemeral GitHub-hosted privileged Docker runner** as F02-V01 only. No work item authorizes root access to any user workstation, host-side package installation, QEMU, USB flashing, macOS/EFI changes or physical deployment.
 
 ## Goal and acceptance
 
@@ -15,6 +15,7 @@ Keep the first execution target **non-T2 64-bit EFI Intel Macs**. Intel T2 and A
 | P0-0 | F00 Source baseline and upstream recon | distro-architect | Archived comparative research, ArchISO baseline, source/fixture test evidence | Traceable repo/CI SHA | ACCEPTED |
 | P0-1 | F01 Edition and platform contract | distro-architect | `spec/editions.json`; `docs/EDITION_CONTRACT.md`; `tests/test_foundation.py` | GitHub foundation CI green, no future-platform support claims | ACCEPTED (CI source check) |
 | P0-2 | F02 Package composition specification | archiso-build-engineer | `spec/package-layers.json`, `docs/PACKAGE_COMPOSITION.md`, source tests | 11 source tests [CI 44608516336](https://github.com/pskeffington/nemesis/actions/runs/44608516336) | ACCEPTED (repo contract) |
+| P0-2b | F02-V01 Docker ISO CI validation | archiso-build-engineer | `docker/archiso/`, workflow, build log and checksum | real mkarchiso/sha256/xorriso in trusted GitHub Docker; no boot claim | IN PROGRESS — [#12](https://github.com/pskeffington/nemesis/issues/12) |
 | P0-3 | F03 Mac hardware support specification | intel-mac-compatibility | Per-model/PCI ID matrix, EFI/input/display/audio/network/thermals/sleep evidence contract, T2/ARM exclusions | Source-backed, no false PASS devices; no firmware redistribution | READY — ACTIVE NEXT, [#9](https://github.com/pskeffington/nemesis/issues/9) |
 | P0-4 | F04 Build provenance and release policy | security-release-reviewer | Signed package/update boundaries, artifact manifest, checksums, SBOM candidate, rollback and test-level separation | Reviewable release criteria; no unsigned trust bypass | NOT STARTED |
 | P1-1 | F05 Codex execution handoff | build-qa-engineer | `codex/HANDOFF_CONTRACT.md`, task pass queue, exact future commands and stop rules, pinned refs | All P0 gates accepted and human explicitly approves moving to execution | NOT STARTED — packet template now prepared |
@@ -85,4 +86,4 @@ F05 + explicit human GO ──> M02 (actual ISO build) ──> M03 VM ──> M0
 
 ## How to work now
 
-Use [repository-phase Codex prompt](../codex/REPOSITORY_PHASE_PROMPT.md). F03 is the active next pass. Change repository source and documentation only, and run GitHub-hosted source tests. Do **not** follow `codex/BUILD_RUNBOOK.md` until F05 is approved. For accepted passes, report files/commit/CI/remaining gate; never mark a milestone accepted from a draft alone.
+Use [repository-phase Codex prompt](../codex/REPOSITORY_PHASE_PROMPT.md). F03 remains the next **design** pass. GitHub-hosted Docker build validation F02-V01 is a separate approved test; it does not authorize local machine work or alter the F05 handoff NO-GO. Do **not** follow `codex/BUILD_RUNBOOK.md` until F05 is approved. For accepted passes, report files/commit/CI/remaining gate; never mark a milestone accepted from a draft alone.

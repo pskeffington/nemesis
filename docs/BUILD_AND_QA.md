@@ -1,4 +1,4 @@
-> **FUTURE EXECUTION / REFERENCE ONLY.** Nemesis is currently in GitHub-only repository foundation mode. Do not run Linux builds, VM boots or physical Mac procedures from this document until F05 handoff acceptance and explicit user GO. See [foundation priorities](FOUNDATION_PRIORITY_PLAN.md) and [handoff contract](../codex/HANDOFF_CONTRACT.md).
+> **FUTURE LOCAL EXECUTION / REFERENCE ONLY.** Nemesis remains in repository foundation mode. A separate user-authorized [GitHub-hosted Docker ISO build test](DOCKER_ISO_VALIDATION.md) is allowed; no physical machine, QEMU, firmware or USB test is authorized. Do not run these local-machine instructions until F05 acceptance and explicit GO. See [foundation priorities](FOUNDATION_PRIORITY_PLAN.md) and [handoff contract](../codex/HANDOFF_CONTRACT.md).
 
 # Build and verification — Mac Intel edition
 

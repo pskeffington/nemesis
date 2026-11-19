@@ -6,7 +6,7 @@
 
 Read in order: `README.md`, `docs/FOUNDATION_PRIORITY_PLAN.md`, `ROADMAP.md`, `spec/editions.json`, `docs/EDITION_CONTRACT.md`, `docs/ARCHITECTURE.md`, `codex/PASS_QUEUE.md` and `codex/REPOSITORY_PHASE_PROMPT.md`. This active phase supersedes any older build-next instructions or open ISO issue until an explicit handoff GO.
 
-**Now:** architecture, hardware/research matrices, package contract, source validators, decisions, agent instructions, security/release specifications and handoff packet. **Not now:** Linux deployment, `sudo`, package installation, `mkarchiso`, QEMU, USB writing, host changes or Mac tests. GitHub Actions source/profile compatibility CI is allowed; it is not an ISO build.
+**Now:** architecture, hardware/research matrices, package contract, source validators, decisions, agent instructions, release specifications and handoff packet. **Narrow user-authorized exception:** a real ISO build may run inside an ephemeral GitHub-hosted **privileged Docker container**, solely as [F02-V01 CI validation](docs/DOCKER_ISO_VALIDATION.md). **Not authorized:** access to a user's Linux/Garuda/Mac hardware, local sudo/pacman/mkarchiso, QEMU, USB, firmware, partitions or physical tests. A Docker ISO build is not Mac boot evidence.
 
 ## Roles and work partition
 
@@ -40,7 +40,7 @@ Use `spec/editions.json` as a declarative planning record; it is not a working p
 2. Choose one P0/F pass; state owner, inputs/dependencies, exact paths, acceptance, rollback and evidence.
 3. Make minimal reversible source/docs changes. Add deterministic tests and run/inspect GitHub CI.
 4. Record pass status only from observed results; commit source change, CI link, open defects and next repo-only pass.
-5. If a gate fails, repair that gate; do not run local machines or silently skip to M02.
+5. If a gate fails, repair that gate; do not run local machines or silently skip to M02. F02-V01 container validation is explicitly scoped to GitHub-hosted Docker only; it does not grant a general execution GO.
 6. Before any future physical execution, complete `codex/HANDOFF_CONTRACT.md` and receive explicit human GO.
 
 **Default next pass:** F03 Mac hardware/firmware evidence specification. **Execution status: NO-GO.**

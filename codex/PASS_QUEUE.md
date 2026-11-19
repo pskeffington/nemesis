@@ -7,6 +7,7 @@
 | 0 | F00 | distro-architect | verified source, upstream recon and baseline decisions | source-pinned research and prior CI | ACCEPTED |
 | 1 | F01 | distro-architect | edition/platform schema `spec/editions.json` and tests | GitHub run 44608135155 | ACCEPTED |
 | 2 | F02 | archiso-build-engineer | module/manifest DAG, precedence, conflicts, signing policy | 11 source tests in CI 44608516336 | ACCEPTED (source design) |
+| 2b | F02-V01 | archiso-build-engineer | GitHub Docker full ISO build evidence, checksum, El Torito UEFI report | trusted container ISO build (not virtual boot) | IN PROGRESS, [#12](https://github.com/pskeffington/nemesis/issues/12) |
 | 3 | F03 | intel-mac-compatibility | model/feature evidence, device ID, firmware/boot contract | source-backed matrix, no unobserved hardware PASS | READY — NEXT |
 | 4 | F04 | security-release-reviewer | package/ISO provenance, release criteria and recovery plan | review gates and no insecure trust bypass | NOT STARTED |
 | 5 | F05 | build-qa-engineer | pinned `codex/HANDOFF_CONTRACT.md` packet | F02–F04 accepted + explicit human GO | NOT STARTED |

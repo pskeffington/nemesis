@@ -60,3 +60,10 @@
 **Reason:** a stable, testable specification should precede generalized package-composition code or execution permissions.
 
 **Consequence:** F02 accepted as repo-only design after [11 Python CI tests](https://github.com/pskeffington/nemesis/actions/runs/44608516336). No package resolver or ISO was run. F03 hardware policy is the next source-only gate.
+
+## ADR-010 — Isolated Docker build CI exception (2026-11-19)
+**Decision:** permit a real `mkarchiso` x86_64 Intel ISO build only inside a trusted **GitHub-hosted ephemeral Docker container** as F02-V01, per explicit user request. Use the official Arch base image, signed packages, `--privileged` limited to the disposable runner, no persisted checkout credentials and only default small evidence uploads.
+
+**Reason:** prove that the committed profile and scripts produce a real bootable-media *artifact* before handing a distro build to local Garuda, without using the user's workstation.
+
+**Scope:** [Docker validation runbook](DOCKER_ISO_VALIDATION.md) and [issue #12](https://github.com/pskeffington/nemesis/issues/12). A passing build/hash/El Torito metadata proves **assembly**, not UEFI boot, Mac drivers, installer safety or a release; local hardware phase remains NO-GO.

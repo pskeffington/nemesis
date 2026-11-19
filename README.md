@@ -4,7 +4,7 @@
 
 ## Current status — repository foundation, not Linux deployment
 
-**Active work is entirely in this GitHub repository.** We are specifying the distro's architecture, package layers, hardware/firmware policy, automated source checks, upstream provenance, release boundaries and Codex handoff. We are **not** currently deploying to Garuda, building an ISO, booting QEMU or testing Macs.
+**Active work remains in this GitHub repository and its hosted CI.** We are specifying architecture, package layers, hardware/firmware policies, provenance and handoff. **A narrowly authorized Docker CI run now attempts an Intel ISO build on an ephemeral GitHub runner**, not on any user's Garuda/Mac. This does not authorize QEMU, USB, firmware, partitions, or real hardware testing.
 
 The earlier scaffold passed Bash/ShellCheck/fixtures and actual packaged ArchISO 92-1 profile-staging checks in GitHub Actions. The repository-only edition and package contracts also passed 11 GitHub CI tests. **No Nemesis ISO or physical Mac boot has been demonstrated.**
 
@@ -28,6 +28,7 @@ Machine-readable scope lives in [`spec/editions.json`](spec/editions.json); sour
 - **Architecture:** [system design](docs/ARCHITECTURE.md), [edition contract](docs/EDITION_CONTRACT.md), [package composition](docs/PACKAGE_COMPOSITION.md), [decisions](docs/DECISIONS.md), [release gates](docs/RELEASE_GATES.md).
 - **Research:** [Mac hardware literature](docs/research/LITERATURE_MATRIX.md), [comparative distro source recon](docs/research/UPSTREAM_DISTRO_RECON.md), [Intel Mac candidates](docs/research/INTEL_MAC_CANDIDATES.md), [open questions](docs/research/OPEN_QUESTIONS.md).
 - **Agent and Codex instructions:** [AGENTS.md](AGENTS.md), [agent catalog](agents/README.md), [repository-phase prompt](codex/REPOSITORY_PHASE_PROMPT.md), [handoff contract](codex/HANDOFF_CONTRACT.md), [CODEX_KICKOFF.md](CODEX_KICKOFF.md).
+- **Docker ISO validation:** [isolated build policy](docs/DOCKER_ISO_VALIDATION.md), [GitHub workflow](.github/workflows/docker-archiso.yml), [container script](docker/archiso/validate-build.sh); current validation status in [F02-V01 issue #12](https://github.com/pskeffington/nemesis/issues/12).
 - **Existing source:** [profiles/mac-intel](profiles/mac-intel), [prepare-profile.sh](scripts/prepare-profile.sh), [build-iso.sh](scripts/build-iso.sh), [source tests](tests).
 
 ## Prior accepted evidence
@@ -40,7 +41,7 @@ Machine-readable scope lives in [`spec/editions.json`](spec/editions.json); sour
 
 ## Future execution: intentionally not active
 
-When the repository foundation is accepted and an explicit handoff GO is given, the Linux implementation operator will follow [`codex/LINUX_EXECUTION_PROMPT.md`](codex/LINUX_EXECUTION_PROMPT.md) and the existing [build runbook](codex/BUILD_RUNBOOK.md). These files are retained for later execution; **do not treat them as today's instructions**.
+When the repository foundation is accepted and an explicit handoff GO is given, the **local-machine** Linux implementation operator will follow [`codex/LINUX_EXECUTION_PROMPT.md`](codex/LINUX_EXECUTION_PROMPT.md) and the existing [build runbook](codex/BUILD_RUNBOOK.md). These files are retained for later execution; **do not treat them as today's instructions**.
 
 Official signed Arch packages by default. No automatic internal Mac disk changes, proprietary firmware redistribution, default remote credentials, or unreviewed package signature bypass. Hardware is verified model-by-model; a successful source check or ISO build is never proof of Mac compatibility.
 

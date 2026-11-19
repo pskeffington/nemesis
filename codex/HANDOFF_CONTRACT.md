@@ -58,3 +58,7 @@ Stages are independent. At each stage record evidence and stop on failure; do no
 `Pass ID | exact source commit | host/version details when actually observed | changed paths | commands and real exit statuses | hashes/log links | acceptance (PASS/FAIL/NOT RUN) | blockers | next approved pass`.
 
 A handoff is accepted when the source authority, dependency and safety decisions are complete, CI is green, the operator can reproduce the intended first step, and the human explicitly approves execution. Do not turn a pending check box into a check mark on assumption.
+
+## 6. Docker CI evidence is not workstation approval
+
+The separately authorized [GitHub-hosted Docker build validation](../docs/DOCKER_ISO_VALIDATION.md) may establish an ISO assembly and checksum result for one source commit. It does **not** satisfy the human-controlled phase transition, specific Garuda host preflight or privilege approval, QEMU VM boot, physical Mac boot, installer or release gates. Any Docker run must be linked by immutable commit and actual CI result; do not substitute its artifact for an accepted Mac hardware test.
