@@ -16,6 +16,7 @@ scripts=(
   tests/test-installed-releng.sh
   scripts/recon-upstreams.sh
   docker/archiso/validate-build.sh
+  profiles/macbook-air-field/airootfs/usr/local/bin/nemesis-field-check
   profiles/mac-intel/airootfs/usr/local/bin/nemesis-hw-report
 )
 for script in "${scripts[@]}"; do

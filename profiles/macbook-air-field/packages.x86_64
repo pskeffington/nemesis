@@ -1,0 +1,10 @@
+# ---------------------------------------------------------------------
+# MacBook Air field laptop OPTIONAL package delta (official Arch only).
+# Not automatically included in mac-intel releng or Docker ISO builds.
+# Do not add broadcom-wl, custom kernels, TLP, fan daemons or SDR tools
+# without model-level license, reliability and power validation.
+# ---------------------------------------------------------------------
+bluez
+bluez-utils
+powertop
+wireguard-tools

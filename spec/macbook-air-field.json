@@ -1,0 +1,194 @@
+{
+  "contract_version": 1,
+  "phase": "repo-foundation",
+  "edition": "macbook-air-field",
+  "platform": "intel-non-t2",
+  "hardware_scope": "Intel MacBook Air 64-bit EFI without T2, model identifiers 5,x through 7,x",
+  "profile_mode": "optional-overlay-source-only",
+  "applied_by_builder": false,
+  "built_in_docker": false,
+  "physically_tested": false,
+  "default_internal_wifi_driver": "none-forced",
+  "broadcom_wl_bundled": false,
+  "operator_profile_bundled": false,
+  "ssh_server_auto_enabled": false,
+  "sensors_or_fans_modified": false,
+  "battery_tuning_auto_enabled": false,
+  "usb_autosuspend_auto_enabled": false,
+  "package_manifest": "profiles/macbook-air-field/packages.x86_64",
+  "diagnostic_script": "profiles/macbook-air-field/airootfs/usr/local/bin/nemesis-field-check",
+  "sources": {
+    "MBA-01": "https://wiki.archlinux.org/title/Laptop/Apple",
+    "MBA-02": "https://wiki.archlinux.org/title/Mac/Troubleshooting",
+    "MBA-03": "https://wiki.debian.org/InstallingDebianOn/Apple/MacBookAir/6-2",
+    "MBA-04": "https://github.com/AdhamNasr/MacBookAir-ArchLinux-i3",
+    "MBA-05": "https://wiki.archlinux.org/title/Power_management",
+    "MBA-06": "https://wiki.archlinux.org/title/TLP",
+    "MBA-07": "https://wiki.archlinux.org/title/NetworkManager",
+    "MBA-08": "https://wiki.archlinux.org/title/archiso"
+  },
+  "candidates": [
+    {
+      "model": "MacBookAir7,2",
+      "priority": 1,
+      "approx_era": "2015-2017",
+      "source_ids": [
+        "MBA-01",
+        "MBA-04"
+      ],
+      "wifi_concern": "BCM4360 reported; verify exact PCI ID and driver",
+      "status": "NOT_TESTED"
+    },
+    {
+      "model": "MacBookAir6,2",
+      "priority": 2,
+      "approx_era": "2013-2014",
+      "source_ids": [
+        "MBA-01",
+        "MBA-03"
+      ],
+      "wifi_concern": "BCM4360 reported; no built-in Ethernet",
+      "status": "NOT_TESTED"
+    },
+    {
+      "model": "MacBookAir6,1",
+      "priority": 3,
+      "approx_era": "2013-2014",
+      "source_ids": [
+        "MBA-01"
+      ],
+      "wifi_concern": "Broadcom driver may require separate delivery; plan USB-network fallback",
+      "status": "NOT_TESTED"
+    },
+    {
+      "model": "MacBookAir7,1",
+      "priority": 4,
+      "approx_era": "2015",
+      "source_ids": [
+        "MBA-01"
+      ],
+      "wifi_concern": "Identify exact Wi-Fi hardware before selecting a driver",
+      "status": "NOT_TESTED"
+    },
+    {
+      "model": "MacBookAir5,2",
+      "priority": 5,
+      "approx_era": "2012",
+      "source_ids": [
+        "MBA-01"
+      ],
+      "wifi_concern": "Community reports sometimes require broadcom-wl for full speed",
+      "status": "NOT_TESTED"
+    },
+    {
+      "model": "MacBookAir5,1",
+      "priority": 6,
+      "approx_era": "2012",
+      "source_ids": [
+        "MBA-01"
+      ],
+      "wifi_concern": "Chipset and suspend behavior need model-specific validation",
+      "status": "NOT_TESTED"
+    }
+  ],
+  "excluded": [
+    "MacBookAir8,1",
+    "MacBookAir8,2",
+    "MacBookAir9,1",
+    "Apple Silicon MacBook Air"
+  ],
+  "policies": {
+    "network": {
+      "offline_first": true,
+      "usb_ethernet_or_tether_fallback_required_for_first_test": true,
+      "automated_wifi_driver_install": false,
+      "wifi_selection_rule": "PCI_ID_AND_LICENSE_REVIEW",
+      "networkmanager_backend": "upstream-default; no forced iwd switch",
+      "preconfigured_credentials": false
+    },
+    "power": {
+      "controller": "none-enabled-by-default",
+      "tlp_auto_enabled": false,
+      "power_profiles_daemon_auto_enabled": false,
+      "usb_autosuspend": "retain-upstream-default-until-SDR-and-input-tests",
+      "fans": "observe-only",
+      "battery": "observe-only",
+      "sleep": "observe-only"
+    },
+    "security": {
+      "internal_disk_mutation": false,
+      "auto_enable_ssh": false,
+      "full_disk_encryption": "future installer consent and recovery gate",
+      "firmware_extraction": false,
+      "sensor_upload": false
+    },
+    "modularity": {
+      "releng_rescue_baseline_preserved": true,
+      "graphical_desktop": "optional",
+      "rf_sdr_stack": "optional-post-hardware-acceptance",
+      "offline_map_tiles": "not-in-base"
+    }
+  },
+  "proposed_acceptance": [
+    {
+      "id": "MBA-F01",
+      "feature": "external EFI boot and return to macOS",
+      "status": "NOT_TESTED",
+      "test_method": "operator-verified external boot plus recovery"
+    },
+    {
+      "id": "MBA-F02",
+      "feature": "battery and AC identification",
+      "status": "NOT_TESTED",
+      "test_method": "compare sysfs observations with Mac power state"
+    },
+    {
+      "id": "MBA-F03",
+      "feature": "thermal sensors and fan safety",
+      "status": "NOT_TESTED",
+      "test_method": "idle and load monitoring with recorded ambient and temperatures"
+    },
+    {
+      "id": "MBA-F04",
+      "feature": "internal keyboard and trackpad",
+      "status": "NOT_TESTED",
+      "test_method": "typing, multitouch and resume test with USB fallback"
+    },
+    {
+      "id": "MBA-F05",
+      "feature": "internal Wi-Fi and USB network fallback",
+      "status": "NOT_TESTED",
+      "test_method": "record PCI ID, driver, reconnect attempts, USB tether path"
+    },
+    {
+      "id": "MBA-F06",
+      "feature": "sleep/wake and lid handling",
+      "status": "NOT_TESTED",
+      "test_method": "10 controlled cycles after backup; zero failed wakes required"
+    },
+    {
+      "id": "MBA-F07",
+      "feature": "USB SDR power stability",
+      "status": "NOT_TESTED",
+      "test_method": "30-minute uninterrupted receive with no USB resets"
+    },
+    {
+      "id": "MBA-F08",
+      "feature": "offline operation and data integrity",
+      "status": "NOT_TESTED",
+      "test_method": "documented offline workflow, checked hashes, safe storage"
+    },
+    {
+      "id": "MBA-F09",
+      "feature": "battery endurance",
+      "status": "NOT_TESTED",
+      "test_method": "compare 30-minute idle/acquisition baseline at known battery health; no fabricated hour rating"
+    },
+    {
+      "id": "MBA-F10",
+      "feature": "VPN, disk encryption and remote-access security",
+      "status": "NOT_TESTED",
+      "test_method": "separately approved install security and leak/recovery tests"
+    }
+  ]
+}

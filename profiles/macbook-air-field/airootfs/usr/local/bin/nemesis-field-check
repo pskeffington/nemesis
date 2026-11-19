@@ -1,0 +1,99 @@
+#!/usr/bin/env bash
+# ---------------------------------------------------------------------
+# Nemesis field laptop probe: read-only, no radio/firmware/power changes.
+# No serial numbers, SSIDs, MAC addresses, or user directories are read.
+# ---------------------------------------------------------------------
+set -euo pipefail
+
+# Test fixtures may point this read-only script at an isolated sysfs tree.
+sysroot="${NEMESIS_FIELD_SYSFS_ROOT:-/sys}"
+
+value_or_unknown() {
+  if [[ -f "$1" && -r "$1" ]]; then
+    cat -- "$1"
+  else
+    printf 'unknown\n'
+  fi
+}
+
+printf '=== Nemesis MacBook Air field readiness (read-only) ===\n'
+printf 'UTC: %s\n' "$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+printf 'Kernel: %s\n' "$(uname -r)"
+model="$(value_or_unknown "$sysroot/class/dmi/id/product_name")"
+printf 'Model identifier: %s\n' "$model"
+if [[ "$model" =~ ^MacBookAir(5|6|7),[12]$ ]]; then
+  printf 'Target lane: candidate Intel non-T2 MacBook Air, NOT physically certified\n'
+else
+  printf 'Target lane: unrecognized or out-of-scope; hardware compatibility NOT established\n'
+fi
+
+printf '\n=== Battery and charging ===\n'
+battery_count=0
+for supply in "$sysroot"/class/power_supply/*; do
+  [[ -d "$supply" ]] || continue
+  if [[ "$(value_or_unknown "$supply/type")" == "Battery" ]]; then
+    battery_count=$((battery_count + 1))
+    printf 'Battery %s: status=%s capacity=%s%%\n' \
+      "$battery_count" "$(value_or_unknown "$supply/status")" \
+      "$(value_or_unknown "$supply/capacity")"
+    printf '  energy_full=%s energy_full_design=%s (raw sysfs units)\n' \
+      "$(value_or_unknown "$supply/energy_full")" \
+      "$(value_or_unknown "$supply/energy_full_design")"
+  elif [[ "$(value_or_unknown "$supply/type")" == "Mains" ]]; then
+    printf 'AC input: online=%s\n' "$(value_or_unknown "$supply/online")"
+  fi
+done
+if (( battery_count == 0 )); then
+  printf 'Battery: not detected in supplied sysfs tree\n'
+fi
+
+printf '\n=== Thermal and suspend diagnostics ===\n'
+zone_count=0
+for zone in "$sysroot"/class/thermal/thermal_zone*; do
+  [[ -d "$zone" ]] || continue
+  zone_count=$((zone_count + 1))
+  printf 'Thermal zone %s: type=%s temperature_mC=%s\n' \
+    "$zone_count" "$(value_or_unknown "$zone/type")" \
+    "$(value_or_unknown "$zone/temp")"
+  (( zone_count < 8 )) || break
+done
+if (( zone_count == 0 )); then
+  printf 'Thermal zones: no readable zones found\n'
+fi
+printf 'Available suspend modes: %s\n' "$(value_or_unknown "$sysroot/power/mem_sleep")"
+printf 'Kernel USB autosuspend setting: %s\n' \
+  "$(value_or_unknown "$sysroot/module/usbcore/parameters/autosuspend")"
+
+printf '\n=== Connectivity (no SSIDs, IPs, or MACs) ===\n'
+if command -v lspci >/dev/null 2>&1; then
+  lspci -nnd ::0280 || printf 'PCI wireless controller: not detected\n'
+else
+  printf 'PCI inventory unavailable: install pciutils in the image\n'
+fi
+if command -v nmcli >/dev/null 2>&1; then
+  network_state="$(nmcli -g STATE general 2>/dev/null || true)"
+  printf 'NetworkManager state: %s\n' "${network_state:-unavailable}"
+else
+  printf 'NetworkManager state: tool unavailable\n'
+fi
+
+printf '\n=== Power management conflict check ===\n'
+if command -v systemctl >/dev/null 2>&1; then
+  active=0
+  for unit in tlp.service power-profiles-daemon.service tuned.service; do
+    if systemctl is-active --quiet "$unit" 2>/dev/null; then
+      printf 'Active controller: %s\n' "$unit"
+      active=$((active + 1))
+    fi
+  done
+  if (( active > 1 )); then
+    printf 'WARNING: multiple competing power controllers are active\n'
+  else
+    printf 'Power controller conflict: none detected (or service state unavailable)\n'
+  fi
+else
+  printf 'Power controller service state: unavailable\n'
+fi
+
+printf '\nNo configuration, device, firmware, driver, or disk changes were made.\n'
+printf 'Do not publish unreviewed output from a private field device.\n'

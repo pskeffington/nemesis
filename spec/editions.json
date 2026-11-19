@@ -60,6 +60,13 @@
       "repo_path": "profiles/mac-intel"
     },
     {
+      "id": "macbook-air-field-tools",
+      "role": "Optional MacBook Air field telemetry and connectivity tools",
+      "status": "scaffold-committed",
+      "source": "nemesis",
+      "repo_path": "profiles/macbook-air-field"
+    },
+    {
       "id": "mac-desktop-kde",
       "role": "optional KDE Plasma desktop, accessibility and theming",
       "status": "design-only",
@@ -106,6 +113,26 @@
       "layers": [
         "arch-releng",
         "intel-hardware-overlay"
+      ]
+    },
+    {
+      "id": "macbook-air-field",
+      "platform": "intel-non-t2",
+      "target_stage": "lightweight-field-profile-design",
+      "status": "planned",
+      "build_executed": false,
+      "boot_verified": false,
+      "hardware_verified": false,
+      "release_ready": false,
+      "source_profile": null,
+      "profile_path": null,
+      "packages_manifest": null,
+      "prepare_script": null,
+      "build_script": null,
+      "layers": [
+        "arch-releng",
+        "intel-hardware-overlay",
+        "macbook-air-field-tools"
       ]
     },
     {

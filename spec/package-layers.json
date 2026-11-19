@@ -42,6 +42,19 @@
       "license_status": "evaluate-packages-individually"
     },
     {
+      "id": "macbook-air-field-tools",
+      "order": 15,
+      "depends_on": [
+        "intel-hardware-overlay"
+      ],
+      "origin": "official-arch-delta",
+      "status": "scaffold-committed",
+      "manifest": "profiles/macbook-air-field/packages.x86_64",
+      "optional": true,
+      "selected_in_active_scaffold": false,
+      "license_status": "evaluate-packages-individually"
+    },
+    {
       "id": "mac-desktop-kde",
       "order": 20,
       "depends_on": [
@@ -97,12 +110,14 @@
     ],
     "intel-t2": [
       "intel-hardware-overlay",
-      "asahi-platform"
+      "asahi-platform",
+      "macbook-air-field-tools"
     ],
     "apple-silicon": [
       "arch-releng",
       "intel-hardware-overlay",
-      "t2-support"
+      "t2-support",
+      "macbook-air-field-tools"
     ]
   },
   "unreviewed_exceptions": [],
