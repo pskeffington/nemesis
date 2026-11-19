@@ -6,7 +6,7 @@
 
 **Active work is entirely in this GitHub repository.** We are specifying the distro's architecture, package layers, hardware/firmware policy, automated source checks, upstream provenance, release boundaries and Codex handoff. We are **not** currently deploying to Garuda, building an ISO, booting QEMU or testing Macs.
 
-The earlier scaffold passed Bash/ShellCheck/fixtures and actual packaged ArchISO 92-1 profile-staging checks in GitHub Actions. **No Nemesis ISO or physical Mac boot has been demonstrated.**
+The earlier scaffold passed Bash/ShellCheck/fixtures and actual packaged ArchISO 92-1 profile-staging checks in GitHub Actions. The repository-only edition and package contracts also passed 11 GitHub CI tests. **No Nemesis ISO or physical Mac boot has been demonstrated.**
 
 **Current authority:** [foundation priorities](docs/FOUNDATION_PRIORITY_PLAN.md) → [edition/platform contract](docs/EDITION_CONTRACT.md) → [roadmap](ROADMAP.md) → [Codex repository-phase prompt](codex/REPOSITORY_PHASE_PROMPT.md). The [future Linux handoff contract](codex/HANDOFF_CONTRACT.md) is **NO-GO** until reviewed and explicitly authorized.
 
@@ -25,7 +25,7 @@ Machine-readable scope lives in [`spec/editions.json`](spec/editions.json); sour
 ## Repository navigation
 
 - **Current planning:** [foundation priority plan](docs/FOUNDATION_PRIORITY_PLAN.md), [ROADMAP.md](ROADMAP.md), [Codex pass queue](codex/PASS_QUEUE.md).
-- **Architecture:** [system design](docs/ARCHITECTURE.md), [edition contract](docs/EDITION_CONTRACT.md), [decisions](docs/DECISIONS.md), [release gates](docs/RELEASE_GATES.md).
+- **Architecture:** [system design](docs/ARCHITECTURE.md), [edition contract](docs/EDITION_CONTRACT.md), [package composition](docs/PACKAGE_COMPOSITION.md), [decisions](docs/DECISIONS.md), [release gates](docs/RELEASE_GATES.md).
 - **Research:** [Mac hardware literature](docs/research/LITERATURE_MATRIX.md), [comparative distro source recon](docs/research/UPSTREAM_DISTRO_RECON.md), [Intel Mac candidates](docs/research/INTEL_MAC_CANDIDATES.md), [open questions](docs/research/OPEN_QUESTIONS.md).
 - **Agent and Codex instructions:** [AGENTS.md](AGENTS.md), [agent catalog](agents/README.md), [repository-phase prompt](codex/REPOSITORY_PHASE_PROMPT.md), [handoff contract](codex/HANDOFF_CONTRACT.md), [CODEX_KICKOFF.md](CODEX_KICKOFF.md).
 - **Existing source:** [profiles/mac-intel](profiles/mac-intel), [prepare-profile.sh](scripts/prepare-profile.sh), [build-iso.sh](scripts/build-iso.sh), [source tests](tests).
@@ -34,6 +34,7 @@ Machine-readable scope lives in [`spec/editions.json`](spec/editions.json); sour
 
 - Official ArchISO releng staging via CI on signed ArchISO 92-1: [run 44607322858](https://github.com/pskeffington/nemesis/actions/runs/44607322858).
 - Edition contract source CI: [run 44608135155](https://github.com/pskeffington/nemesis/actions/runs/44608135155).
+- Package/edition contract: [11 source tests passed, run 44608516336](https://github.com/pskeffington/nemesis/actions/runs/44608516336); no runtime package resolution.
 - Comparable distribution source research: [UPSTREAM_DISTRO_RECON.md](docs/research/UPSTREAM_DISTRO_RECON.md).
 - KDE/Dragonized-inspired visual identity remains a **separate, reversible user-space preview** in [PR #5](https://github.com/pskeffington/nemesis/pull/5), not a core boot dependency.
 

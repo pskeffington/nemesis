@@ -8,8 +8,8 @@
 | --- | --- | --- | --- | --- | --- |
 | P0 | F00 | Baseline source/CI and upstream distro recon | distro-architect | versioned research and prior source CI | ACCEPTED |
 | P0 | F01 | Edition and platform contract | distro-architect | `spec/editions.json` + GitHub source test | ACCEPTED — [CI 44608135155](https://github.com/pskeffington/nemesis/actions/runs/44608135155) |
-| P0 | F02 | Package composition, manifest dependencies/conflicts | archiso-build-engineer | source-owned policy + deterministic checks | **READY — ACTIVE NEXT PASS** |
-| P0 | F03 | Mac device/firmware support and compatibility evidence schema | intel-mac-compatibility | source-linked feature-level contract, no false PASS claims | READY |
+| P0 | F02 | Package composition, manifest dependencies/conflicts | archiso-build-engineer | source-owned policy + deterministic checks | **ACCEPTED (repo source design)** — [CI 44608516336](https://github.com/pskeffington/nemesis/actions/runs/44608516336) |
+| P0 | F03 | Mac device/firmware support and compatibility evidence schema | intel-mac-compatibility | source-linked feature-level contract, no false PASS claims | **READY — ACTIVE NEXT**, [#9](https://github.com/pskeffington/nemesis/issues/9) |
 | P0 | F04 | Build provenance, release security, recovery policy | security-release-reviewer | signed-source/rollback/artifact design review | NOT STARTED |
 | P1 | F05 | Complete and approve Codex handoff packet | build-qa-engineer | all P0 gates + explicit user GO | NOT STARTED / NO-GO |
 | P2 | F06 | Optional Nemesis icon/wallpaper/KDE theme | visual development branch | provenance, contrast and reversible UI review | PARALLEL; PR #5 open |
@@ -40,7 +40,7 @@ M02 ISO -> M03 virtual UEFI -> M04 physical Intel Mac.
 | M07 | Apple Silicon/Asahi ARM64 platform | distinct boot/installer safety | RESEARCH ONLY |
 | M08 | Optional operator/RF editions | validated core and platform | DEFERRED |
 
-## Current active pass contract — F02
+## Accepted source contract — F02
 
 - **Goal:** define a verifiable package-layer dependency, conflict and trust model before Codex implements any new image or optional edition.
 - **Owner:** archiso-build-engineer; security-release-reviewer checks external source/trust policy.
@@ -48,13 +48,20 @@ M02 ISO -> M03 virtual UEFI -> M04 physical Intel Mac.
 - **Output:** machine-readable package layer policy, source-only validator and a source-backed decision on merge precedence and exemptions.
 - **Acceptance:** GitHub tests pass; manifest references exist or are clearly marked planned; no unsigned third-party repo, silent T2/ARM cross-inclusion or unauthorized default desktop/operator packages.
 - **Failure/rollback:** keep previous accepted edition contract; revert the failing spec/test commit; no machine cleanup.
-- **Status:** READY, implementation work may proceed entirely in GitHub.
+- **Status:** ACCEPTED as a **repo-only package-layer contract**. [Commit 9105adc](https://github.com/pskeffington/nemesis/commit/9105adc5d62d6d3fac623822a3d5579166e2bda5) and [GitHub Actions 44608516336](https://github.com/pskeffington/nemesis/actions/runs/44608516336) passed **11 Python source tests**; [static source workflow 44608516293](https://github.com/pskeffington/nemesis/actions/runs/44608516293) also passed. JSON is not wired to the builder; no live package resolver or image was run.
+
+## Active next pass — F03
+- **Owner:** intel-mac-compatibility with T2/Asahi and security reviewers.
+- **Scope:** model/device/feature evidence fields, driver and firmware license policy, static validation only.
+- **Acceptance:** no invented PASS hardware, no T2/ARM crossover, no firmware/host changes, passing GitHub source CI.
+- **Issue:** [F03 #9](https://github.com/pskeffington/nemesis/issues/9).
 
 ## Prior evidence and limits
 
 - Source/fixture static CI and real installed ArchISO releng profile-staging CI passed on signed ArchISO **92-1**, [GitHub Actions 44607322858](https://github.com/pskeffington/nemesis/actions/runs/44607322858). It preserved EFI/GRUB/syslinux folders, pacman.conf, manifest uniqueness and diagnostic overlay.
 - Comparative source review covered ArchISO, EndeavourOS, CachyOS, RebornOS, Garuda, t2linux and Asahi; see [source matrix](docs/research/UPSTREAM_DISTRO_RECON.md). A source-head SHA is not a tested runtime.
 - New repo-only edition contract source test passed [run 44608135155](https://github.com/pskeffington/nemesis/actions/runs/44608135155).
+- **F02 package-layer source policy** [commit 9105adc](https://github.com/pskeffington/nemesis/commit/9105adc5d62d6d3fac623822a3d5579166e2bda5) accepted from [11 GitHub contract tests](https://github.com/pskeffington/nemesis/actions/runs/44608516336), plus [static CI](https://github.com/pskeffington/nemesis/actions/runs/44608516293). No runtime package integration.
 - **No Nemesis ISO exists as an accepted artifact; no VM or Mac boot, installation, T2/ARM release or theme-on-Garuda session acceptance has occurred.**
 - Separate visual work exists in [PR #5](https://github.com/pskeffington/nemesis/pull/5); its physical Garuda proof [issue #6](https://github.com/pskeffington/nemesis/issues/6) remains future work.
 

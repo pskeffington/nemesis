@@ -52,3 +52,7 @@ Tests validate composition safety, graph acyclicity, stable ordering, manifest e
 - How will dependency conflicts be verified against the actual signed Arch package repositories without granting package installation authority to a repo-only Codex?
 
 These are inputs for F03/F04 and, later, a separately approved image resolver—not permissions to execute today.
+
+## Source-only acceptance evidence — 2026-11-19
+
+[Commit 9105adc](https://github.com/pskeffington/nemesis/commit/9105adc5d62d6d3fac623822a3d5579166e2bda5) added the package policy and tests. [GitHub run 44608516336](https://github.com/pskeffington/nemesis/actions/runs/44608516336) passed 11 Python source tests; [static CI 44608516293](https://github.com/pskeffington/nemesis/actions/runs/44608516293) passed. F02 is accepted as a **declarative source-design gate only**: no live Arch dependency solver, image build, or hardware test. F04 owns future supply-chain approvals.

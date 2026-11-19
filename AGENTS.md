@@ -12,7 +12,7 @@ Read in order: `README.md`, `docs/FOUNDATION_PRIORITY_PLAN.md`, `ROADMAP.md`, `s
 
 - [Agent roster](agents/README.md); [source research](docs/research/LITERATURE_MATRIX.md) and [distro source recon](docs/research/UPSTREAM_DISTRO_RECON.md).
 - One accountable implementation agent per pass. Design, security and evidence reviewers may inspect independently.
-- F02 package architecture is the next critical path. F03 Mac support policy and F04 release/provenance follow. F05 handoff needs P0 acceptance and explicit user approval.
+- F02 package contract passed 11 GitHub source tests ([run 44608516336](https://github.com/pskeffington/nemesis/actions/runs/44608516336)). **F03 Mac model/device/firmware evidence schema is the next critical path**, then F04 release/provenance and F05 handoff with explicit approval.
 - The independent [brand PR #5](https://github.com/pskeffington/nemesis/pull/5) is optional P2. Do not overwrite, merge or bake it into `mac-intel` to accelerate boot work.
 - `linux_config` is a separate host configuration project. Do not import machine-specific secrets/config into this distro without a dependency review.
 
@@ -43,4 +43,4 @@ Use `spec/editions.json` as a declarative planning record; it is not a working p
 5. If a gate fails, repair that gate; do not run local machines or silently skip to M02.
 6. Before any future physical execution, complete `codex/HANDOFF_CONTRACT.md` and receive explicit human GO.
 
-**Default next pass:** F02 package composition specification. **Execution status: NO-GO.**
+**Default next pass:** F03 Mac hardware/firmware evidence specification. **Execution status: NO-GO.**

@@ -38,3 +38,7 @@ Tests check data uniqueness, architecture/platform separation, referenced files,
 Changes to `spec/editions.json` need an ADR, a foundation/edition task ID and a passing repository contract test. A new buildable edition requires its own manifest, scripts, source provenance, signed package policy and *separate build/boot/hardware evidence*. See `docs/FOUNDATION_PRIORITY_PLAN.md` and `codex/REPOSITORY_PHASE_PROMPT.md`.
 
 **Handoff expectation:** the implementation Codex should consume these contracts, inspect existing source, report mismatches and work through explicitly assigned pass gates—not interpret a roadmap row as permission to run root, flash devices or build an ISO.
+
+## F02 package-layer extension
+
+The [package composition contract](PACKAGE_COMPOSITION.md) and [`spec/package-layers.json`](../spec/package-layers.json) define dependency ordering, fail-closed conflicts, signed-source defaults and platform exclusions. Eleven GitHub source tests passed [CI 44608516336](https://github.com/pskeffington/nemesis/actions/runs/44608516336). The contract is **not consumed by the current builder** and does not change the ISO.

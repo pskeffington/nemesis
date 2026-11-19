@@ -53,3 +53,10 @@
 **Reason:** a green CI source/profile test is not a complete distro specification or an instruction to touch a workstation. A coherent contract must precede hardware execution.
 
 **Consequences:** `docs/FOUNDATION_PRIORITY_PLAN.md` and `codex/REPOSITORY_PHASE_PROMPT.md` supersede older “build next” language. Existing build runbooks remain future references. The theme PR is optional and isolated.
+
+## ADR-009 — Package design is a source contract, not a runtime resolver (2026-11-19)
+**Decision:** version package-layer ordering, graph dependencies, conflict policy, repository trust and platform exclusions in `spec/package-layers.json`, while leaving `scripts/prepare-profile.sh` unchanged. Default official signed Arch packages; no AUR/firmware auto-install and no T2/ARM crossover.
+
+**Reason:** a stable, testable specification should precede generalized package-composition code or execution permissions.
+
+**Consequence:** F02 accepted as repo-only design after [11 Python CI tests](https://github.com/pskeffington/nemesis/actions/runs/44608516336). No package resolver or ISO was run. F03 hardware policy is the next source-only gate.

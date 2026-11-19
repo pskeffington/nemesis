@@ -14,9 +14,9 @@ The objective is to prepare all distro architecture, package manifests, Mac hard
 
 ## Active task
 
-Execute **F02 — package composition specification**, entirely within GitHub. Create precise package-layer dependencies, conflict rules, official signed-source policy, design notes and CI validators. Do not run `pacman`, `mkarchiso`, QEMU or hardware commands. Preserve the existing `mac-intel` source and brand PR #5.
+Execute **F03 — Mac hardware evidence and firmware policy**, entirely within GitHub. F02 package-source design was accepted by [11 GitHub CI tests](https://github.com/pskeffington/nemesis/actions/runs/44608516336). Create model/PCI-ID evidence, driver selection, licensing, per-feature status and source-only validators. Do not probe real hardware. Preserve `mac-intel` source and brand PR #5.
 
-Use source-only CI, report exact commits and observed tests, and update status without inventing machine results. F03 hardware design and F04 release policy follow.
+Use source-only CI, report exact commits and observed tests, and update status without inventing machine results. F04 release policy and F05 handoff follow.
 
 ## Future execution — NOT YET AUTHORIZED
 

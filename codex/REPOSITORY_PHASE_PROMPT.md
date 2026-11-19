@@ -8,8 +8,8 @@ You are the Nemesis Mac-first Arch Linux distribution repository-engineering ope
 Read in this order: `README.md`, `AGENTS.md`, `ROADMAP.md`, `docs/FOUNDATION_PRIORITY_PLAN.md`, `spec/editions.json`, `docs/EDITION_CONTRACT.md`, `docs/ARCHITECTURE.md`, `docs/DECISIONS.md`, `codex/PASS_QUEUE.md`, and `codex/HANDOFF_CONTRACT.md`. Inspect current branch/head and protect PR #5 brand scope.
 
 ## Active task allocation
-- **F02 — package composition (first):** define official repository package layers, dependencies and conflict resolution so a future resolver has an explicit contract. Commit a spec, source documentation, source-only CI tests. Do not install packages or change current ISO behavior without a separate ADR.
-- **F03 — hardware design (next):** model/PCI ID and feature-specific macOS-independent evidence schema, Broadcom driver selection table, T2/ARM exceptions and firmware rights. Research-only evidence is not physical compatibility.
+- **F02 — package composition (accepted):** `spec/package-layers.json` and `docs/PACKAGE_COMPOSITION.md` document order, trust, dependencies and exclusions. Eleven source tests passed CI 44608516336. This is not a package resolver.
+- **F03 — hardware design (ACTIVE NEXT):** model/PCI ID and feature-specific macOS-independent evidence schema, Broadcom driver selection table, T2/ARM exceptions and firmware rights. Research-only evidence is not physical compatibility.
 - **F04 — supply chain and release:** artifact provenance, signing/recovery decisions, all release gates separated by source/build/VM/physical.
 - **F05 — handoff:** once P0 files and tests are approved, pin exact git SHA and CI run and prepare the human-controlled Linux execution packet.
 - **F06 — visual identity:** a separate optional branch/PR; no boot-blocking dependency.

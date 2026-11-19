@@ -6,8 +6,8 @@
 | --- | --- | --- | --- | --- | --- |
 | 0 | F00 | distro-architect | verified source, upstream recon and baseline decisions | source-pinned research and prior CI | ACCEPTED |
 | 1 | F01 | distro-architect | edition/platform schema `spec/editions.json` and tests | GitHub run 44608135155 | ACCEPTED |
-| 2 | F02 | archiso-build-engineer | module/manifest DAG, precedence, conflicts, signing policy | GitHub-only source validation | READY — NEXT |
-| 3 | F03 | intel-mac-compatibility | model/feature evidence, device ID, firmware/boot contract | source-backed matrix, no unobserved hardware PASS | READY |
+| 2 | F02 | archiso-build-engineer | module/manifest DAG, precedence, conflicts, signing policy | 11 source tests in CI 44608516336 | ACCEPTED (source design) |
+| 3 | F03 | intel-mac-compatibility | model/feature evidence, device ID, firmware/boot contract | source-backed matrix, no unobserved hardware PASS | READY — NEXT |
 | 4 | F04 | security-release-reviewer | package/ISO provenance, release criteria and recovery plan | review gates and no insecure trust bypass | NOT STARTED |
 | 5 | F05 | build-qa-engineer | pinned `codex/HANDOFF_CONTRACT.md` packet | F02–F04 accepted + explicit human GO | NOT STARTED |
 | optional | F06 | separate visual design role | icon/KDE/wallpaper source and reversibility | branch PR #5, nonblocking; physical test deferred | PARALLEL |
@@ -15,13 +15,13 @@
 | hold | M03-P01 | uefi-boot-validator | actual UEFI VM boot | accepted M02 | DEFERRED |
 | hold | M04-P01 | intel-mac-compatibility | actual Mac model-level tests/recovery | accepted M03 + approved device | DEFERRED |
 
-## F02 — current next pass
+## F02 — accepted repo-only source contract
 
 1. Read `spec/editions.json`, official ArchISO package list, existing baseline manifest, UP-01..UP-08 source decisions.
 2. Define package layer order/selection, dependencies, conflicts, provenance and optional edition exclusion rules.
 3. Write a separate machine-readable proposal and deterministic static test; never silently wire it into the real image builder in this pass.
-4. Run GitHub source CI. Record exact commit, observed outcome and incomplete future gate.
-5. Update `ROADMAP.md` and any issue with evidence; hand off F03, not M02.
+4. **Observed:** 11 Python source tests PASS in CI 44608516336, static workflow 44608516293 PASS.
+5. **Accepted scope:** declarative source policy, not live package resolution or a built ISO. Next F03, never M02.
 
 ## F03 — hardware policy
 
