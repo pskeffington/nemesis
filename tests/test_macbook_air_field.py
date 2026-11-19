@@ -24,16 +24,19 @@ class MacBookAirFieldContractTests(unittest.TestCase):
         self.assertEqual(self.spec["contract_version"], 1)
         self.assertEqual(self.spec["edition"], "macbook-air-field")
         self.assertEqual(self.spec["platform"], "intel-non-t2")
-        for key in ("applied_by_builder", "built_in_docker", "physically_tested",
+        self.assertIs(self.spec["applied_by_builder"], True)
+        self.assertEqual(self.spec["build_validation_status"], "NOT_TESTED")
+        for key in ("built_in_docker", "physically_tested",
                     "broadcom_wl_bundled", "operator_profile_bundled",
                     "ssh_server_auto_enabled", "sensors_or_fans_modified",
                     "battery_tuning_auto_enabled", "usb_autosuspend_auto_enabled"):
             self.assertIs(self.spec[key], False, key)
         e = next(x for x in self.editions["editions"] if x["id"] == self.spec["edition"])
-        self.assertEqual(e["status"], "planned")
+        self.assertEqual(e["status"], "source-scaffold")
         self.assertEqual(e["platform"], "intel-non-t2")
-        self.assertIsNone(e["build_script"])
-        self.assertIsNone(e["packages_manifest"])
+        self.assertEqual(e["build_script"], "scripts/build-air-field-iso.sh")
+        self.assertEqual(e["prepare_script"], "scripts/prepare-air-field-profile.sh")
+        self.assertEqual(e["packages_manifest"], self.spec["package_manifest"])
         self.assertIn("macbook-air-field-tools", e["layers"])
         core = next(x for x in self.editions["editions"] if x["id"] == "mac-intel")
         self.assertNotIn("macbook-air-field-tools", core["layers"])

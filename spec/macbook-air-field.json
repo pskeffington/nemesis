@@ -4,8 +4,8 @@
   "edition": "macbook-air-field",
   "platform": "intel-non-t2",
   "hardware_scope": "Intel MacBook Air 64-bit EFI without T2, model identifiers 5,x through 7,x",
-  "profile_mode": "optional-overlay-source-only",
-  "applied_by_builder": false,
+  "profile_mode": "optional-independent-releng-profile",
+  "applied_by_builder": true,
   "built_in_docker": false,
   "physically_tested": false,
   "default_internal_wifi_driver": "none-forced",
@@ -190,5 +190,6 @@
       "status": "NOT_TESTED",
       "test_method": "separately approved install security and leak/recovery tests"
     }
-  ]
+  ],
+  "build_validation_status": "NOT_TESTED"
 }

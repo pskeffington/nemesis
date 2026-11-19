@@ -17,6 +17,10 @@ scripts=(
   scripts/recon-upstreams.sh
   docker/archiso/validate-build.sh
   profiles/macbook-air-field/airootfs/usr/local/bin/nemesis-field-check
+  scripts/prepare-air-field-profile.sh
+  scripts/build-air-field-iso.sh
+  docker/archiso/validate-air-build.sh
+  tests/test-air-profile.sh
   profiles/mac-intel/airootfs/usr/local/bin/nemesis-hw-report
 )
 for script in "${scripts[@]}"; do
@@ -39,4 +43,5 @@ fi
 
 bash tests/test-prepare-profile.sh
 bash tests/test-checksums.sh
+bash tests/test-air-profile.sh
 printf 'Bash syntax, manifest and fixture tests: passed\n'

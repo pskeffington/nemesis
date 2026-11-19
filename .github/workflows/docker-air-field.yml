@@ -1,0 +1,50 @@
+name: Nemesis Docker MacBook Air field ISO
+
+# A privileged Docker build runs only from trusted main; never fork PRs.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/docker-air-field.yml'
+      - 'scripts/prepare-air-field-profile.sh'
+      - 'scripts/build-air-field-iso.sh'
+      - 'docker/archiso/validate-air-build.sh'
+      - 'profiles/macbook-air-field/**'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nemesis-docker-air-field-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  air-image-assembly:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - name: Checkout trusted main without credentials
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - name: Prepare Docker builder from signed Arch base
+        run: docker build --pull -t nemesis-archiso-builder -f docker/archiso/Dockerfile .
+      - name: Build Air field ISO inside disposable privileged Docker
+        run: |
+          docker run --rm --privileged \
+            --env NEMESIS_CI_DOCKER=1 \
+            --mount "type=bind,source=${{ github.workspace }},target=/workspace" \
+            --workdir /workspace \
+            nemesis-archiso-builder \
+            bash docker/archiso/validate-air-build.sh
+      - name: Retain small Air build evidence, even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nemesis-macbook-air-field-build-evidence
+          path: |
+            out/air-field-evidence/
+            out/macbook-air-field/*.sha256
+          if-no-files-found: warn
+          retention-days: 7
