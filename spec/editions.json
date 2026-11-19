@@ -1,0 +1,189 @@
+{
+  "contract_version": 1,
+  "project": "Nemesis",
+  "authority": "GitHub repository is the source of truth",
+  "current_phase": "repo-foundation",
+  "phase_policy": {
+    "repo_foundation": "active",
+    "linux_iso_build": "deferred",
+    "vm_boot": "deferred",
+    "physical_mac_test": "deferred",
+    "installation": "deferred"
+  },
+  "package_policy": {
+    "default_source": "official-signed-arch-repositories",
+    "third_party_repository": "security-review-required",
+    "proprietary_apple_firmware": "not-bundled",
+    "unattended_internal_disk_writes": false,
+    "automated_firmware_extraction": false,
+    "default_remote_credentials": false
+  },
+  "platforms": [
+    {
+      "id": "intel-non-t2",
+      "arch": "x86_64",
+      "boot_family": "apple-efi-x86_64",
+      "status": "target-candidate",
+      "hardware_evidence": "not-tested",
+      "notes": "64-bit EFI models; excludes Intel T2 and mixed/32-bit EFI exceptions until separately tested"
+    },
+    {
+      "id": "intel-t2",
+      "arch": "x86_64",
+      "boot_family": "apple-t2",
+      "status": "research-only",
+      "hardware_evidence": "not-tested",
+      "notes": "requires independently reviewed kernel, firmware policy, external boot and recovery"
+    },
+    {
+      "id": "apple-silicon",
+      "arch": "aarch64",
+      "boot_family": "asahi-platform",
+      "status": "research-only",
+      "hardware_evidence": "not-tested",
+      "notes": "distinct ARM64 boot and installer chain; does not reuse Intel ISO"
+    }
+  ],
+  "layers": [
+    {
+      "id": "arch-releng",
+      "role": "upstream-rescue-base",
+      "status": "external-upstream",
+      "source": "installed-archiso-releng",
+      "repo_path": null
+    },
+    {
+      "id": "intel-hardware-overlay",
+      "role": "Mac Intel hardware packages and diagnostics",
+      "status": "scaffold-committed",
+      "source": "nemesis",
+      "repo_path": "profiles/mac-intel"
+    },
+    {
+      "id": "mac-desktop-kde",
+      "role": "optional KDE Plasma desktop, accessibility and theming",
+      "status": "design-only",
+      "source": null,
+      "repo_path": null
+    },
+    {
+      "id": "field-operator",
+      "role": "optional RF, engineering, and security operator bundles",
+      "status": "design-only",
+      "source": null,
+      "repo_path": null
+    },
+    {
+      "id": "t2-support",
+      "role": "T2 kernel/firmware device support",
+      "status": "research-only",
+      "source": null,
+      "repo_path": null
+    },
+    {
+      "id": "asahi-platform",
+      "role": "Apple Silicon boot and driver stack",
+      "status": "research-only",
+      "source": null,
+      "repo_path": null
+    }
+  ],
+  "editions": [
+    {
+      "id": "mac-intel",
+      "platform": "intel-non-t2",
+      "target_stage": "live-iso",
+      "status": "source-scaffold",
+      "build_executed": false,
+      "boot_verified": false,
+      "hardware_verified": false,
+      "release_ready": false,
+      "source_profile": "archiso-releng",
+      "profile_path": "profiles/mac-intel",
+      "packages_manifest": "profiles/mac-intel/packages.x86_64",
+      "prepare_script": "scripts/prepare-profile.sh",
+      "build_script": "scripts/build-iso.sh",
+      "layers": [
+        "arch-releng",
+        "intel-hardware-overlay"
+      ]
+    },
+    {
+      "id": "mac-intel-desktop",
+      "platform": "intel-non-t2",
+      "target_stage": "desktop-design",
+      "status": "planned",
+      "build_executed": false,
+      "boot_verified": false,
+      "hardware_verified": false,
+      "release_ready": false,
+      "source_profile": null,
+      "profile_path": null,
+      "packages_manifest": null,
+      "prepare_script": null,
+      "build_script": null,
+      "layers": [
+        "arch-releng",
+        "intel-hardware-overlay",
+        "mac-desktop-kde"
+      ]
+    },
+    {
+      "id": "mac-intel-operator",
+      "platform": "intel-non-t2",
+      "target_stage": "operator-design",
+      "status": "planned",
+      "build_executed": false,
+      "boot_verified": false,
+      "hardware_verified": false,
+      "release_ready": false,
+      "source_profile": null,
+      "profile_path": null,
+      "packages_manifest": null,
+      "prepare_script": null,
+      "build_script": null,
+      "layers": [
+        "arch-releng",
+        "intel-hardware-overlay",
+        "mac-desktop-kde",
+        "field-operator"
+      ]
+    },
+    {
+      "id": "mac-t2",
+      "platform": "intel-t2",
+      "target_stage": "hardware-feasibility",
+      "status": "research-only",
+      "build_executed": false,
+      "boot_verified": false,
+      "hardware_verified": false,
+      "release_ready": false,
+      "source_profile": null,
+      "profile_path": null,
+      "packages_manifest": null,
+      "prepare_script": null,
+      "build_script": null,
+      "layers": [
+        "t2-support"
+      ]
+    },
+    {
+      "id": "mac-asahi",
+      "platform": "apple-silicon",
+      "target_stage": "arm64-feasibility",
+      "status": "research-only",
+      "build_executed": false,
+      "boot_verified": false,
+      "hardware_verified": false,
+      "release_ready": false,
+      "source_profile": null,
+      "profile_path": null,
+      "packages_manifest": null,
+      "prepare_script": null,
+      "build_script": null,
+      "layers": [
+        "asahi-platform"
+      ]
+    }
+  ]
+}

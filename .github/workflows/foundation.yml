@@ -1,0 +1,17 @@
+name: Nemesis repository foundation contract
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  foundation-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      - name: Validate declarative edition and platform model
+        run: python3 -m unittest discover -s tests -p 'test_foundation.py' -v
