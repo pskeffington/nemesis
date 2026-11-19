@@ -42,5 +42,5 @@ if ARCHISO_RELENG_PROFILE="$fixture" bash "$root/scripts/prepare-profile.sh" mac
 fi
 
 # Check that the generated profile can be sourced and has the intended name.
-bash -c 'source "$1/profiledef.sh"; [[ "$iso_name" == "nemesis" && "$iso_label" == NEMESIS_* ]]' _ "$stage"
+bash -c 'declare -A file_permissions; source "$1/profiledef.sh"; [[ "$iso_name" == "nemesis" && "$iso_label" == NEMESIS_* ]]' _ "$stage"
 printf 'Fixture profile staging: passed\n'
