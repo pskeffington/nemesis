@@ -58,8 +58,11 @@ class OperatorEditionTests(unittest.TestCase):
         operator = (ROOT / self.op["packages"]["operator"]).read_text()
         for p in ("plasma-desktop", "sddm", "webkitgtk-6.0", "gtk4-layer-shell", "networkmanager"):
             self.assertIn("\n" + p + "\n", "\n" + desktop)
-        for p in ("rtl-sdr", "dump1090_rs", "gpsd", "gqrx", "wireguard-tools"):
+        for p in ("rtl-sdr", "airspy", "dump1090_rs", "usbutils", "jq", "wireguard-tools"):
             self.assertIn("\n" + p + "\n", "\n" + operator)
+        for excluded in ("gqrx", "gnuradio", "gpsd", "qgis", "nmap", "rtl_433", "soapyairspy"):
+            self.assertNotIn("\n" + excluded + "\n", "\n" + operator,
+                             "optional package entered the Operator default")
         for flag in ("internal_storage_write", "default_ssh_listener",
                      "modemmanger_auto_probe", "default_network_credentials",
                      "no_persistent_private_records", "no_untrusted_aur_packages"):

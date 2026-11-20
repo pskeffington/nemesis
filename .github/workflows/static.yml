@@ -36,3 +36,5 @@ jobs:
         run: bash tests/test-installed-air-profile.sh
       - name: Stage Operator edition with a mocked pinned wallpaper asset
         run: bash tests/test-installed-operator-profile.sh
+      - name: Resolve all optional Operator kit packages from signed Arch repositories
+        run: bash tests/test-operator-package-repos.sh

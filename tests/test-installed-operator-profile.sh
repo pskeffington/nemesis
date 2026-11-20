@@ -29,8 +29,13 @@ for folder in efiboot grub syslinux; do
     diff -qr "$upstream/$folder" "$stage/$folder" || die "unexpected boot tree difference"
   fi
 done
-for pkg in plasma-desktop sddm webkitgtk-6.0 gtk4-layer-shell rtl-sdr dump1090_rs gpsd; do
+for pkg in plasma-desktop sddm webkitgtk-6.0 gtk4-layer-shell rtl-sdr airspy dump1090_rs; do
   grep -Fxq "$pkg" "$stage/packages.x86_64" || die "missing operator package $pkg"
+done
+[[ -f "$stage/airootfs/usr/local/bin/nemesis-kit" ]] || die "kit command missing"
+[[ -f "$stage/airootfs/usr/share/nemesis-operator/kits/gnss.packages.x86_64" ]] || die "kit manifest not copied"
+for excluded in gqrx gnuradio gpsd qgis nmap rtl_433; do
+  ! grep -Fxq "$excluded" "$stage/packages.x86_64" || die "optional package auto-selected: $excluded"
 done
 [[ "$(readlink "$stage/airootfs/etc/systemd/system/default.target")" == "/usr/lib/systemd/system/graphical.target" ]] || die "graphical target missing"
 [[ "$(readlink "$stage/airootfs/etc/systemd/system/display-manager.service")" == "/usr/lib/systemd/system/sddm.service" ]] || die "sddm link missing"
@@ -47,5 +52,6 @@ bash -c '
   [[ "$iso_label" == NEMOP_* ]]
   [[ "${file_permissions[/usr/local/bin/linux-live-wallpaper]:-}" == "0:0:755" ]]
   [[ "${file_permissions[/usr/local/bin/nemesis-operator-wallpaper]:-}" == "0:0:755" ]]
+  [[ "${file_permissions[/usr/local/bin/nemesis-kit]:-}" == "0:0:755" ]]
 ' _ "$stage" || die "profile metadata invalid"
 printf 'Installed signed ArchISO Operator staging: PASS (not a live desktop boot)\n'

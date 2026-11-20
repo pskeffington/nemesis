@@ -13,13 +13,18 @@ evidence="$2"
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 sfs="$root/.build/work-mac-intel-operator/iso/arch/x86_64/airootfs.sfs"
 [[ -s "$sfs" ]] || die "built operator SquashFS missing"
-xorriso -indev "$iso" -find /arch/x86_64/airootfs.sfs -print \
-  > "$evidence/iso-rootfs-entry.txt" 2>&1 || die "ISO rootfs missing"
-grep -Fq /arch/x86_64/airootfs.sfs "$evidence/iso-rootfs-entry.txt" || die "rootfs entry absent"
-unsquashfs -ll "$sfs" usr/local/bin etc/xdg/autostart etc/systemd/system \
+# Arch xorriso supports -lsd for a single ISO entry; the prior -find
+# ... -print expression returned an error *after* a successful 2.3-GiB
+# build/checksum. Reject genuinely absent paths, not unsupported syntax.
+xorriso -indev "$iso" -lsd /arch/x86_64/airootfs.sfs \
+  > "$evidence/iso-rootfs-entry.txt" 2>&1 || die "ISO rootfs lookup failed"
+grep -Fq airootfs.sfs "$evidence/iso-rootfs-entry.txt" || die "rootfs entry absent"
+unsquashfs -ll "$sfs" usr/local/bin usr/share/nemesis-operator/kits etc/xdg/autostart etc/systemd/system \
   usr/lib/sysusers.d usr/lib/tmpfiles.d usr/bin > "$evidence/operator-payload.txt" || die "rootfs inventory failed"
 for target in usr/local/bin/linux-live-wallpaper \
               usr/local/bin/nemesis-operator-wallpaper \
+              usr/local/bin/nemesis-kit \
+              usr/share/nemesis-operator/kits/rf-lab.packages.x86_64 \
               etc/xdg/autostart/nemesis-operator-wallpaper.desktop \
               usr/bin/konsole usr/bin/sddm usr/bin/rtl_test \
               usr/lib/sysusers.d/nemesis-operator.conf; do
@@ -31,6 +36,10 @@ runner="$(unsquashfs -cat "$sfs" usr/local/bin/nemesis-operator-wallpaper)"
 [[ "$runner" == *"https://globe.airplanes.live/"* ]] || die "default map URL missing"
 [[ "$runner" == *"file:///usr/share/nemesis-operator/offline.html"* ]] || die "offline fallback not configured"
 [[ "$runner" == *"--background"* ]] || die "background mode not configured"
+kitcli="$(unsquashfs -cat "$sfs" usr/local/bin/nemesis-kit)"
+[[ "$kitcli" == *"pacman -Syu --needed"* ]] || die "interactive on-demand kit installer missing"
+gnss_manifest="$(unsquashfs -cat "$sfs" usr/share/nemesis-operator/kits/gnss.packages.x86_64)"
+[[ "$gnss_manifest" == *"gpsd"* ]] || die "GNSS toolkit manifest missing gpsd"
 sddm="$(unsquashfs -cat "$sfs" etc/sddm.conf.d/10-nemesis-operator-live.conf)"
 [[ "$sddm" == *"User=operator"* && "$sddm" == *"Session=plasma.desktop"* ]] || die "ephemeral session not configured"
 locker="$(unsquashfs -cat "$sfs" etc/xdg/kscreenlockerrc)"
