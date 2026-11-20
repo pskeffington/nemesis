@@ -53,6 +53,10 @@ ARCHISO_RELENG_PROFILE="$fixture" NEMESIS_OPERATOR_WALLPAPER_ASSETS="$assets" \
 [[ -f "$stage/airootfs/usr/local/bin/nemesis-operator-wallpaper" ]]
 [[ -f "$stage/airootfs/etc/xdg/autostart/nemesis-operator-wallpaper.desktop" ]]
 [[ -f "$stage/airootfs/usr/local/bin/nemesis-kit" ]]
+[[ -f "$stage/airootfs/usr/local/bin/nemesis-field-note" ]]
+[[ -f "$stage/airootfs/usr/share/nemesis-operator/offline-field-map.html" ]]
+[[ -f "$stage/airootfs/usr/share/applications/nemesis-operator-offline-map.desktop" ]]
+[[ -f "$stage/airootfs/usr/share/applications/nemesis-operator-field-notes.desktop" ]]
 [[ -f "$stage/airootfs/usr/share/nemesis-operator/kits/rf-lab.packages.x86_64" ]]
 [[ -f "$stage/airootfs/usr/share/nemesis-operator/offline.html" ]]
 [[ -f "$stage/airootfs/etc/sddm.conf.d/10-nemesis-operator-live.conf" ]]
@@ -68,7 +72,7 @@ target="$stage/airootfs/etc/systemd/system/multi-user.target.wants"
 [[ ! -L "$target/iwd.service" && ! -L "$target/systemd-networkd.service" ]]
 [[ ! -L "$target/sshd.service" ]]
 [[ "$(readlink "$stage/airootfs/etc/systemd/system/ModemManager.service")" == /dev/null ]]
-for package in plasma-desktop sddm webkitgtk-6.0 gtk4-layer-shell rtl-sdr airspy dump1090_rs; do
+for package in plasma-desktop sddm webkitgtk-6.0 gtk4-layer-shell rtl-sdr airspy dump1090_rs python; do
   grep -Fxq "$package" "$stage/packages.x86_64"
 done
 [[ "$(grep -xc networkmanager "$stage/packages.x86_64")" -eq 1 ]]
@@ -86,6 +90,7 @@ bash -c '
   [[ "${file_permissions[/usr/local/bin/linux-live-wallpaper]:-}" == "0:0:755" ]]
   [[ "${file_permissions[/usr/local/bin/nemesis-operator-wallpaper]:-}" == "0:0:755" ]]
   [[ "${file_permissions[/usr/local/bin/nemesis-kit]:-}" == "0:0:755" ]]
+  [[ "${file_permissions[/usr/local/bin/nemesis-field-note]:-}" == "0:0:755" ]]
 ' _ "$stage"
 if ARCHISO_RELENG_PROFILE="$fixture" NEMESIS_OPERATOR_WALLPAPER_ASSETS="$assets" \
     bash "$root/scripts/prepare-operator-profile.sh" "$stage" >/dev/null 2>&1; then

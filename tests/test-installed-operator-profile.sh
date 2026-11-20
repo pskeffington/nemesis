@@ -29,10 +29,13 @@ for folder in efiboot grub syslinux; do
     diff -qr "$upstream/$folder" "$stage/$folder" || die "unexpected boot tree difference"
   fi
 done
-for pkg in plasma-desktop sddm webkitgtk-6.0 gtk4-layer-shell rtl-sdr airspy dump1090_rs; do
+for pkg in plasma-desktop sddm webkitgtk-6.0 gtk4-layer-shell rtl-sdr airspy dump1090_rs python; do
   grep -Fxq "$pkg" "$stage/packages.x86_64" || die "missing operator package $pkg"
 done
 [[ -f "$stage/airootfs/usr/local/bin/nemesis-kit" ]] || die "kit command missing"
+[[ -f "$stage/airootfs/usr/local/bin/nemesis-field-note" ]] || die "field notebook missing"
+[[ -f "$stage/airootfs/usr/share/nemesis-operator/offline-field-map.html" ]] || die "offline map viewer missing"
+[[ -f "$stage/airootfs/usr/share/applications/nemesis-operator-offline-map.desktop" ]] || die "offline map launcher missing"
 [[ -f "$stage/airootfs/usr/share/nemesis-operator/kits/gnss.packages.x86_64" ]] || die "kit manifest not copied"
 for excluded in gqrx gnuradio gpsd qgis nmap tcpdump rtl_433; do
   if grep -Fxq "$excluded" "$stage/packages.x86_64"; then
@@ -55,5 +58,6 @@ bash -c '
   [[ "${file_permissions[/usr/local/bin/linux-live-wallpaper]:-}" == "0:0:755" ]]
   [[ "${file_permissions[/usr/local/bin/nemesis-operator-wallpaper]:-}" == "0:0:755" ]]
   [[ "${file_permissions[/usr/local/bin/nemesis-kit]:-}" == "0:0:755" ]]
+  [[ "${file_permissions[/usr/local/bin/nemesis-field-note]:-}" == "0:0:755" ]]
 ' _ "$stage" || die "profile metadata invalid"
 printf 'Installed signed ArchISO Operator staging: PASS (not a live desktop boot)\n'
