@@ -15,11 +15,11 @@
 
 | Purpose | Official signed Arch packages | Startup |
 | --- | --- | --- |
-| Desktop | `plasma-desktop`, `plasma-workspace`, `sddm`, `konsole`, `dolphin`, `kate`, `plasma-nm` | Plasma login; live wallpaper via XDG |
+| Desktop | `plasma-desktop`, `plasma-workspace`, `sddm`, `konsole`, `dolphin`, `kate`, `firefox`, `plasma-nm` | Plasma login; live wallpaper via XDG |
 | Renderer | `gtk4`, `gtk4-layer-shell`, `webkitgtk-6.0` | Wallpaper launches after Wayland compositor |
-| Radio | `rtl-sdr`, `soapysdr`, `soapyrtlsdr`, `rtl_433`, `gqrx` | **Manual** receiver selection and tuning |
+| Radio | `rtl-sdr`, `airspy`, `soapysdr`, `soapyairspy`, `soapyrtlsdr`, `rtl_433`, `gqrx` | **Manual** receiver selection and tuning |
 | ADS-B | `dump1090_rs` | **Manual**, never auto-start receiver or transmit |
-| GNSS | `gpsd`, `gpsd-clients` | Manual device configuration; modem probes disabled |
+| GNSS | `gpsd` (already includes `cgps`, `gpsmon` and other clients) | Manual device configuration; modem probes disabled |
 | Networking/security | `wireguard-tools`, `nmap`, `tcpdump`, `openssh`, `jq`, `git` | No configured keys, scans, captures, tunnels or SSH listener |
 | Diagnostics | `usbutils`, `pciutils`, `python`, `python-pyserial`, `htop`, `tmux` | On demand |
 

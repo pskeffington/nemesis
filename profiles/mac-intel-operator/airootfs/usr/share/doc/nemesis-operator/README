@@ -8,6 +8,7 @@ If incompatible, the normal KDE wallpaper remains visible; no forced session cha
 
 Operator applications are preloaded but do not capture or transmit automatically.
   konsole         Terminal and shell
+  airspy_info     Inspect a connected Airspy receiver (optional; manual action)
   gqrx            Interactive SDR receiver (launch only after connecting a supported device)
   rtl_test        Check compatible RTL-SDR receiver (explicit action only)
   dump1090_rs     ADS-B decoder (explicit action, use --help first)

@@ -3,13 +3,14 @@
 # All packages resolved from signed official Arch repositories.
 # ---------------------------------------------------------------------
 rtl-sdr
+airspy
 soapysdr
+soapyairspy
 soapyrtlsdr
 rtl_433
 dump1090_rs
 gqrx
 gpsd
-gpsd-clients
 nmap
 tcpdump
 wireguard-tools
