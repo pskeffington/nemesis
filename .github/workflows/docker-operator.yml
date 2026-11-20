@@ -1,0 +1,72 @@
+name: Nemesis Operator ISO and live globe packaging
+
+# Only trusted main commits and explicit dispatch; no privileged PR code.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/docker-operator.yml'
+      - 'docker/operator/**'
+      - 'scripts/build-operator-wallpaper.sh'
+      - 'scripts/prepare-operator-profile.sh'
+      - 'scripts/build-operator-iso.sh'
+      - 'profiles/mac-intel-operator/**'
+      - 'spec/operator-edition.json'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nemesis-operator-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  operator-iso:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - name: Checkout trusted repository source without credentials
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - name: Confirm disposable runner resources
+        run: |
+          uname -m
+          df -h .
+          free -h
+      - name: Build signed Arch Linux toolchain container
+        run: docker build --pull -t nemesis-operator-archiso -f docker/operator/Dockerfile .
+      - name: Compile pinned first-party wallpaper as unprivileged user
+        run: |
+          mkdir -p .build
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            --security-opt no-new-privileges \
+            --cap-drop ALL \
+            --env NEMESIS_CI_DOCKER=1 \
+            --env HOME=/workspace/.build/operator-home \
+            --env CARGO_HOME=/workspace/.build/operator-home/.cargo \
+            --mount "type=bind,source=${{ github.workspace }},target=/workspace" \
+            --workdir /workspace \
+            nemesis-operator-archiso \
+            bash scripts/build-operator-wallpaper.sh
+      - name: Compile and inspect distinct Operator ISO inside disposable privileged Docker
+        run: |
+          docker run --rm --privileged \
+            --env NEMESIS_CI_DOCKER=1 \
+            --mount "type=bind,source=${{ github.workspace }},target=/workspace" \
+            --workdir /workspace \
+            nemesis-operator-archiso \
+            bash docker/operator/validate-operator.sh
+      - name: Retain small provenance, installer and payload evidence on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nemesis-operator-iso-evidence
+          path: |
+            .build/operator-assets/provenance.txt
+            out/operator-evidence/
+            out/mac-intel-operator/*.sha256
+          if-no-files-found: warn
+          retention-days: 7

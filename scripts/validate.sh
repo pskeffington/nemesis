@@ -23,6 +23,14 @@ scripts=(
   docker/archiso/check-air-payload.sh
   tests/test-air-profile.sh
   tests/test-installed-air-profile.sh
+  scripts/build-operator-wallpaper.sh
+  scripts/prepare-operator-profile.sh
+  scripts/build-operator-iso.sh
+  tests/test-operator-profile.sh
+  tests/test-installed-operator-profile.sh
+  docker/operator/validate-operator.sh
+  docker/operator/check-payload.sh
+  profiles/mac-intel-operator/airootfs/usr/local/bin/nemesis-operator-wallpaper
   profiles/mac-intel/airootfs/usr/local/bin/nemesis-hw-report
 )
 for script in "${scripts[@]}"; do
@@ -46,4 +54,5 @@ fi
 bash tests/test-prepare-profile.sh
 bash tests/test-checksums.sh
 bash tests/test-air-profile.sh
+bash tests/test-operator-profile.sh
 printf 'Bash syntax, manifest and fixture tests: passed\n'
