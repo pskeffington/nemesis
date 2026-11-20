@@ -1,0 +1,63 @@
+{
+  "contract_version": 1,
+  "edition": "mac-intel-operator",
+  "platform": "intel-non-t2",
+  "first_hardware_targets": [
+    "MacBookAir7,2",
+    "MacBookAir6,2",
+    "MacBookAir6,1"
+  ],
+  "image_status": "source-scaffold-not-boot-tested",
+  "live_user": "operator",
+  "auto_login": "live-medium-only-nonprivileged",
+  "local_machine_execution_allowed": false,
+  "wallpaper": {
+    "home_page": "https://globe.airplanes.live/",
+    "renderer": "linux-live-wallpaper",
+    "source_repo": "https://github.com/pskeffington/linux_live_wallpaper.git",
+    "source_commit": "ee51045dc394f73d8151906fe9f397dd3cc94060",
+    "source_license": "MIT",
+    "source_lockfile": "Cargo.lock",
+    "binary_path": "/usr/local/bin/linux-live-wallpaper",
+    "launcher_path": "/usr/local/bin/nemesis-operator-wallpaper",
+    "autostart": "/etc/xdg/autostart/nemesis-operator-wallpaper.desktop",
+    "offline_fallback": "/usr/share/nemesis-operator/offline.html",
+    "desktop": "KDE Plasma Wayland",
+    "compositor_protocol": "zwlr_layer_shell_v1",
+    "browser_background": true,
+    "browsing_mode_default": false,
+    "reload_seconds": 900,
+    "connectivity_recheck_seconds": 180,
+    "battery_default": "remain-visible-on-battery",
+    "privacy": "No location permission, credentials, trackers or background collection configured by Nemesis. The external website is separately operated.",
+    "downstream_host_tested": false
+  },
+  "packages": {
+    "desktop": "profiles/mac-intel-operator/desktop.packages.x86_64",
+    "operator": "profiles/mac-intel-operator/packages.x86_64",
+    "sourced_from": "official-signed-arch-repositories",
+    "custom_binary": "built-from-pinned-first-party-MIT-source-in-isolated-CI",
+    "automatic_receiver_transmission": false,
+    "automatic_device_capture": false,
+    "automatic_remote_access": false
+  },
+  "safety": {
+    "internal_storage_write": false,
+    "default_ssh_listener": false,
+    "modemmanger_auto_probe": false,
+    "default_network_credentials": false,
+    "no_passwordless_sudo": true,
+    "sddm_auto_login_only_live_medium": true,
+    "no_persistent_private_records": true,
+    "no_untrusted_aur_packages": true
+  },
+  "ci_gates": {
+    "spec_fixture": "NOT_RUN",
+    "verified_wallpaper_binary_build": "NOT_RUN",
+    "signed_package_resolution": "NOT_RUN",
+    "operator_iso_assembly": "NOT_RUN",
+    "iso_payload_inspection": "NOT_RUN",
+    "virtual_wayland_desktop_boot": "NOT_RUN",
+    "physical_macbook_air": "NOT_RUN"
+  }
+}

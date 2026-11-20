@@ -69,16 +69,16 @@
     {
       "id": "mac-desktop-kde",
       "role": "optional KDE Plasma desktop, accessibility and theming",
-      "status": "design-only",
-      "source": null,
-      "repo_path": null
+      "status": "scaffold-committed",
+      "source": "nemesis",
+      "repo_path": "profiles/mac-intel-operator"
     },
     {
       "id": "field-operator",
       "role": "optional RF, engineering, and security operator bundles",
-      "status": "design-only",
-      "source": null,
-      "repo_path": null
+      "status": "scaffold-committed",
+      "source": "nemesis",
+      "repo_path": "profiles/mac-intel-operator"
     },
     {
       "id": "t2-support",
@@ -158,20 +158,21 @@
     {
       "id": "mac-intel-operator",
       "platform": "intel-non-t2",
-      "target_stage": "operator-design",
-      "status": "planned",
+      "target_stage": "macbook-air-first-operator-live-iso",
+      "status": "source-scaffold",
       "build_executed": false,
       "boot_verified": false,
       "hardware_verified": false,
       "release_ready": false,
-      "source_profile": null,
-      "profile_path": null,
-      "packages_manifest": null,
-      "prepare_script": null,
-      "build_script": null,
+      "source_profile": "archiso-releng",
+      "profile_path": "profiles/mac-intel-operator",
+      "packages_manifest": "profiles/mac-intel-operator/packages.x86_64",
+      "prepare_script": "scripts/prepare-operator-profile.sh",
+      "build_script": "scripts/build-operator-iso.sh",
       "layers": [
         "arch-releng",
         "intel-hardware-overlay",
+        "macbook-air-field-tools",
         "mac-desktop-kde",
         "field-operator"
       ]

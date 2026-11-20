@@ -60,12 +60,12 @@
       "depends_on": [
         "intel-hardware-overlay"
       ],
-      "origin": "proposed-official-arch",
-      "status": "design-only",
-      "manifest": null,
+      "origin": "official-arch-delta",
+      "status": "scaffold-committed",
+      "manifest": "profiles/mac-intel-operator/desktop.packages.x86_64",
       "optional": true,
       "selected_in_active_scaffold": false,
-      "license_status": "unreviewed"
+      "license_status": "review-official-packages-individually"
     },
     {
       "id": "field-operator",
@@ -73,12 +73,12 @@
       "depends_on": [
         "mac-desktop-kde"
       ],
-      "origin": "proposed-reviewed-packages",
-      "status": "design-only",
-      "manifest": null,
+      "origin": "official-arch-delta",
+      "status": "scaffold-committed",
+      "manifest": "profiles/mac-intel-operator/packages.x86_64",
       "optional": true,
       "selected_in_active_scaffold": false,
-      "license_status": "unreviewed"
+      "license_status": "review-official-packages-individually"
     },
     {
       "id": "t2-support",
@@ -111,13 +111,17 @@
     "intel-t2": [
       "intel-hardware-overlay",
       "asahi-platform",
-      "macbook-air-field-tools"
+      "macbook-air-field-tools",
+      "mac-desktop-kde",
+      "field-operator"
     ],
     "apple-silicon": [
       "arch-releng",
       "intel-hardware-overlay",
       "t2-support",
-      "macbook-air-field-tools"
+      "macbook-air-field-tools",
+      "mac-desktop-kde",
+      "field-operator"
     ]
   },
   "unreviewed_exceptions": [],
