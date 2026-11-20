@@ -95,3 +95,10 @@
 **Security:** use ephemeral nonprivileged SDDM live-only autologin (not installed security policy); switch only Operator's staged networking to NetworkManager, keeping SSH and ModemManager auto-start disabled. Never auto-start SDR capture, scan, VPN, remote login, privileged tasks or geolocation. Existing rescue/Air ISO source remains unchanged.
 
 **Acceptance:** separate source/Arch staging, pinned Rust binary, ISO SHA-256/UEFI/SquashFS, virtual KDE rendering and physical MacBook Air gates. Source compilation or ISO assembly alone does not certify wallpaper placement, startup on reboot, battery use or actual hardware support.
+
+## ADR-015 — Prevent passwordless live-operator screen lockout (2026-11-20)
+**Decision:** in the removable `mac-intel-operator` image alone, set KDE `/etc/xdg/kscreenlockerrc` under `[Daemon]` to `Autolock=false`, `LockOnResume=false`, and `RequirePassword=false`. Its ephemeral SDDM `operator` identity has no usable password. Preventing automatic or manual lockout takes precedence over providing a misleading lock screen on disposable media. The generic rescue and lean Air images have no such override.
+
+**Trade-off:** a live session without credential-based locking provides no unattended device privacy. This is suitable only for a disposable, explicitly selected live Operator ISO. A future installed edition must create a real password/secure key and remove the override before accepting persistent deployment. See [KDE upstream kscreenlocker config](https://github.com/KDE/kscreenlocker/blob/master/settings/kscreenlockersettings.kcfg).
+
+**Gate:** Python/source/fixture/real Arch stage and built SquashFS must verify the live-only policy. None of those tests demonstrates actual KDE runtime/suspend behavior.

@@ -1,0 +1,7 @@
+# Nonpersistent Operator live media only. Locked-password autologin must
+# not trap an operator behind an unlock prompt. Installed systems MUST
+# remove these overrides and configure authenticated locking.
+[Daemon]
+Autolock=false
+LockOnResume=false
+RequirePassword=false
