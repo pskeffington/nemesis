@@ -13,3 +13,7 @@
 ## Package selection pass
 
 Prioritize first-use: map, network, terminal, diagnostics, basic RTL-SDR/Airspy/ADS-B. Review [OP-P01 package matrix](../docs/research/OPERATOR_PACKAGE_LIT_MATRIX.md). Select GUI SDR, GNSS, advanced network scanning, QGIS and compilers only through opt-in [kit manifests](../spec/operator-kits.json). Test inherited ArchISO releng requests separately from Nemesis additions; reserve size/4-GiB claims until comparable ISO and physical performance evidence. `nemesis-kit` is a future authenticated installed-system helper, not an installer for the password-locked live user.
+
+## SIGINT distribution source review
+
+For future toolkit expansion, read [the publisher-source OS comparison](../docs/research/SIGINT_OS_PACKAGE_DEPLOYMENT_MATRIX.md). Compare individual practical receiver workflows rather than copying all programs from SigintOS/DragonOS/Skywave. Pentoo illustrates modular profiles, not an Arch-compatible repository. Mark newly proposed tools as research until signed official Arch package name, dependency closure, license, USB backend, security posture and real operator task are validated. Do not enable transmission, cellular capture, automatic remote servers or background service listeners.

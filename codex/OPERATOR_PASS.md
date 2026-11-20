@@ -56,3 +56,12 @@ Once OP-03 passes, review source and UI assets from the separate [theme PR #5](h
 ## OP-P03 — Installed-system kit selection and GUI runtime
 
 **Deferred:** the persistent installer must first configure real users, encrypted storage/recovery and authenticated root. Then confirm interactive `nemesis-kit install KIT` with rollback/recovery and user-selected use. Separately verify KDE Wayland map layering and 4-GiB battery/RAM/USB operation on approved hardware. No local machine execution in current phase.
+
+## SIGINT-S01 — Comparable distribution deployments and potential kit expansion
+
+**Owner:** operator-desktop-engineer. **Input:** [cross-distribution SIGINT package matrix](../docs/research/SIGINT_OS_PACKAGE_DEPLOYMENT_MATRIX.md), [machine inventory](../spec/sigint-distro-references.json), [existing Operator kits](../spec/operator-kits.json). **Status:** RESEARCH COMMITTED; no new default packages authorized.
+
+- Contrast publisher lists from SigintOS 2.0, DragonOS Resolute R2.2, Skywave 5.10 and Pentoo profile design. Preserve distinctions between advertised software, package-managed files, `/usr/src` source-installed applications and actual ISO SBOMs.
+- Evaluate optional **light signal GUI** (`sigdigger`, `inspectrum`), **basic data decoding** (`multimon-ng`), **aviation/airband** and **satellite** kit proposals using official signed Arch package availability and dependency sizes. Do not replace an approved application until measured workflows support the change.
+- Do not import self-updating appimages, Linux distribution binary roots, AUR builds, active cellular base stations, interception frameworks or jammers as an Operator default. Services must be operator initiated and off by default.
+- Record exact candidate/Arch package names, direct and transitive dependency closure, firmware/license requirements, background services, and USB/hardware constraints. Keep all build claims at their actual accepted source/CI gates.

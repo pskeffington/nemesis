@@ -61,3 +61,7 @@ The official [ArchISO releng package list](https://github.com/archlinux/archiso/
 | OP-P05 | Runtime efficiency on MacBook Air 4 GiB / supported MacBook Pro | Measured before/after data on exact hardware, no secrets | DEFERRED |
 
 Only after accepting OP-P03 should the exact size reduction be claimed. Source tests do not establish working KDE wallpaper or Mac hardware compatibility.
+
+## Cross-distribution evidence — SigintOS, DragonOS, Skywave, Pentoo (2026-11-20)
+
+The detailed [SIGINT/SDR OS deployment matrix](SIGINT_OS_PACKAGE_DEPLOYMENT_MATRIX.md) and [machine-readable publisher inventory](../../spec/sigint-distro-references.json) compare the **advertised tool stacks** and modular distribution patterns of SigintOS 2.0 Community Edition, DragonOS Resolute R2.2 (2026-10-27), Skywave Linux 5.10.0 and Gentoo-based Pentoo. DragonOS's listed ~4.0-GB ISO demonstrates an all-in-one capability path, **not** a like-for-like size comparator with Nemesis's prior ~2.3-GiB image. Pentoo's meta/profile/USE-flag selection is an architectural model, not a compatible Arch package source. Keep current seven Operator kits unchanged until actual Arch dependency, license, service and hardware evidence justifies additions. **No binary, firmware, service or default package was imported from these distributions.**
