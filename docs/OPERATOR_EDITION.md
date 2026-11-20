@@ -4,7 +4,7 @@
 
 ## Desktop experience
 
-1. Boot the Operator ISO to KDE Plasma **Wayland** through SDDM. A nonprivileged, password-locked live-only `operator` user is configured for autologin; this is **not** an installed-machine account policy.
+1. Boot the Operator ISO to KDE Plasma **Wayland** through SDDM. A nonprivileged, password-locked live-only `operator` user is configured for autologin; this is **not** an installed-machine account policy. Since that disposable account has no usable password, the Operator **live image only** disables KDE automatic locking and password-on-unlock in `/etc/xdg/kscreenlockerrc` to prevent accidental lockout. This is **not a secure installed-session configuration** and must never be inherited by a later persistent installation.
 2. KDE's **XDG autostart** launches `/usr/local/bin/nemesis-operator-wallpaper` once a graphical session exists. This avoids relying on an unverified systemd-user session enablement mechanism.
 3. The wrapper checks `XDG_SESSION_TYPE`, `WAYLAND_DISPLAY`, and the compositor's `zwlr_layer_shell_v1` support. Unsupported sessions retain the regular KDE background rather than crashing or covering desktop controls.
 4. With protocol support, the first-party `linux-live-wallpaper` renderer starts in background mode with **https://globe.airplanes.live/** as its default live aircraft map. Click-through mode leaves KDE windows, panels and other controls usable. For direct map interaction, the operator can use a normal browser session.

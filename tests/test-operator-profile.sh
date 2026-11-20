@@ -48,6 +48,11 @@ ARCHISO_RELENG_PROFILE="$fixture" NEMESIS_OPERATOR_WALLPAPER_ASSETS="$assets" \
 [[ -f "$stage/airootfs/etc/xdg/autostart/nemesis-operator-wallpaper.desktop" ]]
 [[ -f "$stage/airootfs/usr/share/nemesis-operator/offline.html" ]]
 [[ -f "$stage/airootfs/etc/sddm.conf.d/10-nemesis-operator-live.conf" ]]
+live_locker="$stage/airootfs/etc/xdg/kscreenlockerrc"
+[[ -f "$live_locker" ]]
+grep -Fxq 'Autolock=false' "$live_locker"
+grep -Fxq 'LockOnResume=false' "$live_locker"
+grep -Fxq 'RequirePassword=false' "$live_locker"
 [[ "$(readlink "$stage/airootfs/etc/systemd/system/default.target")" == "/usr/lib/systemd/system/graphical.target" ]]
 [[ "$(readlink "$stage/airootfs/etc/systemd/system/display-manager.service")" == "/usr/lib/systemd/system/sddm.service" ]]
 target="$stage/airootfs/etc/systemd/system/multi-user.target.wants"

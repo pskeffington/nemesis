@@ -33,6 +33,10 @@ runner="$(unsquashfs -cat "$sfs" usr/local/bin/nemesis-operator-wallpaper)"
 [[ "$runner" == *"--background"* ]] || die "background mode not configured"
 sddm="$(unsquashfs -cat "$sfs" etc/sddm.conf.d/10-nemesis-operator-live.conf)"
 [[ "$sddm" == *"User=operator"* && "$sddm" == *"Session=plasma.desktop"* ]] || die "ephemeral session not configured"
+locker="$(unsquashfs -cat "$sfs" etc/xdg/kscreenlockerrc)"
+for flag in '[Daemon]' 'Autolock=false' 'LockOnResume=false' 'RequirePassword=false'; do
+  [[ "$locker" == *"$flag"* ]] || die "live-only lock screen safeguard missing: $flag"
+done
 service="$evidence/operator-payload.txt"
 grep -Fq "etc/systemd/system/default.target -> /usr/lib/systemd/system/graphical.target" "$service" || die "graphical default missing"
 grep -Fq "etc/systemd/system/display-manager.service -> /usr/lib/systemd/system/sddm.service" "$service" || die "sddm link missing"

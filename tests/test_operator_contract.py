@@ -83,6 +83,19 @@ class OperatorEditionTests(unittest.TestCase):
         self.assertIn("globe.airplanes.live", (ROOT / "profiles/mac-intel-operator/airootfs" /
                                                o["offline_fallback"].lstrip("/")).read_text())
 
+    def test_ephemeral_operator_login_cannot_lock_out_user(self):
+        # The autologin identity has no password. Disabling automatic locking
+        # is for the removable live session ONLY, never an installed system.
+        live = ROOT / "profiles/mac-intel-operator/airootfs"
+        sddm = (live / "etc/sddm.conf.d/10-nemesis-operator-live.conf").read_text()
+        locker = (live / "etc/xdg/kscreenlockerrc").read_text()
+        self.assertIn("User=operator", sddm)
+        self.assertIn("[Daemon]", locker)
+        for key in ("Autolock=false", "LockOnResume=false", "RequirePassword=false"):
+            self.assertIn(key, locker)
+        self.assertFalse((ROOT / "profiles/macbook-air-field/airootfs/etc/xdg/kscreenlockerrc").exists())
+        self.assertFalse((ROOT / "profiles/mac-intel/airootfs/etc/xdg/kscreenlockerrc").exists())
+
     def test_no_claimed_unrun_runtime_checks(self):
         self.assertEqual(set(self.op["ci_gates"].values()), {"NOT_RUN"})
         self.assertFalse(self.op["local_machine_execution_allowed"])
