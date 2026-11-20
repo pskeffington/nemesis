@@ -1,0 +1,150 @@
+#!/usr/bin/env python3
+"""Nemesis Operator's manual, local-only SQLite field notebook.
+
+There is no background service, radio/device access, location collection,
+network transfer, or implicit export. On live media the data is ephemeral.
+"""
+
+import argparse
+from datetime import datetime, timezone
+import json
+import os
+from pathlib import Path
+import sqlite3
+import stat
+import sys
+
+KINDS = ("observation", "navigation", "supply", "system", "safety")
+MAX_NOTE_CHARS = 500
+DEFAULT_DATA = Path.home() / ".local" / "share" / "nemesis-operator"
+
+
+def fail(message):
+    raise ValueError(message)
+
+
+def make_store():
+    if os.geteuid() == 0:
+        fail("use a nonprivileged operator account, not root")
+    directory = Path(os.environ.get("NEMESIS_FIELD_NOTES_DIR", str(DEFAULT_DATA)))
+    if directory.is_symlink():
+        fail("refusing symlinked notes directory")
+    directory.mkdir(parents=True, exist_ok=True, mode=0o700)
+    meta = directory.stat()
+    if not stat.S_ISDIR(meta.st_mode) or meta.st_uid != os.geteuid():
+        fail("notes directory is not a private, user-owned directory")
+    os.chmod(directory, 0o700)
+    file = directory / "field-notes.sqlite3"
+    if file.is_symlink():
+        fail("refusing symlinked notes database")
+    if file.exists():
+        meta = file.stat()
+        if not stat.S_ISREG(meta.st_mode) or meta.st_uid != os.geteuid():
+            fail("notes database must be a regular user-owned file")
+    else:
+        flags = os.O_CREAT | os.O_EXCL | os.O_WRONLY
+        if hasattr(os, "O_NOFOLLOW"):
+            flags |= os.O_NOFOLLOW
+        descriptor = os.open(file, flags, 0o600)
+        os.close(descriptor)
+    os.chmod(file, 0o600)
+    connection = sqlite3.connect(file, timeout=3)
+    connection.execute("PRAGMA busy_timeout = 3000")
+    connection.execute("PRAGMA journal_mode = DELETE")
+    connection.execute("PRAGMA synchronous = FULL")
+    with connection:
+        connection.execute(
+            "CREATE TABLE IF NOT EXISTS notes ("
+            "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+            "utc TEXT NOT NULL, "
+            "category TEXT NOT NULL, "
+            "note TEXT NOT NULL)"
+        )
+    return connection
+
+
+def validate_note(text):
+    value = text.strip()
+    if not value or len(value) > MAX_NOTE_CHARS:
+        fail("note must contain 1-500 characters")
+    if any(ord(ch) < 32 or ord(ch) == 127 for ch in value):
+        fail("note cannot contain control characters or newlines")
+    return value
+
+
+def build_parser():
+    parser = argparse.ArgumentParser(
+        description="Manual, local-only field notebook; no tracking or network access."
+    )
+    sub = parser.add_subparsers(dest="command", required=True)
+    add = sub.add_parser("add", help="Create one manual observation")
+    add.add_argument("--category", required=True, choices=KINDS)
+    add.add_argument("--text", required=True)
+    recent = sub.add_parser("list", help="Display recent local observations")
+    recent.add_argument("--limit", type=int, default=20)
+    sub.add_parser("status", help="Print the local record count")
+    export = sub.add_parser("export", help="Explicitly export records as private JSONL")
+    export.add_argument("--output", type=Path, required=True)
+    return parser
+
+
+def run(args):
+    if args.command == "add":
+        clean = validate_note(args.text)
+    if args.command == "list" and not 1 <= args.limit <= 100:
+        fail("list limit must be between 1 and 100")
+    if args.command == "export" and args.output.exists():
+        fail("export destination already exists; refusing overwrite")
+
+    conn = make_store()
+    try:
+        if args.command == "add":
+            utc = datetime.now(timezone.utc).isoformat(timespec="seconds")
+            with conn:
+                cursor = conn.execute(
+                    "INSERT INTO notes(utc, category, note) VALUES(?, ?, ?)",
+                    (utc, args.category, clean),
+                )
+            print("Saved local record " + str(cursor.lastrowid))
+        elif args.command == "status":
+            count = conn.execute("SELECT COUNT(*) FROM notes").fetchone()[0]
+            print("Local records: " + str(count) + " (no automatic export)")
+        elif args.command == "list":
+            rows = conn.execute(
+                "SELECT id, utc, category, note FROM notes "
+                "ORDER BY id DESC LIMIT ?", (args.limit,)
+            )
+            for number, utc, category, note in rows:
+                print(str(number) + " | " + utc + " | " + category + " | " + note)
+        elif args.command == "export":
+            dest = args.output
+            flags = os.O_CREAT | os.O_EXCL | os.O_WRONLY
+            if hasattr(os, "O_NOFOLLOW"):
+                flags |= os.O_NOFOLLOW
+            fd = os.open(dest, flags, 0o600)
+            count = 0
+            with os.fdopen(fd, "w", encoding="utf-8") as output:
+                for record in conn.execute(
+                    "SELECT id, utc, category, note FROM notes ORDER BY id"
+                ):
+                    payload = dict(zip(("id", "utc", "category", "note"), record))
+                    output.write(json.dumps(payload, ensure_ascii=False) + "\n")
+                    count += 1
+            print("Exported " + str(count) + " local records to " + str(dest))
+            print("Check the destination before sharing; records may contain private text.")
+    finally:
+        conn.close()
+
+
+def main():
+    try:
+        args = build_parser().parse_args()
+        run(args)
+    except (OSError, sqlite3.Error, ValueError) as exc:
+        print("nemesis-field-note: " + str(exc), file=sys.stderr)
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

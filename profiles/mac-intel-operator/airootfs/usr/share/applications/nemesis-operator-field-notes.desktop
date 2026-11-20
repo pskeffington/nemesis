@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Field Notes (Manual)
+Comment=Local incident notebook commands; no automatic collection
+Exec=konsole --hold -e /usr/local/bin/nemesis-field-note --help
+Icon=accessories-text-editor
+Terminal=false
+Categories=Utility;
+StartupNotify=false
