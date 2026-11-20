@@ -55,9 +55,9 @@ done
 [[ ! -e "$wants/NetworkManager.service" && ! -L "$wants/NetworkManager.service" ]] || die "unexpected preexisting NetworkManager enablement"
 ln -s /usr/lib/systemd/system/NetworkManager.service "$wants/NetworkManager.service"
 
-install -m 0755 "$assets/linux-live-wallpaper" "$dest/airootfs/usr/local/bin/linux-live-wallpaper"
-install -m 0644 "$assets/LICENSE" "$dest/airootfs/usr/share/licenses/linux-live-wallpaper/LICENSE"
-install -m 0644 "$assets/provenance.txt" "$dest/airootfs/usr/share/nemesis-operator/wallpaper-provenance.txt"
+install -Dm0755 "$assets/linux-live-wallpaper" "$dest/airootfs/usr/local/bin/linux-live-wallpaper"
+install -Dm0644 "$assets/LICENSE" "$dest/airootfs/usr/share/licenses/linux-live-wallpaper/LICENSE"
+install -Dm0644 "$assets/provenance.txt" "$dest/airootfs/usr/share/nemesis-operator/wallpaper-provenance.txt"
 [[ -f "$dest/airootfs/usr/local/bin/nemesis-operator-wallpaper" ]] || die "wallpaper launcher source missing"
 bash -n "$dest/profiledef.sh"
 printf 'Prepared distinct Operator ISO with pinned wallpaper: %s\n' "$dest"
