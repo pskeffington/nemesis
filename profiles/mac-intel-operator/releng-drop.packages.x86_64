@@ -1,0 +1,23 @@
+# ---------------------------------------------------------------------
+# Operator-only exclusions from upstream ArchISO releng package *requests*.
+# These packages are not needed for a normal Plasma/network/ADS-B desktop;
+# the independent rescue and lean-Air images keep upstream releng intact.
+# This is NOT dependency pruning: pacman may still require transitive deps.
+# Update only after an explicit signed-package and boot-service review.
+# ---------------------------------------------------------------------
+irssi
+lftp
+lynx
+mc
+nmap
+tcpdump
+openconnect
+openvpn
+pptpclient
+vpnc
+xl2tpd
+virtualbox-guest-utils-nox
+open-vm-tools
+qemu-guest-agent
+modemmanager
+iwd

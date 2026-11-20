@@ -9,11 +9,13 @@ set -euo pipefail
 die() { printf 'Operator package repository check: %s\n' "$*" >&2; exit 1; }
 [[ -f /etc/arch-release ]] || die "requires Arch Linux CI"
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-for repo in core extra multilib; do
-  if grep -Eq "^[[:space:]]*\\[$repo\\]" /etc/pacman.conf; then
-    continue
-  fi
-done
+# Never resolve a kit against an unapproved third-party package repository.
+while IFS= read -r repo; do
+  case "$repo" in
+    core|extra|multilib) ;;
+    *) die "unexpected repository configured in Arch CI: $repo" ;;
+  esac
+done < <(pacman-conf --repo-list)
 count=0
 for manifest in "$root/profiles/mac-intel-operator/packages.x86_64" \
                 "$root/profiles/mac-intel-operator/desktop.packages.x86_64" \

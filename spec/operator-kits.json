@@ -16,7 +16,8 @@
     "new_size": "UNMEASURED",
     "require_comparable_archiso_version": true,
     "target": "reduce initial ISO and dependency footprint without losing working map/desktop",
-    "size_budget_status": "evidence-pending"
+    "size_budget_status": "evidence-pending",
+    "comparison_note": "Previous ISO about 2.3 GiB. Savings require rebuilt ISO measurement; ArchISO releng upstream adds packages independently of Nemesis core manifests."
   },
   "kits": [
     {
@@ -91,5 +92,7 @@
     "no_passwordless_sudo": true,
     "no_aur": true,
     "preserve_original_rescue": true
-  }
+  },
+  "base_profile_strategy": "archiso-releng-plus-reviewed-operator-exclusion-list",
+  "releng_drop_manifest": "profiles/mac-intel-operator/releng-drop.packages.x86_64"
 }

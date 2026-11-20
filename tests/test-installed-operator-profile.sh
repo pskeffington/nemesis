@@ -34,8 +34,10 @@ for pkg in plasma-desktop sddm webkitgtk-6.0 gtk4-layer-shell rtl-sdr airspy dum
 done
 [[ -f "$stage/airootfs/usr/local/bin/nemesis-kit" ]] || die "kit command missing"
 [[ -f "$stage/airootfs/usr/share/nemesis-operator/kits/gnss.packages.x86_64" ]] || die "kit manifest not copied"
-for excluded in gqrx gnuradio gpsd qgis nmap rtl_433; do
-  ! grep -Fxq "$excluded" "$stage/packages.x86_64" || die "optional package auto-selected: $excluded"
+for excluded in gqrx gnuradio gpsd qgis nmap tcpdump rtl_433; do
+  if grep -Fxq "$excluded" "$stage/packages.x86_64"; then
+    die "optional package auto-selected: $excluded"
+  fi
 done
 [[ "$(readlink "$stage/airootfs/etc/systemd/system/default.target")" == "/usr/lib/systemd/system/graphical.target" ]] || die "graphical target missing"
 [[ "$(readlink "$stage/airootfs/etc/systemd/system/display-manager.service")" == "/usr/lib/systemd/system/sddm.service" ]] || die "sddm link missing"

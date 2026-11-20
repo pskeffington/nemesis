@@ -36,6 +36,29 @@ awk '
   length($0) && !seen[$0]++ { print $0 }
 ' "$dest/packages.x86_64" "$desktop" "$tools" > "$temp"
 mv -- "$temp" "$dest/packages.x86_64"
+
+# ---------------------------------------------------------------------
+# The full ArchISO releng rescue profile includes many nonessential
+# network/client/VM utilities. For Operator only, remove a documented
+# allowlisted set of *explicit requests*. Preserve boot, Mac firmware,
+# USB-network fallback, installer and signed repository trust contracts.
+# ---------------------------------------------------------------------
+drop="$root/profiles/mac-intel-operator/releng-drop.packages.x86_64"
+[[ -f "$drop" && ! -L "$drop" ]] || die "reviewed releng exclusion manifest missing"
+awk '
+  NR==FNR {
+    sub(/#.*/, "", $0); gsub(/^[[:space:]]+|[[:space:]]+$/, "", $0)
+    if (length($0)) { excluded[$0]=1 }
+    next
+  }
+  !($0 in excluded) { print }
+' "$drop" "$dest/packages.x86_64" > "$temp"
+mv -- "$temp" "$dest/packages.x86_64"
+for required in linux linux-firmware intel-ucode mkinitcpio-archiso \
+                archinstall networkmanager wpa_supplicant plasma-desktop \
+                sddm webkitgtk-6.0 dump1090_rs; do
+  grep -Fxq "$required" "$dest/packages.x86_64" || die "critical package absent: $required"
+done
 cp -a "$overlay/." "$dest/airootfs/"
 
 # ---------------------------------------------------------------------

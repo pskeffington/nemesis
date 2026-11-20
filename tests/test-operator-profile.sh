@@ -30,7 +30,13 @@ cat > "$fixture/packages.x86_64" <<'EOF'
 base
 linux
 linux-firmware
+intel-ucode
+archinstall
+mkinitcpio-archiso
+wpa_supplicant
 networkmanager
+nmap
+tcpdump
 EOF
 printf '#!/usr/bin/env sh\nexit 0\n' > "$assets/linux-live-wallpaper"
 chmod 755 "$assets/linux-live-wallpaper"
@@ -66,8 +72,11 @@ for package in plasma-desktop sddm webkitgtk-6.0 gtk4-layer-shell rtl-sdr airspy
   grep -Fxq "$package" "$stage/packages.x86_64"
 done
 [[ "$(grep -xc networkmanager "$stage/packages.x86_64")" -eq 1 ]]
-for opt in gqrx gnuradio gpsd qgis nmap rtl_433; do
-  ! grep -Fxq "$opt" "$stage/packages.x86_64"
+for opt in gqrx gnuradio gpsd qgis nmap tcpdump rtl_433; do
+  if grep -Fxq "$opt" "$stage/packages.x86_64"; then
+    printf 'ERROR: optional package selected: %s\n' "$opt" >&2
+    exit 1
+  fi
 done
 bash -c '
   declare -A file_permissions=()
