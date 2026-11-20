@@ -88,3 +88,10 @@
 **Reason:** the current official releng profile may automatically start an SSH listener and probe serial modems. Neither is a safe default for an offline-first mobile communications laptop with field RF/USB devices. Installed NetworkManager tooling is not a reason to start a competing wireless backend.
 
 **Safety/gates:** edits touch only the copied ArchISO staging tree and fail on unexpected non-symlink service entries. Validate via synthetic fixture and actual packaged-releng staging in Arch CI. A successful image build is still not an observed MacBook Air hardware result. See `docs/FIELD_LAPTOP_ARCHITECTURE.md`.
+
+## ADR-014 — Preloaded Operator desktop with Airplanes.live as live wallpaper (2026-11-20)
+**Decision:** create a separate `mac-intel-operator` source/build edition with official-signed Arch Plasma, RF/ADS-B/GNSS/network packages. Build the user's MIT `linux_live_wallpaper` from immutable commit `ee51045dc394f73d8151906fe9f397dd3cc94060` and its Cargo.lock **without root** in isolated GitHub Docker, then package the recorded binary and license into a distinct Operator ISO. The KDE session autostarts `https://globe.airplanes.live/` in layer-shell background mode, with local standby fallback and reconnect. No third-party map code/tiles are bundled.
+
+**Security:** use ephemeral nonprivileged SDDM live-only autologin (not installed security policy); switch only Operator's staged networking to NetworkManager, keeping SSH and ModemManager auto-start disabled. Never auto-start SDR capture, scan, VPN, remote login, privileged tasks or geolocation. Existing rescue/Air ISO source remains unchanged.
+
+**Acceptance:** separate source/Arch staging, pinned Rust binary, ISO SHA-256/UEFI/SquashFS, virtual KDE rendering and physical MacBook Air gates. Source compilation or ISO assembly alone does not certify wallpaper placement, startup on reboot, battery use or actual hardware support.

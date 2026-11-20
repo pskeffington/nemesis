@@ -12,6 +12,8 @@
 | P0 | F02-V01 | Docker CI compile of baseline Intel ISO, checksum and UEFI image metadata | archiso-build-engineer | real mkarchiso 0, SHA-256 checked and UEFI metadata present | **ACCEPTED (assembly only)** — [CI 44610122687](https://github.com/pskeffington/nemesis/actions/runs/44610122687); not booted |
 | P0 | F03-A01 | MacBook Air field source and offline/power diagnostics | macbook-air-field-engineer | six models, optional manifest, fixture CI | ACCEPTED (source) — [CI 44612120052](https://github.com/pskeffington/nemesis/actions/runs/44612120052) |
 | P0 | F03-A02 | Independent MacBook Air field ISO | archiso-build-engineer | staged profile fixture; Docker mkarchiso, SHA and EFI checks | IN PROGRESS — [first Docker ISO PASS](https://github.com/pskeffington/nemesis/actions/runs/44612684836); [hardened Docker](https://github.com/pskeffington/nemesis/actions/runs/44614544328) pending, [#15](https://github.com/pskeffington/nemesis/issues/15) |
+| P0 | OP-01 | KDE Operator profile with Airplanes.live startup and preloaded tools | operator-desktop-engineer | pinned first-party wallpaper, signed package manifests, autostart and offline fallback | SOURCE COMMITTED — [PR #18](https://github.com/pskeffington/nemesis/pull/18), CI review |
+| P0 | OP-02 | Docker build the separate graphical Operator ISO | archiso-build-engineer | pinned Rust binary/hash, mkarchiso, ISO SHA and SquashFS tools/startup inspection | NOT YET ACCEPTED — [workflow](.github/workflows/docker-operator.yml) |
 | P0 | F03 | Mac device/firmware support and compatibility evidence schema | intel-mac-compatibility | source-linked feature-level contract, no false PASS claims | **READY — ACTIVE NEXT**, [#9](https://github.com/pskeffington/nemesis/issues/9) |
 | P0 | F04 | Build provenance, release security, recovery policy | security-release-reviewer | signed-source/rollback/artifact design review | NOT STARTED |
 | P1 | F05 | Complete and approve Codex handoff packet | build-qa-engineer | all P0 gates + explicit user GO | NOT STARTED / NO-GO |
@@ -79,3 +81,15 @@ M02 ISO -> M03 virtual UEFI -> M04 physical Intel Mac.
 - **R-F05:** design/artwork is separate from core boot and security; no forced merge of active brand PR.
 
 **Future transition:** only after F05 acceptance and explicit user instruction. The inactive [Linux execution prompt](codex/LINUX_EXECUTION_PROMPT.md) and [build runbook](codex/BUILD_RUNBOOK.md) remain reference material until then.
+
+## Operator edition — live aircraft globe (2026-11-20)
+
+The user selected the **Operator edition** for all integrated desktop tools and a live aircraft map as the central wallpaper. [Operator source specification](docs/OPERATOR_EDITION.md) and [PR #18](https://github.com/pskeffington/nemesis/pull/18) provide an independent `mac-intel-operator` ISO path. It inherits conservative Air hardware configuration, adds Plasma Wayland, a live-only nonprivileged operator login, signed SDR/ADS-B/GNSS/network packages, and pins the MIT Rust [linux_live_wallpaper](https://github.com/pskeffington/linux_live_wallpaper) source to `ee51045dc394f73d8151906fe9f397dd3cc94060`.
+
+- **OP-01:** KDE XDG session autostart, default `https://globe.airplanes.live/`, local non-data offline fallback and reconnect, no competing iwd/networkd with the Operator NetworkManager, disabled SSH/modem auto-start, no embedded credentials. **SOURCE COMMITTED, validation review underway.**
+- **OP-02:** compile pinned app without root in disposable Docker; then distinct privileged Docker `mkarchiso` with SHA-256/UEFI/SquashFS/package verification. **NOT YET ACCEPTED**.
+- **OP-03:** actual UEFI/Plasma Wayland graphical session, layer placement behind KDE panels and icons, one startup per reboot, WebKit globe rendering, browser interaction, network recovery. **NOT RUN — explicit later approval.**
+- **OP-04:** physical MacBookAir7,2/6,x battery, memory, Wi-Fi/USB, SDR and return to macOS tests. **NOT RUN — explicit later approval.**
+- **Theme:** Nemesis panel/icon work from PR #5 stays independent until visual KDE rendering and licensing are accepted; the map remains the primary visual surface.
+
+No live-mapped aircraft positions are available offline: the original standby HTML is only an offline indicator. Operator tools are installed but never automatically scan, capture, transmit or establish remote access.
