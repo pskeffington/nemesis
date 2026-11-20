@@ -33,6 +33,16 @@ printf '=== Source static validation ===\n'
 bash scripts/validate.sh
 printf '=== Packaged ArchISO profile contract ===\n'
 bash tests/test-installed-releng.sh
+printf '=== Read-only package and service inventory ===\n'
+inventory_stage="$(mktemp -d)"
+trap 'rm -rf -- "$inventory_stage"' EXIT
+bash scripts/prepare-profile.sh mac-intel "$inventory_stage/intel"
+bash scripts/prepare-air-field-profile.sh "$inventory_stage/air"
+python3 scripts/inventory-archiso.py \
+  --source /usr/share/archiso/configs/releng \
+  --intel "$inventory_stage/intel" \
+  --air "$inventory_stage/air" \
+  --out "$evidence"
 printf '=== Run mkarchiso (actual ISO compilation) ===\n'
 
 # Capture the real status of mkarchiso through the tee pipeline.
