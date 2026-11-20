@@ -1,0 +1,5 @@
+# Optional diagnostics for explicitly authorized networks.
+nmap
+tcpdump
+mtr
+traceroute

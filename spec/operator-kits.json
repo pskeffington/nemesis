@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "edition": "mac-intel-operator",
+  "goal": "small usable MacBook live desktop with optional toolkits installed after authorized persistent installation",
+  "target_candidates": "Intel non-T2 MacBook Air and MacBook Pro; no physical validation",
+  "default_profile": "operator-core",
+  "core_manifest": "profiles/mac-intel-operator/packages.x86_64",
+  "desktop_manifest": "profiles/mac-intel-operator/desktop.packages.x86_64",
+  "installer_status": "not-implemented",
+  "package_source": "official-signed-arch",
+  "installed_toolkit_directory": "/usr/share/nemesis-operator/kits",
+  "cli": "/usr/local/bin/nemesis-kit",
+  "installation_policy": "user-initiated with authenticated root on installed Arch; never on live ISO, no automatic services",
+  "size_policy": {
+    "previous_iso_approx_gib": 2.3,
+    "new_size": "UNMEASURED",
+    "require_comparable_archiso_version": true,
+    "target": "reduce initial ISO and dependency footprint without losing working map/desktop",
+    "size_budget_status": "evidence-pending"
+  },
+  "kits": [
+    {
+      "id": "aviation",
+      "label": "ADS-B/ISM extensions",
+      "level": "field",
+      "priority": 1,
+      "reason": "RTL receiver device plugins and ISM decoding",
+      "manifest": "profiles/mac-intel-operator/toolkits/aviation.packages.x86_64",
+      "default_installed": false
+    },
+    {
+      "id": "airspy",
+      "label": "Airspy Soapy backend",
+      "level": "field",
+      "priority": 2,
+      "reason": "Airspy compatibility when Soapy applications are used",
+      "manifest": "profiles/mac-intel-operator/toolkits/airspy.packages.x86_64",
+      "default_installed": false
+    },
+    {
+      "id": "gnss",
+      "label": "GNSS receiver",
+      "level": "field",
+      "priority": 3,
+      "reason": "Device-specific GPS and serial diagnostics",
+      "manifest": "profiles/mac-intel-operator/toolkits/gnss.packages.x86_64",
+      "default_installed": false
+    },
+    {
+      "id": "network",
+      "label": "Network diagnostics",
+      "level": "field",
+      "priority": 4,
+      "reason": "Authorized packet/path/port troubleshooting",
+      "manifest": "profiles/mac-intel-operator/toolkits/network.packages.x86_64",
+      "default_installed": false
+    },
+    {
+      "id": "rf-lab",
+      "label": "RF workbench",
+      "level": "advanced",
+      "priority": 5,
+      "reason": "Gqrx, GNU Radio and GUI dependency closure",
+      "manifest": "profiles/mac-intel-operator/toolkits/rf-lab.packages.x86_64",
+      "default_installed": false
+    },
+    {
+      "id": "development",
+      "label": "Software development",
+      "level": "advanced",
+      "priority": 6,
+      "reason": "Build tools, Rust and Python development",
+      "manifest": "profiles/mac-intel-operator/toolkits/development.packages.x86_64",
+      "default_installed": false
+    },
+    {
+      "id": "gis",
+      "label": "Geospatial analysis",
+      "level": "advanced",
+      "priority": 7,
+      "reason": "QGIS mapping and geospatial dependencies",
+      "manifest": "profiles/mac-intel-operator/toolkits/gis.packages.x86_64",
+      "default_installed": false
+    }
+  ],
+  "safety": {
+    "no_automatic_toolkit_install": true,
+    "no_default_gqrx": true,
+    "no_default_gpsd_service": true,
+    "no_default_scan": true,
+    "no_passwordless_sudo": true,
+    "no_aur": true,
+    "preserve_original_rescue": true
+  }
+}

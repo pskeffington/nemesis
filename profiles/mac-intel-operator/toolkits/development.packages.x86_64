@@ -1,0 +1,6 @@
+# Optional compilers and development tools (large dependency set).
+base-devel
+rust
+python
+python-pip
+shellcheck

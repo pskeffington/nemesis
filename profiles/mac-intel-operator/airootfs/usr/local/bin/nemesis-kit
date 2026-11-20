@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+# ---------------------------------------------------------------------
+# List opt-in Nemesis Operator toolkits, inspect packages, and install only
+# after the owner explicitly authenticates as root on a persistent system.
+# ---------------------------------------------------------------------
+set -euo pipefail
+
+die() { printf 'nemesis-kit: %s\n' "$*" >&2; exit 1; }
+usage() {
+  cat <<'EOF'
+Nemesis Operator toolkits
+  nemesis-kit list            List optional toolkits
+  nemesis-kit show KIT        Preview packages without changing the system
+  nemesis-kit install KIT     Interactive root-only installation, installed systems only
+KIT: aviation airspy gnss network rf-lab development gis
+EOF
+}
+kit_dir="/usr/share/nemesis-operator/kits"
+# The test fixture override can never be used to install a toolkit.
+if [[ -n "${NEMESIS_KITS_TEST_DIR:-}" ]]; then
+  kit_dir="$NEMESIS_KITS_TEST_DIR"
+fi
+[[ $# -ge 1 ]] || { usage; exit 2; }
+action="$1"
+shift
+case "$action" in
+  list)
+    [[ $# -eq 0 ]] || die "list takes no extra arguments"
+    for id in aviation airspy gnss network rf-lab development gis; do
+      printf '%s\toptional\n' "$id"
+    done
+    exit 0 ;;
+  show|install)
+    [[ $# -eq 1 ]] || die "usage: nemesis-kit $action KIT"
+    kit="$1"
+    case "$kit" in
+      aviation|airspy|gnss|network|rf-lab|development|gis) ;;
+      *) die "unknown toolkit: $kit" ;;
+    esac
+    file="$kit_dir/$kit.packages.x86_64"
+    [[ -f "$file" && ! -L "$file" ]] || die "manifest missing: $kit"
+    packages=()
+    while IFS= read -r line || [[ -n "$line" ]]; do
+      line="${line%%#*}"
+      line="${line//[[:space:]]/}"
+      [[ -n "$line" ]] || continue
+      [[ "$line" =~ ^[a-z0-9@._+:-]+$ ]] || die "invalid package entry"
+      packages+=("$line")
+    done < "$file"
+    (( ${#packages[@]} > 0 )) || die "empty toolkit"
+    if [[ "$action" == show ]]; then
+      printf 'Toolkit %s (official Arch packages):\n' "$kit"
+      printf '  %s\n' "${packages[@]}"
+      exit 0
+    fi ;;
+  help|-h|--help) usage; exit 0 ;;
+  *) die "unknown action; run nemesis-kit --help" ;;
+esac
+
+# No package download, privilege escalation, or mutation before these gates.
+[[ -z "${NEMESIS_KITS_TEST_DIR:-}" ]] || die "test override forbidden for installation"
+[[ "$EUID" -eq 0 ]] || die "install requires authenticated administrator on an installed system"
+[[ ! -d /run/archiso && ! -e /run/archiso/bootmnt ]] || die "no package installs on ephemeral live ISO"
+[[ -f /etc/arch-release ]] || die "requires installed Arch"
+command -v pacman >/dev/null 2>&1 || die "pacman unavailable"
+printf 'Review and confirm the signed pacman transaction for optional %s toolkit.\n' "$kit"
+# Full refresh+upgrade avoids an unsupported Arch partial-upgrade transaction.
+exec pacman -Syu --needed -- "${packages[@]}"
