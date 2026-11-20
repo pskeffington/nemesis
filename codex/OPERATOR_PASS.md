@@ -65,3 +65,15 @@ Once OP-03 passes, review source and UI assets from the separate [theme PR #5](h
 - Evaluate optional **light signal GUI** (`sigdigger`, `inspectrum`), **basic data decoding** (`multimon-ng`), **aviation/airband** and **satellite** kit proposals using official signed Arch package availability and dependency sizes. Do not replace an approved application until measured workflows support the change.
 - Do not import self-updating appimages, Linux distribution binary roots, AUR builds, active cellular base stations, interception frameworks or jammers as an Operator default. Services must be operator initiated and off by default.
 - Record exact candidate/Arch package names, direct and transitive dependency closure, firmware/license requirements, background services, and USB/hardware constraints. Keep all build claims at their actual accepted source/CI gates.
+
+## R29-03 — Offline field console source and CI (ACTIVE)
+
+**Owner:** operator-desktop-engineer. **Review:** security-release-reviewer and build-qa-engineer. **Base:** the verified but still unmerged lean-toolkit branch `feat/operator-lean-toolkit-matrix`. Do not merge unrelated package changes implicitly.
+
+1. Inspect [console contract](../spec/offline-field-console.json), [runbook](../docs/OPERATOR_FIELD_CONSOLE.md), the sourced 2029 capability matrix and the existing Operator staging script. Keep Airplanes.live wallpaper unchanged.
+2. Validate `nemesis-field-note`: manual `add/list/status/export`, strict categories/text bounds, user ownership and private SQLite storage, explicit non-overwriting JSONL export, no network/dependency/server calls, and rejection of root and symlinks. Run real Python regression tests in GitHub foundation CI.
+3. Validate `offline-field-map.html`: only explicitly selected local GeoJSON, no remote basemap, no location API, secure CSP with `connect-src 'none'`, bounded bytes/features/vertices, appropriate uncertainty wording and syntax checks where Node is available. Inspect menu launchers.
+4. Verify source/script tests, synthetic profile staging and signed native ArchISO staging. The real Operator Docker/SquashFS gate must check the actual viewer, notebook executable and desktop entries before asserting that the binary image includes them. The ISO may still fail other preexisting CI gates: record the failure, do not bypass it.
+5. If accepted, create a clean, separately reviewable changeset. Do not claim actual KDE rendering, usable offline street maps or physical Mac performance from source CI.
+
+**Exit:** observed green source/fixtures + clear unresolved runtime/retention limits. Follow-up R29-04: opt-in Meshtastic and broadcast Remote ID hardware interface **research only**, no auto-scan or private-data relay. Full offline basemap/routing requires geographic data and license/quality gates before calling it navigation.

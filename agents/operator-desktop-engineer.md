@@ -17,3 +17,7 @@ Prioritize first-use: map, network, terminal, diagnostics, basic RTL-SDR/Airspy/
 ## SIGINT distribution source review
 
 For future toolkit expansion, read [the publisher-source OS comparison](../docs/research/SIGINT_OS_PACKAGE_DEPLOYMENT_MATRIX.md). Compare individual practical receiver workflows rather than copying all programs from SigintOS/DragonOS/Skywave. Pentoo illustrates modular profiles, not an Arch-compatible repository. Mark newly proposed tools as research until signed official Arch package name, dependency closure, license, USB backend, security posture and real operator task are validated. Do not enable transmission, cellular capture, automatic remote servers or background service listeners.
+
+## Offline console follow-up
+
+Treat the [offline field console](../docs/OPERATOR_FIELD_CONSOLE.md) as an on-demand *complement* to the online Airplanes.live background, not a replacement. Verify user-selected GeoJSON drawing remains fully local; do not silently download map tiles, request position, store surveillance data or call the plot a navigational basemap. The notebook uses SQLite in the private nonroot user's home and explicit exports; no services or device sensors are enabled. Validate Python regression tests and staged/squashed source before a separate browser and 4-GiB Mac acceptance pass. The optional Meshtastic and broadcast Remote ID research must stay disabled unless individually approved with hardware and privacy gates.
