@@ -20,6 +20,8 @@ on:
       - 'scripts/build-iso.sh'
       - 'scripts/prepare-profile.sh'
       - 'scripts/write-checksums.sh'
+      - 'scripts/inventory-archiso.py'
+      - 'profiles/macbook-air-field/**'
       - 'profiles/mac-intel/**'
 
 permissions:
