@@ -21,11 +21,15 @@ First engineering cohort: **MacBookAir7,2 and 6,x**, followed by 7,1/5,x legacy 
 | `mac-intel` | non-T2 Intel x86_64 rescue/live ISO | [Docker ISO assembled and checksummed](https://github.com/pskeffington/nemesis/actions/runs/44610122687); boot untested | Physical deployment deferred |
 | `macbook-air-field` | optional Air 5–7 field laptop layer | Independent builder and first Docker ISO pass; hardened build pending | UEFI and Mac tests deferred |
 | `mac-intel-desktop` | optional accessible KDE desktop | design-only | Deferred |
-| `mac-intel-operator` | optional field / RF / engineering edition | design-only | Deferred |
+| `mac-intel-operator` | KDE Wayland Operator, live Airplanes.live globe wallpaper, SDR/GNSS/ADS-B tools | separate source/ISO builder and signed package manifests; CI under review | graphical/physical boot NOT TESTED |
 | `mac-t2` | Intel Macs with T2-specific kernel and device stack | research-only | Deferred |
 | `mac-asahi` | Apple Silicon ARM64/Asahi platform | research-only | Deferred |
 
 Machine-readable scope lives in [`spec/editions.json`](spec/editions.json); source-only tests prevent premature hardware/release claims. This specification is **not automatically consumed by the builder**.
+
+## Operator live aviation desktop
+
+The dedicated [Operator edition](docs/OPERATOR_EDITION.md) builds [Linux Live Wallpaper](https://github.com/pskeffington/linux_live_wallpaper) from pinned MIT Rust source and configures **https://globe.airplanes.live/** to start automatically as the KDE Wayland desktop background. It includes original offline standby artwork and preloaded SDR, ADS-B, GNSS and network tools; no remote login, modem probing, device capture, GPS disclosure or VPN credentials auto-enable. An ISO build is **not** proof of working Plasma/Wayland desktop placement.
 
 ## Repository navigation
 
@@ -34,6 +38,7 @@ Machine-readable scope lives in [`spec/editions.json`](spec/editions.json); sour
 - **Research:** [Mac hardware literature](docs/research/LITERATURE_MATRIX.md), [comparative distro source recon](docs/research/UPSTREAM_DISTRO_RECON.md), [Intel Mac candidates](docs/research/INTEL_MAC_CANDIDATES.md), [open questions](docs/research/OPEN_QUESTIONS.md).
 - **Agent and Codex instructions:** [AGENTS.md](AGENTS.md), [agent catalog](agents/README.md), [repository-phase prompt](codex/REPOSITORY_PHASE_PROMPT.md), [handoff contract](codex/HANDOFF_CONTRACT.md), [CODEX_KICKOFF.md](CODEX_KICKOFF.md).
 - **Docker ISO validation:** [isolated build policy](docs/DOCKER_ISO_VALIDATION.md), [GitHub workflow](.github/workflows/docker-archiso.yml), [container script](docker/archiso/validate-build.sh); current validation status in [F02-V01 issue #12](https://github.com/pskeffington/nemesis/issues/12).
+- **Operator:** [edition specification](spec/operator-edition.json), [startup and package design](docs/OPERATOR_EDITION.md), [Operator CI](.github/workflows/docker-operator.yml), [Codex passes](codex/OPERATOR_PASS.md), [Operator PR #18](https://github.com/pskeffington/nemesis/pull/18).
 - **MacBook Air field:** [field architecture](docs/FIELD_LAPTOP_ARCHITECTURE.md), [hardware research](docs/research/MACBOOK_AIR_FIELD_MATRIX.md), [field engineer](agents/macbook-air-field-engineer.md), [Codex queue](codex/MACBOOK_AIR_FIELD_PASS.md).
 - **Existing source:** [profiles/mac-intel](profiles/mac-intel), [prepare-profile.sh](scripts/prepare-profile.sh), [build-iso.sh](scripts/build-iso.sh), [source tests](tests).
 

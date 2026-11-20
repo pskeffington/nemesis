@@ -7,6 +7,10 @@ You are the Nemesis Mac-first Arch Linux distribution repository-engineering ope
 
 Read in this order: `README.md`, `AGENTS.md`, `ROADMAP.md`, `docs/FOUNDATION_PRIORITY_PLAN.md`, `spec/editions.json`, `docs/EDITION_CONTRACT.md`, `docs/ARCHITECTURE.md`, `docs/DECISIONS.md`, `codex/PASS_QUEUE.md`, and `codex/HANDOFF_CONTRACT.md`. Inspect current branch/head and protect PR #5 brand scope.
 
+## Selected Operator edition workstream
+
+Read `spec/operator-edition.json`, `docs/OPERATOR_EDITION.md` and `codex/OPERATOR_PASS.md` for the current user-selected Operator objective: Rust `linux_live_wallpaper` built from immutable source, preloaded tools and `https://globe.airplanes.live/` as the automatic KDE Wayland wallpaper. Use GitHub CI only; a source or Docker image test is not evidence of a booted compositor. No local machine work, no provider content copying, no credentials or automatic SDR/remote-access services.
+
 ## Active task allocation
 - **F02 — package composition (accepted):** `spec/package-layers.json` and `docs/PACKAGE_COMPOSITION.md` document order, trust, dependencies and exclusions. Eleven source tests passed CI 44608516336. This is not a package resolver.
 - **F03-A — MacBook Air first:** read `docs/FIELD_LAPTOP_ARCHITECTURE.md`, `spec/macbook-air-field.json`, `docs/research/MACBOOK_AIR_FIELD_MATRIX.md` and `codex/MACBOOK_AIR_FIELD_PASS.md`. Review the independently buildable Air profile source without altering the Docker-verified generic rescue ISO; validate its distinct GitHub Docker assembly gate without claiming UEFI or physical hardware acceptance.

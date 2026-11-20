@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Aircraft Globe (Interactive)
+Comment=Open the full live aircraft map in a regular browser window
+Exec=firefox --new-window https://globe.airplanes.live/
+Icon=applications-internet
+Terminal=false
+Categories=Network;Science;
+StartupNotify=true

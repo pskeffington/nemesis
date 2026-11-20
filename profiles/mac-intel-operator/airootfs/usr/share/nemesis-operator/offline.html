@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nemesis Operator • Air Map Offline</title>
+<style>
+* {box-sizing:border-box} body{margin:0;color:#d9e9e8;background:#07151b;font:400 16px/1.5 system-ui,sans-serif;height:100vh;overflow:hidden}
+.grid{position:fixed;inset:0;opacity:.17;background:linear-gradient(90deg,#44756b 1px,transparent 1px),linear-gradient(#44756b 1px,transparent 1px);background-size:50px 50px;transform:perspective(500px) rotateX(8deg) scale(1.2)}
+.radar{position:fixed;top:50%;left:50%;width:min(70vw,70vh);aspect-ratio:1;transform:translate(-50%,-50%);border:1px solid #267c7e;border-radius:50%;box-shadow:0 0 0 12vw #0b232724 inset}
+.radar::before,.radar::after{content:"";position:absolute;border:1px solid #267c7e;border-radius:50%;inset:24%}
+.radar::after{inset:47%}
+h1{font-size:1rem;letter-spacing:.35em;color:#e6f8f4} .status{position:fixed;top:7vh;left:6vw;padding:1rem 1.5rem;background:#0a2029de;border-left:3px solid #69a8a2;max-width:510px}
+small{display:block;letter-spacing:.14em;color:#8ab0af} .footer{position:fixed;bottom:5vh;left:6vw;color:#91b0b0}
+</style></head><body>
+<div class="grid" aria-hidden="true"></div><div class="radar" aria-hidden="true"></div>
+<section class="status"><small>NEMESIS / OPERATOR</small><h1>AIR TRAFFIC / OFFLINE</h1>
+<p>Live aircraft map unavailable. The desktop remains ready for offline operations. The launcher will retry the map when connectivity returns.</p>
+<p>Live source: <strong>https://globe.airplanes.live/</strong></p></section>
+<div class="footer">LOCAL FALLBACK • NO AIRCRAFT POSITIONS OR OFFLINE TRACKING ARE DISPLAYED</div>
+</body></html>

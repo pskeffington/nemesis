@@ -49,7 +49,7 @@ class FoundationContractTests(unittest.TestCase):
 
     def test_buildable_scaffold_is_intel_only(self):
         scaffolded = [e for e in self.spec["editions"] if e["status"] == "source-scaffold"]
-        self.assertEqual({e["id"] for e in scaffolded}, {"mac-intel", "macbook-air-field"})
+        self.assertEqual({e["id"] for e in scaffolded}, {"mac-intel", "macbook-air-field", "mac-intel-operator"})
         active = scaffolded[0]
         self.assertEqual(active["platform"], "intel-non-t2")
         self.assertEqual(active["source_profile"], "archiso-releng")
@@ -61,7 +61,7 @@ class FoundationContractTests(unittest.TestCase):
         for other in self.spec["editions"]:
             if other is active:
                 continue
-            if other["id"] == "macbook-air-field":
+            if other["id"] in ("macbook-air-field", "mac-intel-operator"):
                 self.assertEqual(other["status"], "source-scaffold")
                 self.assertEqual(other["source_profile"], "archiso-releng")
                 for key in ("profile_path", "packages_manifest", "prepare_script", "build_script"):

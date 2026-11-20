@@ -1,0 +1,25 @@
+# ---------------------------------------------------------------------
+# Operator tools preloaded in the Operator edition. No auto-scan/capture.
+# All packages resolved from signed official Arch repositories.
+# ---------------------------------------------------------------------
+rtl-sdr
+airspy
+soapysdr
+soapyairspy
+soapyrtlsdr
+rtl_433
+dump1090_rs
+gqrx
+gpsd
+nmap
+tcpdump
+wireguard-tools
+openssh
+usbutils
+pciutils
+jq
+git
+python
+python-pyserial
+htop
+tmux

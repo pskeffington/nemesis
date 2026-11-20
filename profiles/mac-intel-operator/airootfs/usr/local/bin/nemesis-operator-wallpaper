@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+# ---------------------------------------------------------------------
+# Nemesis Operator • start the pinned aircraft-globe wallpaper after
+# Plasma starts. Never launch an SSH server, SDR capture, or privileged task.
+# ---------------------------------------------------------------------
+set -euo pipefail
+
+# A KDE wallpaper surface requires a Wayland session with wlr layer-shell.
+# If unsupported, exit cleanly and leave KDE's ordinary background visible.
+[[ "${XDG_SESSION_TYPE:-}" == wayland && -n "${WAYLAND_DISPLAY:-}" ]] || exit 0
+command -v wayland-info >/dev/null 2>&1 || exit 0
+protocols="$(timeout 8 wayland-info 2>/dev/null || true)"
+[[ "$protocols" == *zwlr_layer_shell_v1* ]] || exit 0
+
+binary=/usr/local/bin/linux-live-wallpaper
+[[ -x "$binary" ]] || exit 1
+command -v curl >/dev/null 2>&1 || exit 1
+command -v flock >/dev/null 2>&1 || exit 1
+[[ -n "${XDG_RUNTIME_DIR:-}" && -d "$XDG_RUNTIME_DIR" ]] || exit 1
+umask 077
+exec 9>"$XDG_RUNTIME_DIR/nemesis-operator-wallpaper.lock"
+flock -n 9 || exit 0
+
+map_url="https://globe.airplanes.live/"
+offline_url="file:///usr/share/nemesis-operator/offline.html"
+child=""
+active=""
+cleanup() {
+  if [[ -n "$child" ]]; then
+    kill "$child" 2>/dev/null || true
+    wait "$child" 2>/dev/null || true
+    child=""
+  fi
+}
+trap 'cleanup; exit 0' INT TERM
+trap cleanup EXIT
+
+# Launch the complete page directly in WebKit (no iframe, proxy or mirroring).
+# The short, ranged GET is a connectivity probe; never request location.
+while :; do
+  selected="$offline_url"
+  if curl --silent --show-error --fail --location --range 0-0 \
+          --connect-timeout 5 --max-time 10 --output /dev/null "$map_url" 2>/dev/null; then
+    selected="$map_url"
+  fi
+
+  if [[ "$selected" != "$active" ]] || [[ -z "$child" ]] || ! kill -0 "$child" 2>/dev/null; then
+    cleanup
+    active="$selected"
+    GDK_BACKEND=wayland "$binary" --background --url "$active" --reload-seconds 900 &
+    child="$!"
+  fi
+
+  # A display/link outage never locks the session: local fallback on next
+  # connectivity check, with the remote globe restored after recovery.
+  sleep 180 &
+  wait "$!" || true
+done

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Operator Field Readiness
+Comment=Read-only battery, thermal and connectivity report
+Exec=konsole --hold -e /usr/local/bin/nemesis-field-check
+Icon=utilities-system-monitor
+Terminal=false
+Categories=System;Utility;
+StartupNotify=false

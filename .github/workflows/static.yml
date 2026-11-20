@@ -34,3 +34,5 @@ jobs:
         run: bash tests/test-installed-releng.sh
       - name: Verify MacBook Air staging and field service hardening
         run: bash tests/test-installed-air-profile.sh
+      - name: Stage Operator edition with a mocked pinned wallpaper asset
+        run: bash tests/test-installed-operator-profile.sh

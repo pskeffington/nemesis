@@ -89,3 +89,7 @@ F05 + explicit human GO ──> M02 (actual ISO build) ──> M03 VM ──> M0
 ## How to work now
 
 Use [repository-phase Codex prompt](../codex/REPOSITORY_PHASE_PROMPT.md). F03 remains the next **design** pass. GitHub-hosted Docker build validation F02-V01 is a separate approved test; it does not authorize local machine work or alter the F05 handoff NO-GO. Do **not** follow `codex/BUILD_RUNBOOK.md` until F05 is approved. For accepted passes, report files/commit/CI/remaining gate; never mark a milestone accepted from a draft alone.
+
+## Dedicated Operator image (2026-11-20)
+
+The user's explicit new priority is a separate full **Operator** edition with preloaded field tools, KDE Plasma and a wallpaper built from the user-owned Rust project. It autoloads `https://globe.airplanes.live/` as the desktop background with local fallback; see [Operator architecture](OPERATOR_EDITION.md) and [OP-01/OP-02](../codex/OPERATOR_PASS.md). This is authorized for repository changes and disposable GitHub Docker validation only. No local Linux/Mac, QEMU GUI session or physical Mac testing is authorized by the source changes. Do not conflate the Operator image with the field-rescue baseline or release.

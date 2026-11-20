@@ -17,10 +17,14 @@ Read in order: `README.md`, `docs/FOUNDATION_PRIORITY_PLAN.md`, `ROADMAP.md`, `s
 - The independent [brand PR #5](https://github.com/pskeffington/nemesis/pull/5) is optional P2. Do not overwrite, merge or bake it into `mac-intel` to accelerate boot work.
 - `linux_config` is a separate host configuration project. Do not import machine-specific secrets/config into this distro without a dependency review.
 
+## OPERATOR — live aircraft globe desktop
+
+Current Operator objective: preloaded Plasma Wayland and field tools with the user's pinned MIT `linux_live_wallpaper` displaying `https://globe.airplanes.live/` at login. See [design and source contract](docs/OPERATOR_EDITION.md), [OP-01/OP-02 pass queue](codex/OPERATOR_PASS.md), and [desktop agent](agents/operator-desktop-engineer.md). Build Rust source from pinned commit **without root**; stage binary in a separate trusted Docker `mkarchiso` run. Test auto-start/Wayland runtime separately; do not treat a source or payload check as booted. Keep the generic Intel rescue and Air editions unchanged, no default SSH, radio capture, external geolocation, secrets or physical device operations.
+
 ## Platform contract
 
 1. `mac-intel` — Intel x86_64 without T2, candidate live/rescue profile scaffold, **not built or booted**.
-2. `mac-intel-desktop` / `mac-intel-operator` — planned optional layers; never default-enabled in core.
+2. `mac-intel-desktop` remains planned. `mac-intel-operator` is a distinct **source-scaffold** with KDE, Airplanes.live live wallpaper and preloaded tools, independently CI-built; never default enabled in rescue/lean Air image.
 3. `mac-t2` — separate T2 kernel and firmware research, no stock-image equivalence.
 4. `mac-asahi` — distinct ARM64/Asahi boot and installer lane, never an x86_64 ISO derivative.
 
