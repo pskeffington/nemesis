@@ -61,7 +61,7 @@ Do not invent size, memory, boot time, battery-hour or performance gains from so
 | Pass | Status | Deliverable | Gate |
 | --- | --- | --- | --- |
 | F03-B01 | REVIEW | This upstream comparison and optimization decision register | Reviewer checks authoritative releng snapshot and existing Nemesis staging behavior |
-| F03-B02 | READY | Add reproducible CI report of upstream-vs-delta package intersection, effective versions and network/SSH/ModemManager unit state without changing the image | Reports derived from actual installed ArchISO, published as CI artifacts |
+| F03-B02 | REVIEW | `scripts/inventory-archiso.py` records staged package overlap, repository-advertised versions and selected service symlinks in JSON, CSV and Markdown; wired into trusted Intel Docker CI | Await a successful CI artifact containing all three reports; repository metadata versions are not a resolved package lockfile |
 | F03-B03 | READY after B02 | Compare build artifacts and payload sizes for Intel and Air using identical pinned inputs | Hashes and sizes present, no claims about bootability |
 | F03-B04 | BLOCKED | UEFI VM benchmark | Explicit authorization plus trustworthy VM runner and serial boot evidence |
 | F03-B05 | BLOCKED | Model-by-model MacBook Air hardware performance evidence | Explicit physical deployment authorization, backup/recovery and recorded results |
@@ -78,3 +78,11 @@ Do not invent size, memory, boot time, battery-hour or performance gains from so
 ## Handoff guard
 
 This file is a source-level design review. No new ISO build, installed-system packaging, boot test, user-device access, partition modification, wireless driver activation or release authorization is implied.
+
+## F03-B02 implementation note — 2026-11-19
+
+- Source: `scripts/inventory-archiso.py`; integration: `docker/archiso/validate-build.sh`, `.github/workflows/docker-archiso.yml`.
+- Artifact path: `out/docker-evidence/package-inventory.{json,csv,md}`.
+- Package counts and incremental additions come from actual staged ArchISO source, not hard-coded release assumptions. Versions use the container's current `pacman -Sl` repository metadata; they are not full resolved root filesystem package versions.
+- Unit records inspect service symlinks in each source/staged `airootfs` directory, not `systemctl` running state.
+- Acceptance pending CI success and examination of emitted artifacts. No new ISO, VM boot or physical Mac qualification is asserted by this commit.
