@@ -39,7 +39,11 @@
     "custom_binary": "built-from-pinned-first-party-MIT-source-in-isolated-CI",
     "automatic_receiver_transmission": false,
     "automatic_device_capture": false,
-    "automatic_remote_access": false
+    "automatic_remote_access": false,
+    "optional_kit_contract": "spec/operator-kits.json",
+    "core_profile": "operator-core",
+    "toolkits_installed_by_default": false,
+    "post_install_customization": "nemesis-kit list/show/install (install only with authenticated root on persistent Arch)"
   },
   "safety": {
     "internal_storage_write": false,

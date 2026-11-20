@@ -25,3 +25,7 @@ OP-01 source/native ArchISO tests passed [CI 44734587794](https://github.com/psk
 [Codex handoff contract](codex/HANDOFF_CONTRACT.md) contains the future go/no-go checklist. [Linux execution prompt](codex/LINUX_EXECUTION_PROMPT.md), [build runbook](codex/BUILD_RUNBOOK.md), and [hardware runbook](codex/HARDWARE_RUNBOOK.md) are **inactive** until the repository foundation is accepted and the user explicitly requests Linux-side work.
 
 Do not promote a source-only success into a claim that an ISO builds, boots or works on any Mac.
+
+## Current package-rationalization subpass — OP-P01/OP-P02
+
+The user requests a **full-capability but lightweight MacBook Operator** that can be extended after a basic install. Review [package literature matrix](docs/research/OPERATOR_PACKAGE_LIT_MATRIX.md), [optional kit contract](spec/operator-kits.json), [kit composition PR #21](https://github.com/pskeffington/nemesis/pull/21), and [Operator Codex passes](codex/OPERATOR_PASS.md). Commit source and native-Arch package availability evidence; only approved GitHub Docker may rebuild ISO. Do not claim a real installer, root-enabled live session, KDE runtime, physical Mac operation or a size improvement until the respective gate is observed.

@@ -30,7 +30,13 @@ cat > "$fixture/packages.x86_64" <<'EOF'
 base
 linux
 linux-firmware
+intel-ucode
+archinstall
+mkinitcpio-archiso
+wpa_supplicant
 networkmanager
+nmap
+tcpdump
 EOF
 printf '#!/usr/bin/env sh\nexit 0\n' > "$assets/linux-live-wallpaper"
 chmod 755 "$assets/linux-live-wallpaper"
@@ -46,6 +52,8 @@ ARCHISO_RELENG_PROFILE="$fixture" NEMESIS_OPERATOR_WALLPAPER_ASSETS="$assets" \
 [[ -s "$stage/airootfs/usr/local/bin/linux-live-wallpaper" ]]
 [[ -f "$stage/airootfs/usr/local/bin/nemesis-operator-wallpaper" ]]
 [[ -f "$stage/airootfs/etc/xdg/autostart/nemesis-operator-wallpaper.desktop" ]]
+[[ -f "$stage/airootfs/usr/local/bin/nemesis-kit" ]]
+[[ -f "$stage/airootfs/usr/share/nemesis-operator/kits/rf-lab.packages.x86_64" ]]
 [[ -f "$stage/airootfs/usr/share/nemesis-operator/offline.html" ]]
 [[ -f "$stage/airootfs/etc/sddm.conf.d/10-nemesis-operator-live.conf" ]]
 live_locker="$stage/airootfs/etc/xdg/kscreenlockerrc"
@@ -60,10 +68,16 @@ target="$stage/airootfs/etc/systemd/system/multi-user.target.wants"
 [[ ! -L "$target/iwd.service" && ! -L "$target/systemd-networkd.service" ]]
 [[ ! -L "$target/sshd.service" ]]
 [[ "$(readlink "$stage/airootfs/etc/systemd/system/ModemManager.service")" == /dev/null ]]
-for package in plasma-desktop sddm webkitgtk-6.0 gtk4-layer-shell rtl-sdr dump1090_rs gpsd gqrx; do
+for package in plasma-desktop sddm webkitgtk-6.0 gtk4-layer-shell rtl-sdr airspy dump1090_rs; do
   grep -Fxq "$package" "$stage/packages.x86_64"
 done
 [[ "$(grep -xc networkmanager "$stage/packages.x86_64")" -eq 1 ]]
+for opt in gqrx gnuradio gpsd qgis nmap tcpdump rtl_433; do
+  if grep -Fxq "$opt" "$stage/packages.x86_64"; then
+    printf 'ERROR: optional package selected: %s\n' "$opt" >&2
+    exit 1
+  fi
+done
 bash -c '
   declare -A file_permissions=()
   source "$1/profiledef.sh"
@@ -71,6 +85,7 @@ bash -c '
   [[ "$iso_label" == NEMOP_* ]]
   [[ "${file_permissions[/usr/local/bin/linux-live-wallpaper]:-}" == "0:0:755" ]]
   [[ "${file_permissions[/usr/local/bin/nemesis-operator-wallpaper]:-}" == "0:0:755" ]]
+  [[ "${file_permissions[/usr/local/bin/nemesis-kit]:-}" == "0:0:755" ]]
 ' _ "$stage"
 if ARCHISO_RELENG_PROFILE="$fixture" NEMESIS_OPERATOR_WALLPAPER_ASSETS="$assets" \
     bash "$root/scripts/prepare-operator-profile.sh" "$stage" >/dev/null 2>&1; then

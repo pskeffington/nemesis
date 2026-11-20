@@ -1,0 +1,253 @@
+{
+  "schema_version": 1,
+  "reviewed_utc": "2026-11-20",
+  "kind": "public-distribution-published-inventory-not-verified-ISO-SBOM",
+  "purpose": "benchmark packaging patterns; no third-party executable integration or new default packages",
+  "default_policy": "retain Nemesis Airplanes.live + minimum receiver, network and hardware tools; selected modules only",
+  "distributions": [
+    {
+      "id": "sigintos",
+      "name": "SigintOS 2.0 Community Edition",
+      "platform": "Ubuntu-based",
+      "sources": [
+        "https://www.sigintos.com/sigintos-2-0-community-edition/",
+        "https://www.sigintos.com/download/"
+      ],
+      "inventory_basis": "publisher's featured software list, not package/SBOM export",
+      "listed_software": [
+        "Open5GS",
+        "srsRAN 4G",
+        "YateBTS",
+        "Gqrx",
+        "GNU Radio 3.8",
+        "SigDigger",
+        "SDRAngel",
+        "ADSB Viewer",
+        "Dump1090",
+        "OpenCPN",
+        "GPredict",
+        "BladeRF",
+        "HackRF",
+        "RTL-SDR",
+        "USRP/UHD",
+        "Kalibrate RTL/HackRF",
+        "QtCreator",
+        "KDevelop",
+        "MySQL",
+        "MongoDB",
+        "Apache",
+        "PHP"
+      ],
+      "deployment_model": "broad all-in-one RF and development workstation; GUI-first with cellular laboratory and server components",
+      "source_release_label": "2.0 Community Edition (publisher latest page)",
+      "published_image_size": "not-established-from-official-source",
+      "nemesis_impact": "keep receiver/ADS-B essentials; optional GUI/DSP; exclude servers and cellular infrastructure from default"
+    },
+    {
+      "id": "dragonos",
+      "name": "DragonOS Resolute R2.2",
+      "platform": "Ubuntu 26.04/Lubuntu x86_64",
+      "sources": [
+        "https://sourceforge.net/projects/dragonos-focal/files/",
+        "https://cemaxecuter.com/download/"
+      ],
+      "inventory_basis": "publisher release README and image listing, not inspected ISO files",
+      "listed_software": [
+        "RTL-SDR",
+        "Airspy",
+        "HackRF",
+        "BladeRF",
+        "USRP/UHD",
+        "SDRplay",
+        "LimeSDR",
+        "SoapySDR",
+        "SDR++",
+        "SDRAngel",
+        "Gqrx",
+        "SigDigger",
+        "GNU Radio 3.10",
+        "GNU Radio 4 RC",
+        "SatDump",
+        "gr-satellites",
+        "dump1090-fa",
+        "dump978-fa",
+        "ACARSDEC",
+        "DumpVDL2",
+        "DumpHFDL",
+        "OpenWebRX+",
+        "rtl_433",
+        "GPredict",
+        "Wireshark",
+        "gpsd",
+        "SDRTrunk"
+      ],
+      "deployment_model": "large readied-to-use lab image; source-installed code in /usr/src and package-managed components; selected servers deliberately on demand",
+      "source_release_label": "Resolute R2.2 (image dated 2026-10-27)",
+      "published_image_size": "4.0 GB as shown by distributor listing",
+      "nemesis_impact": "copy on-demand service and hardware plugin principles, not complete cellular/AI/server workload"
+    },
+    {
+      "id": "skywave",
+      "name": "Skywave Linux 5.10.0",
+      "platform": "Debian Sid x86-64-v2",
+      "sources": [
+        "https://skywavelinux.com/downloads"
+      ],
+      "inventory_basis": "publisher versioned software list, not a package manager snapshot",
+      "listed_software": [
+        "DWM",
+        "CubicSDR",
+        "SDR++",
+        "SatDump",
+        "Acarsdec",
+        "DumpHFDL",
+        "VDLM2dec",
+        "RTLSDR-Airband",
+        "Multimon-ng",
+        "GPredict",
+        "Hamlib",
+        "SoapySDR",
+        "SoapyAirspy",
+        "SoapyRTLSDR",
+        "SoapyRemote",
+        "JS8Call",
+        "WSJT-X",
+        "Brave Browser",
+        "JupyterLab",
+        "Reticulum MeshChat"
+      ],
+      "deployment_model": "radio-listening and aviation-centric environment with lightweight window manager but broad bundled programs",
+      "source_release_label": "version 5.10.0 on publisher download page",
+      "published_image_size": "not-established-from-publisher-list",
+      "nemesis_impact": "aviation/airband/satellite are compelling opt-in receive-only kits; do not copy entire stack or non-Arch binary packages"
+    },
+    {
+      "id": "pentoo",
+      "name": "Pentoo",
+      "platform": "Gentoo-based XFCE LiveCD with overlay",
+      "sources": [
+        "https://www.pentoo.org/about/",
+        "https://pentoo.github.io/"
+      ],
+      "inventory_basis": "publisher architecture/about description, not SDR-specific package inventory",
+      "listed_software": [
+        "XFCE4",
+        "Pentoo overlay",
+        "pentoo/pentoo meta-ebuild",
+        "multiple profiles",
+        "USE flags",
+        "OpenCL cracking tools"
+      ],
+      "deployment_model": "capability bundles via Gentoo overlay, meta-ebuild, USE flags and selectable profiles",
+      "source_release_label": "publisher overview (no audited release date)",
+      "published_image_size": "not-established-from-source",
+      "nemesis_impact": "adopt selection model through independently reviewed signed-Arch manifests, never import Gentoo overlay into Arch"
+    }
+  ],
+  "evaluated_capabilities": [
+    {
+      "id": "basic-rx",
+      "examples": [
+        "rtl-sdr",
+        "airspy",
+        "dump1090_rs"
+      ],
+      "nemesis_tier": "default",
+      "reason": "basic air traffic and hardware tools; no active RF transmission"
+    },
+    {
+      "id": "radio-gui",
+      "examples": [
+        "sigdigger",
+        "inspectrum",
+        "urh",
+        "gqrx"
+      ],
+      "nemesis_tier": "optional-review",
+      "reason": "multiple overlapping GUI receivers; compare actual runtime/closure before deciding between lightweight and full RF kit"
+    },
+    {
+      "id": "signal-framework",
+      "examples": [
+        "gnuradio",
+        "gnuradio-companion",
+        "python-gnuradio"
+      ],
+      "nemesis_tier": "rf-lab-only",
+      "reason": "DSP graph ecosystem and transitive dependencies, not a default map requirement"
+    },
+    {
+      "id": "aviation-extended",
+      "examples": [
+        "rtl_433",
+        "ACARSDEC",
+        "DumpVDL2",
+        "DumpHFDL",
+        "dump978-fa",
+        "GPredict"
+      ],
+      "nemesis_tier": "optional-research",
+      "reason": "receive-only extensions; packages/repository names must be resolved on Arch before a manifest change"
+    },
+    {
+      "id": "satellite",
+      "examples": [
+        "SatDump",
+        "gr-satellites"
+      ],
+      "nemesis_tier": "optional-research",
+      "reason": "extra SDR/decoder dependencies; no default satellite service"
+    },
+    {
+      "id": "remote-rx",
+      "examples": [
+        "OpenWebRX+",
+        "SoapyRemote",
+        "SpyServer"
+      ],
+      "nemesis_tier": "separately-review-service",
+      "reason": "network listeners must be disabled by default and reviewed for authentication/ports"
+    },
+    {
+      "id": "cellular-lab",
+      "examples": [
+        "Open5GS",
+        "srsRAN 4G",
+        "YateBTS"
+      ],
+      "nemesis_tier": "isolated-lab-deferred",
+      "reason": "active cellular infrastructure, license/interference/privacy rules; no implicit installation or startup"
+    },
+    {
+      "id": "servers-dev",
+      "examples": [
+        "Apache",
+        "MySQL",
+        "MongoDB",
+        "QtCreator",
+        "KDevelop"
+      ],
+      "nemesis_tier": "not-default",
+      "reason": "not needed to render globe or receive ADS-B; avoid unattended listener/services"
+    },
+    {
+      "id": "device-plugins",
+      "examples": [
+        "SoapyAirspy",
+        "SoapyRTLSDR",
+        "SoapyHackRF",
+        "UHD"
+      ],
+      "nemesis_tier": "hardware-selected",
+      "reason": "select exact USB/network SDR backend using hardware evidence rather than every driver"
+    }
+  ],
+  "source_trust_policy": {
+    "arch_package_names_must_be_resolved_in_signed_ci": true,
+    "not_a_binary_bill_of_materials": true,
+    "advertised_not_proven_installed": true,
+    "no_auto_transmit_or_interception": true,
+    "no_default_services": true,
+    "do_not_modify_current_core": true
+  }
+}

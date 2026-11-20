@@ -60,3 +60,11 @@ These are inputs for F03/F04 and, later, a separately approved image resolver—
 ## MacBook Air optional field layer
 
 `macbook-air-field-tools` depends on `intel-hardware-overlay` but is **not selected** in the existing `mac-intel` build. Its candidate package list (`bluez`, `bluez-utils`, `powertop`, `wireguard-tools`) comes from official Arch repositories; this source-only edition has no service auto-enable, Broadcom `wl`, TLP, fan controller or USB autosuspend override. An opt-in `scripts/prepare-air-field-profile.sh` stages this layer and `scripts/build-air-field-iso.sh` builds a separate `nemesis-air` image. The Docker gate is independently tracked by issue #15; the generic rescue build remains unchanged.
+
+## Operator composition refinement — 2026-11-20
+
+The independent `mac-intel-operator` edition is **now source-stageable**. The older description of `mac-desktop-kde` and `field-operator` as design-only applies to historical F02 before the Operator build branch; it does not describe the current source tree. Use [Operator literature and package matrix](research/OPERATOR_PACKAGE_LIT_MATRIX.md) and [kit contract](../spec/operator-kits.json) as the active source authorities.
+
+The current Operator source composes `arch-releng → intel-hardware-overlay → macbook-air-field-tools → mac-desktop-kde → field-operator (core)`, then applies a separately reviewed **Operator-only inherited releng exclusion list** to reduce packages that are not needed for daily use. Rescue and Air remain unchanged. `profiles/mac-intel-operator/toolkits/` lists optional field and advanced packages that are copied as **text manifests** into Operator images but **not** passed to `mkarchiso` as package requests. No generalized layer resolver or installation mechanism is implied.
+
+For a persistent installed computer, `nemesis-kit install KIT` requires authenticated root and refuses live-ISO use. The installer and installed-system security/boot configuration are **NOT IMPLEMENTED**. Check full pacman dependency graph and compressed ISO output, not package line count, for savings. [PR #21](https://github.com/pskeffington/nemesis/pull/21) introduces the controls; source/native Arch and Docker must be separately accepted.

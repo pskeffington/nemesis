@@ -1,26 +1,33 @@
-NEMESIS / OPERATOR — FIRST START
+NEMESIS / OPERATOR — LIGHTWEIGHT FIRST START
 
 Map: https://globe.airplanes.live/
-Desktop: KDE Plasma Wayland. The local offline page appears when the remote site cannot be reached.
-Wallpapers are launched via /etc/xdg/autostart/nemesis-operator-wallpaper.desktop
-The operator launcher only starts in a graphical Wayland session advertising zwlr_layer_shell_v1.
-If incompatible, the normal KDE wallpaper remains visible; no forced session changes.
+KDE Plasma Wayland session; live wallpaper launches from XDG autostart.
+Offline map is only a static status indicator, never cached aircraft data.
 
-Operator applications are preloaded but do not capture or transmit automatically.
-  konsole         Terminal and shell
-  airspy_info     Inspect a connected Airspy receiver (optional; manual action)
-  gqrx            Interactive SDR receiver (launch only after connecting a supported device)
-  rtl_test        Check compatible RTL-SDR receiver (explicit action only)
-  dump1090_rs     ADS-B decoder (explicit action, use --help first)
-  gpsd            GNSS support (not enabled at boot)
-  nmap, tcpdump   Network diagnostics (require authorized scope)
-  wg             WireGuard client (no keys or tunnels preinstalled)
+Included by default: a full usable desktop, Firefox, Konsole, Dolphin,
+RTL-SDR and Airspy hardware utilities, a basic ADS-B decoder, safe local
+diagnostics, WireGuard client and signed Arch package management.
+No automatic RF capture, scanning, VPN or SSH remote service.
 
-The live operator session auto-logins on the *live ISO only* with a locked user
-and no sudo privileges or remote SSH listener. Do not store private data in RAM-backed
-live media. For a real installation, configure user authentication, storage encryption,
-recovery, network and power settings separately.
+Optional toolkits (text manifests ship in live image, not the packages):
+  nemesis-kit list            List curated toolkits
+  nemesis-kit show aviation   Preview ADS-B/ISM extras
+  nemesis-kit show airspy     Preview Soapy Airspy backend
+  nemesis-kit show gnss       Preview GNSS tools
+  nemesis-kit show network    Preview advanced network diagnostics
+  nemesis-kit show rf-lab     Preview heavyweight Gqrx/GNU Radio
+  nemesis-kit show development
+  nemesis-kit show gis
+
+After an installer with proper administrator authentication is validated,
+the installed-system administrator may select and install only what is
+needed with 'nemesis-kit install KIT'. This refuses installation on the
+ephemeral live ISO, does not bypass signatures or invoke sudo, and makes
+no system change merely by listing or showing tools.
+
+Live-only operator login has a locked password and no sudo access; it
+is not an installer or persistent workstation security policy. Do not
+replicate auto-login or disable screen locking on an installed system.
 
 Wallpaper source: https://github.com/pskeffington/linux_live_wallpaper
-License: MIT (bundled at build time) — renderer is built from an exact pinned commit.
-Third-party map: airplanes.live, externally hosted, not mirrored or copied into Nemesis.
+Third-party map: https://globe.airplanes.live/ (not redistributed).

@@ -1,0 +1,325 @@
+{
+  "schema_version": 1,
+  "reviewed_date": "2026-11-20",
+  "scenario": "Fictional 2029 multi-robot civil resilience exercise",
+  "prediction": false,
+  "observed_usage_data": false,
+  "measured_macbook_performance": false,
+  "decision_context": "Nemesis Operator x86_64 Intel non-T2; 4-GiB MacBook Air constraint; no hardware access",
+  "scoring": {
+    "methodology": "ordinal scenario judgment, not statistical regression or observed package usage",
+    "scale": "1-5 for each dimension; scores normalized to 0-100",
+    "weights": {
+      "need": 0.4,
+      "offline": 0.25,
+      "fit_4gib": 0.2,
+      "safety": 0.15
+    },
+    "interpretation": "Scores select research order, not blanket install thresholds. Product-mandated map remains core despite lower offline score; hardware-only capabilities stay opt-in.",
+    "regression_status": "BLOCKED_NO_MEASURED_USAGE_OR_RUNTIME_DATA"
+  },
+  "roles": {
+    "Bob": "Field observer: offline navigation, short-text communications, visual verification and safety plans.",
+    "Alice": "Operator analyst: system health, time-stamped local notes, cooperative-airspace awareness and lawful passive sensors."
+  },
+  "tiers": {
+    "existing-core": "already in Operator core source; CI and hardware acceptance separate",
+    "existing-core-manual": "already in Operator package requests; must be started by the operator",
+    "product-required": "airmap user requirement; online only",
+    "proposed-core": "research/implementation proposal; not present in current image",
+    "external-companion": "requires separate optional external node/phone",
+    "hardware-opt-in": "requires specific approved device and compatibility",
+    "advanced-opt-in": "existing or proposed optional specialist toolkit, not default",
+    "research-deferred": "not planned for 4-GiB first image"
+  },
+  "rules": {
+    "no_automatic_target_classification": true,
+    "no_automatic_people_tracking": true,
+    "no_interception_of_private_communications": true,
+    "no_jamming_or_drone_takeover": true,
+    "no_offensive_robot_disruption": true,
+    "no_new_default_package_from_scenario": true,
+    "no_false_drone_presence_or_absence_certainty": true,
+    "requires_human_review_of_alerts": true,
+    "no_physical_test_claims": true
+  },
+  "evidence": [
+    {
+      "id": "FAA-RID",
+      "url": "https://www.faa.gov/uas/getting_started/remote_id",
+      "interpretation": "Cooperative drone Remote ID is a broadcast identity/location channel, not a universal UAS detector"
+    },
+    {
+      "id": "FAA-DETECTION",
+      "url": "https://www.faa.gov/airports/new_entrants/uas_detection_mitigation_response",
+      "interpretation": "RF, radar, optical and acoustic detection methods have limits; detection cannot infer intent"
+    },
+    {
+      "id": "NIST-ROBOT",
+      "url": "https://www.nist.gov/programs-projects/performance-emergency-response-robots",
+      "interpretation": "Robot sensing, endurance, communications, control and safety need explicit standardized testing"
+    },
+    {
+      "id": "SPOT-SPECS",
+      "url": "https://support.bostondynamics.com/s/article/spot-specifications",
+      "interpretation": "Example commercial quadruped with multiple cameras, autonomy and 90-minute typical battery"
+    },
+    {
+      "id": "MESH",
+      "url": "https://meshtastic.org/docs/introduction/",
+      "interpretation": "External LoRa mesh supports off-grid short text without cellular service"
+    },
+    {
+      "id": "OPENDRONEID",
+      "url": "https://github.com/opendroneid/receiver-android",
+      "interpretation": "Open source receiver examples on supported Android hardware; separate from Mac package"
+    },
+    {
+      "id": "QMAPSHACK",
+      "url": "https://archlinux.org/packages/extra/x86_64/qmapshack/",
+      "interpretation": "Signed Arch package exists but dependency closure includes GIS/Qt WebEngine"
+    }
+  ],
+  "rows": [
+    {
+      "id": "emergency-checklists",
+      "label": "Offline emergency/safety checklist",
+      "criteria": {
+        "need": 5,
+        "offline": 5,
+        "fit_4gib": 5,
+        "safety": 5
+      },
+      "score_100": 100,
+      "tier": "proposed-core",
+      "primary_operator": "Bob",
+      "note": "Prepared evacuation/contact/first aid plan, not autonomous threat classification",
+      "compute_assumption": "None; textual content",
+      "hardware_status": "NOT_TESTED"
+    },
+    {
+      "id": "power-readiness",
+      "label": "Battery, thermal and device readiness",
+      "criteria": {
+        "need": 5,
+        "offline": 5,
+        "fit_4gib": 5,
+        "safety": 5
+      },
+      "score_100": 100,
+      "tier": "existing-core",
+      "primary_operator": "Alice",
+      "note": "Use existing read-only field diagnostics to identify failing systems",
+      "compute_assumption": "Existing nemesis-field-check; no new packages",
+      "hardware_status": "NOT_TESTED"
+    },
+    {
+      "id": "offgrid-text",
+      "label": "Off-grid short-text communications",
+      "criteria": {
+        "need": 5,
+        "offline": 5,
+        "fit_4gib": 5,
+        "safety": 4
+      },
+      "score_100": 97,
+      "tier": "external-companion",
+      "primary_operator": "Bob",
+      "note": "Meshtastic on approved LoRa node; local-only communications, no public location broadcasting by default",
+      "compute_assumption": "External node/phone; laptop bridge optional",
+      "hardware_status": "NOT_TESTED"
+    },
+    {
+      "id": "offline-navigation",
+      "label": "Offline maps and safe route notes",
+      "criteria": {
+        "need": 5,
+        "offline": 5,
+        "fit_4gib": 4,
+        "safety": 5
+      },
+      "score_100": 96,
+      "tier": "proposed-core",
+      "primary_operator": "Bob",
+      "note": "Bring legally obtained local vector maps independent of live Airplanes globe",
+      "compute_assumption": "Offline tile/map storage and simple viewer selection pending",
+      "hardware_status": "NOT_TESTED"
+    },
+    {
+      "id": "local-log",
+      "label": "Timestamped local incident notebook",
+      "criteria": {
+        "need": 4,
+        "offline": 5,
+        "fit_4gib": 5,
+        "safety": 5
+      },
+      "score_100": 92,
+      "tier": "proposed-core",
+      "primary_operator": "Alice",
+      "note": "Manual observations with coarse timestamps and redaction; no automated people tracking",
+      "compute_assumption": "Text files, checksum, optional sqlite; storage boundary pending",
+      "hardware_status": "NOT_TESTED"
+    },
+    {
+      "id": "gnss-input",
+      "label": "Local GNSS input",
+      "criteria": {
+        "need": 4,
+        "offline": 5,
+        "fit_4gib": 4,
+        "safety": 4
+      },
+      "score_100": 85,
+      "tier": "hardware-opt-in",
+      "primary_operator": "Bob",
+      "note": "Optional GPS receiver when trusted; manual coordinates if absent",
+      "compute_assumption": "gpsd existing optional kit; external receiver",
+      "hardware_status": "NOT_TESTED"
+    },
+    {
+      "id": "visual-check",
+      "label": "User-initiated camera observation",
+      "criteria": {
+        "need": 4,
+        "offline": 4,
+        "fit_4gib": 4,
+        "safety": 4
+      },
+      "score_100": 80,
+      "tier": "hardware-opt-in",
+      "primary_operator": "Bob",
+      "note": "Optical verification of observed objects; do not infer intent from shape",
+      "compute_assumption": "USB camera / manual viewer; no automatic recording",
+      "hardware_status": "NOT_TESTED"
+    },
+    {
+      "id": "remote-id",
+      "label": "Broadcast Remote ID awareness",
+      "criteria": {
+        "need": 4,
+        "offline": 3,
+        "fit_4gib": 4,
+        "safety": 5
+      },
+      "score_100": 78,
+      "tier": "hardware-opt-in",
+      "primary_operator": "Alice",
+      "note": "Receive publicly broadcast compliant drone IDs when supported; not universal detection",
+      "compute_assumption": "Approved BLE/Wi-Fi-capable companion; privacy review",
+      "hardware_status": "NOT_TESTED"
+    },
+    {
+      "id": "offline-cartography",
+      "label": "Full offline GIS/track planning",
+      "criteria": {
+        "need": 3,
+        "offline": 5,
+        "fit_4gib": 2,
+        "safety": 5
+      },
+      "score_100": 72,
+      "tier": "advanced-opt-in",
+      "primary_operator": "Bob",
+      "note": "QMapShack/alternative where detailed routes needed; dependency closure to be measured",
+      "compute_assumption": "QMapShack has GDAL/Qt WebEngine dependencies; not in core",
+      "hardware_status": "NOT_TESTED"
+    },
+    {
+      "id": "passive-spectrum",
+      "label": "Passive spectrum survey",
+      "criteria": {
+        "need": 3,
+        "offline": 4,
+        "fit_4gib": 4,
+        "safety": 4
+      },
+      "score_100": 72,
+      "tier": "existing-core-manual",
+      "primary_operator": "Alice",
+      "note": "Only lawful RF-energy/metadata observations, never communications-content capture",
+      "compute_assumption": "rtl-sdr/Airspy tools currently shipped; device selected manually",
+      "hardware_status": "NOT_TESTED"
+    },
+    {
+      "id": "acoustic-thermal",
+      "label": "Supplemental acoustic or thermal observation",
+      "criteria": {
+        "need": 3,
+        "offline": 4,
+        "fit_4gib": 3,
+        "safety": 4
+      },
+      "score_100": 68,
+      "tier": "hardware-opt-in",
+      "primary_operator": "Bob",
+      "note": "External sensors only for corroboration; urban noise, weather and occlusion affect results",
+      "compute_assumption": "Hardware-specific, no preinstalled recognition models",
+      "hardware_status": "NOT_TESTED"
+    },
+    {
+      "id": "adsb-receiver",
+      "label": "ADS-B awareness for cooperative aircraft",
+      "criteria": {
+        "need": 3,
+        "offline": 2,
+        "fit_4gib": 4,
+        "safety": 5
+      },
+      "score_100": 65,
+      "tier": "existing-core-manual",
+      "primary_operator": "Alice",
+      "note": "Not a substitute for drone/ground-robot detection",
+      "compute_assumption": "dump1090_rs currently shipped, receiver needs USB device",
+      "hardware_status": "NOT_TESTED"
+    },
+    {
+      "id": "live-globe",
+      "label": "Airplanes.live wallpaper",
+      "criteria": {
+        "need": 3,
+        "offline": 1,
+        "fit_4gib": 2,
+        "safety": 5
+      },
+      "score_100": 52,
+      "tier": "product-required",
+      "primary_operator": "Alice",
+      "note": "Airspace visualization online; does not identify uncooperative drones or ground robots",
+      "compute_assumption": "KDE+WebKit graphical cost; remains default per user contract",
+      "hardware_status": "NOT_TESTED"
+    },
+    {
+      "id": "gqrx-gnuradio",
+      "label": "Graphical SDR/DSP workstation",
+      "criteria": {
+        "need": 2,
+        "offline": 3,
+        "fit_4gib": 1,
+        "safety": 4
+      },
+      "score_100": 47,
+      "tier": "advanced-opt-in",
+      "primary_operator": "Alice",
+      "note": "For specialized authorized signal analysis, not required for everyday safety",
+      "compute_assumption": "Gqrx+GNU Radio transitive stack; existing optional rf-lab kit",
+      "hardware_status": "NOT_TESTED"
+    },
+    {
+      "id": "local-vision-model",
+      "label": "Local object recognition model",
+      "criteria": {
+        "need": 2,
+        "offline": 3,
+        "fit_4gib": 1,
+        "safety": 3
+      },
+      "score_100": 44,
+      "tier": "research-deferred",
+      "primary_operator": "Alice",
+      "note": "High false-positive/privacy/CPU risks; human review required for all alerts",
+      "compute_assumption": "No model or GPU acceleration validated on 4-GiB Intel Air",
+      "hardware_status": "NOT_TESTED"
+    }
+  ]
+}

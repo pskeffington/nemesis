@@ -1,25 +1,12 @@
-# ---------------------------------------------------------------------
-# Operator tools preloaded in the Operator edition. No auto-scan/capture.
-# All packages resolved from signed official Arch repositories.
-# ---------------------------------------------------------------------
+# Nemesis Operator core: everyday tools only. Signed Arch packages.
+# Heavy radio suites and specialist tools belong in opt-in toolkits.
 rtl-sdr
 airspy
-soapysdr
-soapyairspy
-soapyrtlsdr
-rtl_433
 dump1090_rs
-gqrx
-gpsd
-nmap
-tcpdump
-wireguard-tools
-openssh
 usbutils
 pciutils
 jq
 git
-python
-python-pyserial
 htop
 tmux
+wireguard-tools

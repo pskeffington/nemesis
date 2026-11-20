@@ -28,6 +28,8 @@ scripts=(
   scripts/build-operator-iso.sh
   tests/test-operator-profile.sh
   tests/test-installed-operator-profile.sh
+  tests/test-operator-package-repos.sh
+  profiles/mac-intel-operator/airootfs/usr/local/bin/nemesis-kit
   docker/operator/validate-operator.sh
   docker/operator/check-payload.sh
   profiles/mac-intel-operator/airootfs/usr/local/bin/nemesis-operator-wallpaper

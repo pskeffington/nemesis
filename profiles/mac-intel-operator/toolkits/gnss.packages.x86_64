@@ -1,0 +1,3 @@
+# Optional GNSS receiver support; never start gpsd automatically.
+gpsd
+python-pyserial

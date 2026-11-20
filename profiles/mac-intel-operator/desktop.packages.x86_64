@@ -1,15 +1,11 @@
-# ---------------------------------------------------------------------
-# Nemesis Operator Plasma Wayland desktop: signed official Arch packages.
-# Selected only by the separate mac-intel-operator image.
-# ---------------------------------------------------------------------
+# Nemesis Operator: small functional Plasma Wayland desktop.
+# Firefox is deliberate for interactive access while WebKit renders the globe.
 plasma-desktop
-plasma-workspace
 sddm
 konsole
 dolphin
 kate
 firefox
-xdg-utils
 plasma-nm
 plasma-pa
 xdg-desktop-portal-kde
