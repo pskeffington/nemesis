@@ -11,19 +11,25 @@
 5. An original locally bundled `offline.html` standby page displays on connectivity failure. The wrapper retries the remote source every 180 seconds; it does not present invented or stale aircraft positions as live data.
 6. No GPS location, hidden website credentials, custom scraping, map mirroring, self-signed TLS exceptions or remote-control permissions are configured.
 
-## Preloaded and configured tool domains
+## Lightweight first-use core and optional kits
 
-| Purpose | Official signed Arch packages | Startup |
+The separate Operator image prioritizes **a complete working desktop** over a preinstalled specialist workstation. Its default manifests include KDE Plasma/SDDM, the user-owned WebKitGTK globe renderer, Firefox for interactive map use, Konsole, Dolphin, Kate, a single NetworkManager backend, USB/PCI inspection, Airspy and RTL-SDR hardware utilities, basic `dump1090_rs` ADS-B decoding, `jq`, `tmux`, `htop`, `git` and WireGuard client tools. No receiver capture, network scan, GPS logging or remote login starts automatically.
+
+| Optional kit | Signed Arch packages | Intended operator |
 | --- | --- | --- |
-| Desktop | `plasma-desktop`, `plasma-workspace`, `sddm`, `konsole`, `dolphin`, `kate`, `firefox`, `plasma-nm` | Plasma login; live wallpaper via XDG |
-| Renderer | `gtk4`, `gtk4-layer-shell`, `webkitgtk-6.0` | Wallpaper launches after Wayland compositor |
-| Radio | `rtl-sdr`, `airspy`, `soapysdr`, `soapyairspy`, `soapyrtlsdr`, `rtl_433`, `gqrx` | **Manual** receiver selection and tuning |
-| ADS-B | `dump1090_rs` | **Manual**, never auto-start receiver or transmit |
-| GNSS | `gpsd` (already includes `cgps`, `gpsmon` and other clients) | Manual device configuration; modem probes disabled |
-| Networking/security | `wireguard-tools`, `nmap`, `tcpdump`, `openssh`, `jq`, `git` | No configured keys, scans, captures, tunnels or SSH listener |
-| Diagnostics | `usbutils`, `pciutils`, `python`, `python-pyserial`, `htop`, `tmux` | On demand |
+| `aviation` | `soapyrtlsdr`, `rtl_433` | RTL-SDR/ISM receiver expansion |
+| `airspy` | `soapyairspy` | Airspy in a Soapy application |
+| `gnss` | `gpsd`, `python-pyserial` | Attached GNSS devices |
+| `network` | `nmap`, `tcpdump`, `mtr`, `traceroute` | Approved advanced network diagnostics |
+| `rf-lab` | `gqrx` (GNU Radio dependency closure) | Spectrum GUI work |
+| `development` | `base-devel`, `rust`, `python`, `python-pip`, `shellcheck` | Compiling/debugging tools |
+| `gis` | `qgis` | GIS and research cartography |
 
-Package manifests live under `profiles/mac-intel-operator/`. GNU Radio dependencies increase ISO size, so **Operator is not the lightweight rescue edition**.
+The original `releng` ArchISO package list also contains `nmap`, `tcpdump` and other nonessential rescue utilities. The **Operator staged copy only** uses a reviewed [exclusion manifest](../profiles/mac-intel-operator/releng-drop.packages.x86_64), preserving boot, firmware, `archinstall` and recovery. The plain rescue and lean Air images are unchanged. The current source-level package matrix and quantitative uncertainty are documented in [OPERATOR_PACKAGE_LIT_MATRIX.md](research/OPERATOR_PACKAGE_LIT_MATRIX.md).
+
+**Live media:** `nemesis-kit list` or `nemesis-kit show rf-lab` works without root or network; no package installation is permitted. **Installed system:** a future authorized installer must establish real user/root authentication, then the administrator may explicitly run `nemesis-kit install KIT` (interactive official pacman `-Syu --needed`, no automatic AUR or sudo escalation). This **does not mean Nemesis already has an installable persistent OS**; installer acceptance is a separate future gate.
+
+The previous full Operator image was ~2.3 GiB with ISO checksum success, but its rootfs verifier failed; the revised lean image size is **not measured yet**. Avoid summing direct Arch package sizes as if they were compressed ISO savings. KDE/WebKit/browser remain fixed costs because the map desktop is non-negotiable.
 
 ## Source provenance
 
@@ -33,7 +39,7 @@ The third-party [Airplanes.live Globe](https://globe.airplanes.live/) URL is lin
 
 ## Boot and network boundaries
 
-The live-only SDDM user has no wheel/sudo credentials and no persistent profile secrets. **Do not replicate autologin** into a later installed laptop without new authentication and encryption controls. Operator starts `NetworkManager` to work with Plasma's network applet and removes **only its own staging copy** of inherited Air iwd/systemd-networkd enablement links. It retains the Air profile's masked ModemManager and disabled sshd auto-start. The original Air and rescue ISO configurations are unchanged.
+The live-only SDDM user has no wheel/sudo credentials and no persistent profile secrets. Optional kit manifests are available to read, but cannot be installed on this live account. **Do not replicate autologin** into a later installed laptop without new authentication and encryption controls. Operator starts `NetworkManager` to work with Plasma's network applet and removes **only its own staging copy** of inherited Air iwd/systemd-networkd enablement links. It retains the Air profile's masked ModemManager and disabled sshd auto-start. The original Air and rescue ISO configurations are unchanged.
 
 No Broadcom proprietary driver, automatic VPN, RF capture, USB autosuspend override, fan override or power tuning is introduced. An online globe draws battery/GPU resources: real idle memory and power impact on 4 GiB MacBook Air models are **unmeasured**.
 

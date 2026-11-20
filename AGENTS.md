@@ -49,3 +49,7 @@ Use `spec/editions.json` as a declarative planning record; it is not a working p
 6. Before any future physical execution, complete `codex/HANDOFF_CONTRACT.md` and receive explicit human GO.
 
 **Default next pass:** F03 Mac hardware/firmware evidence specification. **Execution status: NO-GO.**
+
+## Operator lean package governance
+
+The Operator’s default is a small *usable* base, not a full GNU Radio/GIS workstation. Read [OP-P01 literature matrix](docs/research/OPERATOR_PACKAGE_LIT_MATRIX.md) and [toolkit contract](spec/operator-kits.json) before editing packages. Preserve KDE/Wayland, Firefox for interactive globe, pinned WebKitGTK wallpaper and minimal RF/hardware diagnostics. Heavy and specialized packages live in distinct optional signed-Arch manifests; the live medium offers only read-only `nemesis-kit list/show`, no installer or unauthorized root. An explicit [Operator-only releng exclusions file](profiles/mac-intel-operator/releng-drop.packages.x86_64) handles upstream inherited packages; do not remove signed boot/USB recovery/installer requirements or touch the rescue/Air profiles. Image size and hardware battery performance require measured evidence, never line-count estimates.

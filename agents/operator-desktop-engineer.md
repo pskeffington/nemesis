@@ -9,3 +9,7 @@
 **Quality gates:** source/fixture, native Arch stage, real Docker ISO/image content, virtual Wayland graphic runtime, Mac battery/USB/wireless and full operator acceptance are independent. Do not claim live wallpaper operational solely because the Rust binary compiles or ISO has UEFI metadata.
 
 **Theme:** original Nemesis assets and transparent/legible controls around the map; review [theme PR #5](https://github.com/pskeffington/nemesis/pull/5) separately. Prioritize usability and battery/4 GiB memory before decorative effects.
+
+## Package selection pass
+
+Prioritize first-use: map, network, terminal, diagnostics, basic RTL-SDR/Airspy/ADS-B. Review [OP-P01 package matrix](../docs/research/OPERATOR_PACKAGE_LIT_MATRIX.md). Select GUI SDR, GNSS, advanced network scanning, QGIS and compilers only through opt-in [kit manifests](../spec/operator-kits.json). Test inherited ArchISO releng requests separately from Nemesis additions; reserve size/4-GiB claims until comparable ISO and physical performance evidence. `nemesis-kit` is a future authenticated installed-system helper, not an installer for the password-locked live user.

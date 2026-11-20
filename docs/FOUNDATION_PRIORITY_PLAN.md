@@ -93,3 +93,7 @@ Use [repository-phase Codex prompt](../codex/REPOSITORY_PHASE_PROMPT.md). F03 re
 ## Dedicated Operator image (2026-11-20)
 
 The user's explicit new priority is a separate full **Operator** edition with preloaded field tools, KDE Plasma and a wallpaper built from the user-owned Rust project. It autoloads `https://globe.airplanes.live/` as the desktop background with local fallback; see [Operator architecture](OPERATOR_EDITION.md) and [OP-01/OP-02](../codex/OPERATOR_PASS.md). This is authorized for repository changes and disposable GitHub Docker validation only. No local Linux/Mac, QEMU GUI session or physical Mac testing is authorized by the source changes. Do not conflate the Operator image with the field-rescue baseline or release.
+
+## Modular Operator package optimization (2026-11-20)
+
+**OP-P01:** create [Arch-source-backed package matrix](research/OPERATOR_PACKAGE_LIT_MATRIX.md), minimal daily core and seven optional signed-Arch kits. Protect the live globe and basic RF diagnostics; keep Gqrx/GNU Radio, GIS, GNSS and compilers opt-in. Audit inherited releng packages using an **Operator-only** exclusion manifest, never the baseline rescue/Air. **OP-P02:** validate signed packages and rebuild in trusted GitHub Docker with ISO SHA/EFI/SquashFS, compare exact bytes with the previous ~2.3-GiB image. [PR #21](https://github.com/pskeffington/nemesis/pull/21) tracks changes. Persistent installer/customizer runtime and physical 4-GiB battery tests remain deferred.
