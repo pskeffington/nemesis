@@ -26,7 +26,7 @@ sed -i \
   -e 's/^iso_name=.*/iso_name="nemesis-operator"/' \
   -e "s/^iso_label=.*/iso_label=\"$label\"/" \
   -e 's|^iso_application=.*|iso_application="Nemesis Operator Intel Mac live desktop"|' \
-  -e '/^file_permissions=(/a\["/usr/local/bin/linux-live-wallpaper"]="0:0:755"\n["/usr/local/bin/nemesis-operator-wallpaper"]="0:0:755"\n["/usr/local/bin/nemesis-kit"]="0:0:755"' \
+  -e '/^file_permissions=(/a\["/usr/local/bin/linux-live-wallpaper"]="0:0:755"\n["/usr/local/bin/nemesis-operator-wallpaper"]="0:0:755"\n["/usr/local/bin/nemesis-kit"]="0:0:755"\n["/usr/local/bin/nemesis-field-note"]="0:0:755"' \
   "$dest/profiledef.sh"
 
 temp="$(mktemp)"
@@ -75,6 +75,8 @@ for kit in aviation airspy gnss network rf-lab development gis; do
   install -m 0644 "$file" "$kit_dest/$kit.packages.x86_64"
 done
 [[ -f "$dest/airootfs/usr/local/bin/nemesis-kit" ]] || die "toolkit manager missing"
+[[ -f "$dest/airootfs/usr/local/bin/nemesis-field-note" ]] || die "offline notebook missing"
+[[ -f "$dest/airootfs/usr/share/nemesis-operator/offline-field-map.html" ]] || die "offline coordinate viewer missing"
 
 # The Operator KDE Plasma network applet uses NetworkManager. Remove only
 # inherited Air stage *enablement links* for iwd and networkd. No changes

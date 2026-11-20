@@ -31,3 +31,28 @@ replicate auto-login or disable screen locking on an installed system.
 
 Wallpaper source: https://github.com/pskeffington/linux_live_wallpaper
 Third-party map: https://globe.airplanes.live/ (not redistributed).
+
+OFFLINE FIELD CONSOLE (MANUAL ONLY)
+
+Applications menu:
+  Offline Coordinate Viewer   Locally import a GeoJSON file for drawing
+  Field Notes (Manual)        Show local notebook command help
+
+No street basemap, route instructions, automatic location or live aircraft
+positions are contained in the offline viewer. Import only trusted GeoJSON.
+The online Airplanes.live desktop background is a separate service.
+
+Terminal usage (no sudo, no network):
+  nemesis-field-note add --category observation --text "Battery test completed"
+  nemesis-field-note list --limit 10
+  nemesis-field-note status
+  nemesis-field-note export --output /path/to/new-private-export.jsonl
+
+The notebook writes only after an operator command, in a private local
+SQLite database. The export destination must not already exist. The live
+operator home is ephemeral: explicitly export to a trusted mounted storage
+location before shutdown if records must be retained. Check exported text
+before sharing: it may contain manually entered private details.
+
+Meshtastic and passive Remote ID integration are separate future opt-ins,
+not bundled collectors or automatic robot identification systems.

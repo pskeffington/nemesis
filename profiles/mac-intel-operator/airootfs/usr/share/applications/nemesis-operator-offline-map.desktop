@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Offline Coordinate Viewer
+Comment=Read a local GeoJSON file without network, geolocation or map tiles
+Exec=firefox --new-window file:///usr/share/nemesis-operator/offline-field-map.html
+Icon=applications-graphics
+Terminal=false
+Categories=Utility;Education;
+StartupNotify=true

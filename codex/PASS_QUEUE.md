@@ -11,6 +11,7 @@
 | 2c | F03-A01 | macbook-air-field-engineer | Air optional field source, readonly diagnostic, six-model acceptance schema | [foundation/static CI 44612120052/50](https://github.com/pskeffington/nemesis/actions/runs/44612120052) | ACCEPTED (source only) |
 | 2d | OP-01 | operator-desktop-engineer | pinned live wallpaper, KDE autostart, offline indicator and signed operator tools | source/fixture/Arch-stage CI | SOURCE COMMITTED / CI REVIEW, PR #18 |
 | 2e | OP-02 | archiso-build-engineer | non-root Rust build, signed packages, Operator ISO and built SquashFS | GitHub Docker evidence, no boot claim | NOT YET ACCEPTED |
+| 2f | R29-03 | operator-desktop-engineer | on-demand offline GeoJSON viewer and private notebook; operator-only files | Python data/privacy tests, signed ArchISO staging and later SquashFS | SOURCE COMMITTED — CI REVIEW; browser/Mac NOT TESTED |
 | 3 | F03 | intel-mac-compatibility | model/feature evidence, device ID, firmware/boot contract | source-backed matrix, no unobserved hardware PASS | READY — NEXT |
 | 4 | F04 | security-release-reviewer | package/ISO provenance, release criteria and recovery plan | review gates and no insecure trust bypass | NOT STARTED |
 | 5 | F05 | build-qa-engineer | pinned `codex/HANDOFF_CONTRACT.md` packet | F02–F04 accepted + explicit human GO | NOT STARTED |

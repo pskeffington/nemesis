@@ -57,3 +57,7 @@ The Operator’s default is a small *usable* base, not a full GNU Radio/GIS work
 ## External SIGINT/SDR distribution research
 
 [Publisher-source deployment comparison](docs/research/SIGINT_OS_PACKAGE_DEPLOYMENT_MATRIX.md) is the reference for SigintOS, DragonOS, Skywave and Pentoo. It is a **software/catalog research input, not a license to install foreign packages**. Reuse the receive-only, on-demand, provenance and modularity lessons; never mistake advertised tools for an inspected installed SBOM. No source from Ubuntu/Debian/Gentoo may be copied into an Arch ISO without individual official signed repository, license, dependency and security validation. Keep cellular lab and transmitting/receiver-control suites separate from the basic map Operator.
+
+## R29-03 offline field console boundary
+
+Operator-only local features: [offline viewer and manual notebook](docs/OPERATOR_FIELD_CONSOLE.md) and [machine contract](spec/offline-field-console.json). Do not autostart GPS/SDR/camera or store records on a server. User-imported GeoJSON is not a verified basemap; no routing, person/robot detection or safety decision is inferred. Notes are manual private SQLite records in ephemeral live home; export requires an explicit destination and must never overwrite. Test input limits, network-denying browser policy, nonroot permissions, signed ArchISO staging and built image contents separately. Meshtastic/Remote ID remain device-specific optional research until safe interfaces and permissions are demonstrated.

@@ -65,3 +65,9 @@ The live map is the central desktop visual. Design Nemesis translucent panels, i
 ## Comparative SIGINT/SDR distro research
 
 [SigintOS / DragonOS / Skywave / Pentoo research](research/SIGINT_OS_PACKAGE_DEPLOYMENT_MATRIX.md) distinguishes first-use radio readiness from a full monitoring laboratory. This source review supports the modular Nemesis kit model, rather than copying Debian/Ubuntu or Gentoo package selections into Arch. SigDigger, inspectrum, multimon-ng, extended aviation decoders and satellite applications remain candidates **only**; no new default tool, transmitter or network service was enabled. Published release lists cannot certify an ISO's installed contents, physical Mac performance or licensing for redistribution.
+
+## Local-only field viewer and notebook — R29-03
+
+The Operator profile now carries an optional [offline field console](OPERATOR_FIELD_CONSOLE.md), without another heavy GIS dependency. A separate Firefox launcher opens an original HTML5 Canvas GeoJSON viewer from a `file://` path; it never requests external tiles, location permission or network resources. A Python-standard-library command `nemesis-field-note` allows a user to enter observations manually, review records and explicitly export to a new private JSONL file. Both start **only on operator request**, not at boot. The main `https://globe.airplanes.live/` background and its existing online/offline fallback are unchanged.
+
+**Accuracy boundary:** the local viewer has no included basemap, routable roads, navigation engine, or live aircraft positions. The plotted equirectangular coordinates are a visual inspection aid only. The live session stores notes in the ephemeral operator home; the user must explicitly export them before shutdown, and the export must be handled as private data. Only source/CI checks are currently intended; no MacBook runtime behavior has been demonstrated.

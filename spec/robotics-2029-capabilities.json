@@ -321,5 +321,11 @@
       "compute_assumption": "No model or GPU acceleration validated on 4-GiB Intel Air",
       "hardware_status": "NOT_TESTED"
     }
-  ]
+  ],
+  "r29_03_source_status": {
+    "notebook": "SOURCE_COMMITTED_ON_DEPENDENT_BRANCH; NOT_MAC_RUNTIME_TESTED",
+    "offline_geojson_viewer": "SOURCE_COMMITTED_ON_DEPENDENT_BRANCH; NO_BASEMAP_OR_ROUTING",
+    "kit_selection": "CURRENT_OPERATOR_BASELINE_UNCHANGED",
+    "automatic_surveillance": "NONE"
+  }
 }

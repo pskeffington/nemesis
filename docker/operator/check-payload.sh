@@ -19,11 +19,15 @@ sfs="$root/.build/work-mac-intel-operator/iso/arch/x86_64/airootfs.sfs"
 xorriso -indev "$iso" -lsd /arch/x86_64/airootfs.sfs \
   > "$evidence/iso-rootfs-entry.txt" 2>&1 || die "ISO rootfs lookup failed"
 grep -Fq airootfs.sfs "$evidence/iso-rootfs-entry.txt" || die "rootfs entry absent"
-unsquashfs -ll "$sfs" usr/local/bin usr/share/nemesis-operator/kits etc/xdg/autostart etc/systemd/system \
+unsquashfs -ll "$sfs" usr/local/bin usr/share/nemesis-operator usr/share/applications etc/xdg/autostart etc/systemd/system \
   usr/lib/sysusers.d usr/lib/tmpfiles.d usr/bin > "$evidence/operator-payload.txt" || die "rootfs inventory failed"
 for target in usr/local/bin/linux-live-wallpaper \
               usr/local/bin/nemesis-operator-wallpaper \
               usr/local/bin/nemesis-kit \
+              usr/local/bin/nemesis-field-note \
+              usr/share/nemesis-operator/offline-field-map.html \
+              usr/share/applications/nemesis-operator-offline-map.desktop \
+              usr/share/applications/nemesis-operator-field-notes.desktop \
               usr/share/nemesis-operator/kits/rf-lab.packages.x86_64 \
               etc/xdg/autostart/nemesis-operator-wallpaper.desktop \
               usr/bin/konsole usr/bin/sddm usr/bin/rtl_test \
@@ -38,6 +42,12 @@ runner="$(unsquashfs -cat "$sfs" usr/local/bin/nemesis-operator-wallpaper)"
 [[ "$runner" == *"--background"* ]] || die "background mode not configured"
 kitcli="$(unsquashfs -cat "$sfs" usr/local/bin/nemesis-kit)"
 [[ "$kitcli" == *"pacman -Syu --needed"* ]] || die "interactive on-demand kit installer missing"
+map_html="$(unsquashfs -cat "$sfs" usr/share/nemesis-operator/offline-field-map.html)"
+[[ "$map_html" == *"connect-src 'none'"* ]] || die "offline map network block missing"
+[[ "$map_html" == *'maxVertices = 30000'* ]] || die "offline GeoJSON bounds missing"
+field_note="$(unsquashfs -cat "$sfs" usr/local/bin/nemesis-field-note)"
+[[ "$field_note" == *"sqlite3.connect"* ]] || die "local field notebook not bundled"
+[[ "$field_note" == *"O_NOFOLLOW"* ]] || die "export file safety check absent"
 gnss_manifest="$(unsquashfs -cat "$sfs" usr/share/nemesis-operator/kits/gnss.packages.x86_64)"
 [[ "$gnss_manifest" == *"gpsd"* ]] || die "GNSS toolkit manifest missing gpsd"
 sddm="$(unsquashfs -cat "$sfs" etc/sddm.conf.d/10-nemesis-operator-live.conf)"

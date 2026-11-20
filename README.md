@@ -35,6 +35,10 @@ The dedicated [Operator edition](docs/OPERATOR_EDITION.md) builds [Linux Live Wa
 
 The [operator package literature matrix](docs/research/OPERATOR_PACKAGE_LIT_MATRIX.md) drives the default footprint: Plasma/Wayland, map/Firefox, core Airspy/RTL-SDR/ADS-B CLI, USB/PCI diagnostics and WireGuard tooling stay in the ISO. **Gqrx/GNU Radio, QGIS, full development tools, GNSS and deeper network scanning** are selected only through [optional signed-Arch toolkits](spec/operator-kits.json), not installed automatically. `nemesis-kit list` and `nemesis-kit show aviation` work read-only on live media; after a future authorized persistent installation, an authenticated root operator can explicitly install a kit. A full installer is **not yet implemented**. The staged Operator-only [upstream releng exclusions](profiles/mac-intel-operator/releng-drop.packages.x86_64) preserve rescue and lean-Air image profiles.
 
+## Offline field console — staged in Operator source
+
+The Operator source now includes an [offline field console](docs/OPERATOR_FIELD_CONSOLE.md): a zero-network local GeoJSON **coordinate viewer** and a user-initiated SQLite incident notebook. The aircraft globe remains the online wallpaper; the separate local viewer does **not** contain a basemap, a route planner or an offline ADS-B feed. The notebook does not collect GPS/camera/radio data, automatically export, or run a background service. Both are confined to the optional Operator profile; source/CI is distinct from a graphical MacBook runtime test.
+
 ## Repository navigation
 
 - **Current planning:** [foundation priority plan](docs/FOUNDATION_PRIORITY_PLAN.md), [ROADMAP.md](ROADMAP.md), [Codex pass queue](codex/PASS_QUEUE.md).

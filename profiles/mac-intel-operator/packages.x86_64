@@ -6,6 +6,7 @@ dump1090_rs
 usbutils
 pciutils
 jq
+python
 git
 htop
 tmux

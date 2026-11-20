@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy"
+ content="default-src 'none'; connect-src 'none'; img-src data:; font-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; object-src 'none'; form-action 'none'; base-uri 'none'">
+<title>Nemesis Operator • Offline Coordinate Viewer</title>
+<style>
+:root{color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;padding:20px;color:#cbe1e1;background:#07131b;font:15px/1.45 system-ui,sans-serif}
+main{max-width:1100px;margin:auto}
+h1{font-size:1.45rem;letter-spacing:.08em;margin:.4rem 0}
+small,p{color:#9fbdc3}
+.tools{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin:15px 0}
+input,button{color:#d8e9e9;background:#12313c;border:1px solid #67939c;border-radius:4px;padding:7px;max-width:100%}
+button{cursor:pointer}
+canvas{display:block;width:100%;height:auto;aspect-ratio:16/9;background:#071923;border:1px solid #46747c;border-radius:6px}
+#status{display:block;margin:10px 0;min-height:1.5em}
+.notice{border-left:3px solid #77afb7;padding:6px 12px;background:#10242b;margin:15px 0}
+</style>
+</head>
+<body>
+<main>
+<small>NEMESIS / OPERATOR / LOCAL DATA ONLY</small>
+<h1>Offline coordinate viewer</h1>
+<p>This viewer has no basemap, automatic GPS, network access, or route guidance. Select your own trusted GeoJSON file to display coordinates and shapes. The selected file stays in this browser tab.</p>
+<div class="tools">
+<label for="dataset">Load local GeoJSON:</label>
+<input id="dataset" type="file" accept=".geojson,.json,application/geo+json">
+<button id="clear" type="button">Clear</button>
+</div>
+<canvas id="map" width="960" height="540" role="img"
+ aria-label="Local coordinate drawing. This is not a navigational basemap."></canvas>
+<output id="status" role="status" aria-live="polite">No geodata loaded. Grid only.</output>
+<div class="notice">Coordinates use a simple longitude/latitude plot, not a distance-preserving map projection. Imported paths can be incomplete or outdated. Verify routes against authoritative local mapping and real conditions.</div>
+</main>
+<script>
+"use strict";
+(function () {
+  const maxBytes = 5 * 1024 * 1024;
+  const maxFeatures = 2500;
+  const maxVertices = 30000;
+  const canvas = document.getElementById("map");
+  const input = document.getElementById("dataset");
+  const status = document.getElementById("status");
+  const clear = document.getElementById("clear");
+  const ctx = canvas.getContext("2d");
+  let shapes = [];
+  let bounds = null;
+  let vertices = 0;
+
+  function point(pair) {
+    if (!Array.isArray(pair) || pair.length < 2 ||
+        typeof pair[0] !== "number" || typeof pair[1] !== "number" ||
+        !Number.isFinite(pair[0]) || !Number.isFinite(pair[1]) ||
+        pair[0] < -180 || pair[0] > 180 || pair[1] < -90 || pair[1] > 90) {
+      throw new Error("Invalid longitude/latitude coordinate");
+    }
+    vertices += 1;
+    if (vertices > maxVertices) throw new Error("Too many coordinates");
+    if (bounds === null) bounds = [pair[0], pair[1], pair[0], pair[1]];
+    bounds[0] = Math.min(bounds[0], pair[0]);
+    bounds[1] = Math.min(bounds[1], pair[1]);
+    bounds[2] = Math.max(bounds[2], pair[0]);
+    bounds[3] = Math.max(bounds[3], pair[1]);
+    return [pair[0], pair[1]];
+  }
+
+  function path(group, isPoint, close) {
+    if (!Array.isArray(group)) throw new Error("Invalid geometry coordinates");
+    const points = group.map(point);
+    if (points.length) shapes.push({points:points, dot:isPoint, close:close});
+  }
+
+  function geometry(item) {
+    if (!item || typeof item !== "object" || Array.isArray(item)) {
+      throw new Error("Invalid geometry");
+    }
+    const c = item.coordinates;
+    switch (item.type) {
+      case "Point": path([c], true, false); break;
+      case "MultiPoint":
+        if (!Array.isArray(c)) throw new Error("Invalid MultiPoint");
+        c.forEach(p => path([p], true, false)); break;
+      case "LineString": path(c, false, false); break;
+      case "MultiLineString":
+        if (!Array.isArray(c)) throw new Error("Invalid MultiLineString");
+        c.forEach(line => path(line, false, false)); break;
+      case "Polygon":
+        if (!Array.isArray(c)) throw new Error("Invalid Polygon");
+        c.forEach(ring => path(ring, false, true)); break;
+      case "MultiPolygon":
+        if (!Array.isArray(c)) throw new Error("Invalid MultiPolygon");
+        c.forEach(poly => {
+          if (!Array.isArray(poly)) throw new Error("Invalid polygon");
+          poly.forEach(ring => path(ring, false, true));
+        }); break;
+      default: throw new Error("Unsupported GeoJSON geometry");
+    }
+  }
+
+  function render() {
+    const w = canvas.width, h = canvas.height;
+    ctx.fillStyle = "#071923";
+    ctx.fillRect(0, 0, w, h);
+    ctx.strokeStyle = "#1d4b56";
+    ctx.lineWidth = 1;
+    for (let x = 0; x <= w; x += 60) {
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+    }
+    for (let y = 0; y <= h; y += 60) {
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+    }
+    if (bounds === null) return;
+    const lon = (bounds[0] + bounds[2]) / 2;
+    const lat = (bounds[1] + bounds[3]) / 2;
+    const dx = Math.max(0.001, bounds[2] - bounds[0]);
+    const dy = Math.max(0.001, bounds[3] - bounds[1]);
+    const scale = Math.min((w - 80) / dx, (h - 80) / dy);
+    function project(p) {
+      return [w / 2 + (p[0] - lon) * scale,
+              h / 2 - (p[1] - lat) * scale];
+    }
+    shapes.forEach(shape => {
+      ctx.strokeStyle = "#84d5c9";
+      ctx.fillStyle = "#e7b979";
+      ctx.lineWidth = 2;
+      if (shape.dot) {
+        shape.points.forEach(p => {
+          const xy = project(p);
+          ctx.beginPath(); ctx.arc(xy[0], xy[1], 4, 0, 2 * Math.PI); ctx.fill();
+        });
+      } else {
+        ctx.beginPath();
+        shape.points.forEach((p, index) => {
+          const xy = project(p);
+          if (index === 0) ctx.moveTo(xy[0], xy[1]);
+          else ctx.lineTo(xy[0], xy[1]);
+        });
+        if (shape.close) ctx.closePath();
+        ctx.stroke();
+      }
+    });
+  }
+
+  function reset(message) {
+    shapes = []; bounds = null; vertices = 0;
+    status.textContent = message;
+    render();
+  }
+
+  input.addEventListener("change", async function () {
+    const file = input.files && input.files[0];
+    if (!file) return;
+    if (file.size > maxBytes) {
+      reset("File rejected: 5-MiB limit.");
+      return;
+    }
+    try {
+      const data = JSON.parse(await file.text());
+      shapes = []; bounds = null; vertices = 0;
+      if (data && data.type === "FeatureCollection" &&
+          Array.isArray(data.features)) {
+        if (data.features.length > maxFeatures) throw new Error("Too many features");
+        data.features.forEach(feature => {
+          if (!feature || feature.type !== "Feature") {
+            throw new Error("Invalid GeoJSON feature");
+          }
+          if (feature.geometry !== null) geometry(feature.geometry);
+        });
+      } else if (data && data.type === "Feature") {
+        if (data.geometry !== null) geometry(data.geometry);
+      } else {
+        geometry(data);
+      }
+      if (bounds === null) throw new Error("No supported coordinates");
+      render();
+      status.textContent = "Loaded " + vertices + " coordinates from " +
+                           file.name + ". Local viewing only.";
+    } catch (error) {
+      reset("Could not display file: " + String(error.message));
+    }
+  });
+  clear.addEventListener("click", function () {
+    input.value = "";
+    reset("Cleared. No geodata loaded.");
+  });
+  render();
+}());
+</script>
+</body>
+</html>

@@ -63,5 +63,22 @@
     "iso_payload_inspection": "NOT_RUN",
     "virtual_wayland_desktop_boot": "NOT_RUN",
     "physical_macbook_air": "NOT_RUN"
+  },
+  "offline_field_console": {
+    "status": "source-implemented, no graphical/physical runtime acceptance",
+    "map_viewer": "/usr/share/nemesis-operator/offline-field-map.html",
+    "map_launcher": "/usr/share/applications/nemesis-operator-offline-map.desktop",
+    "map_supported_data": "user-selected local GeoJSON up to 5 MiB, 30k coordinates, no basemap included",
+    "map_network_policy": "CSP connect-src 'none'; no geolocation, network fetch or remote tiles",
+    "notebook_executable": "/usr/local/bin/nemesis-field-note",
+    "notebook_storage": "~/.local/share/nemesis-operator/field-notes.sqlite3, user-initiated only",
+    "notebook_privacy": "0600 SQLite file in 0700 user directory; no auto capture, no network, no auto export",
+    "live_session": "ephemeral; notes lost at shutdown unless explicitly exported by operator",
+    "optional_companions": {
+      "meshtastic": "deferred: reviewed external node, manual connection only",
+      "remote_id": "deferred: approved receiver, no automatic drone classification"
+    },
+    "performance_status": "NOT_TESTED_ON_4GIB_MAC",
+    "full_navigation_routing_status": "NOT_IMPLEMENTED_NO_BASEMAP_OR_ROUTE_ENGINE"
   }
 }
