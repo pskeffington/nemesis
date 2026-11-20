@@ -60,11 +60,25 @@
     }
   },
   "gates": {
-    "python_tests": "PENDING",
-    "synthetic_releng_stage": "PENDING",
-    "native_archiso_stage": "PENDING",
+    "python_tests": "PASS 40 tests (44804592372, source da112193)",
+    "synthetic_releng_stage": "PASS (44804592390, source da112193)",
+    "native_archiso_stage": "PASS (44804592390, source da112193)",
     "built_squashfs": "PENDING",
     "offline_browser_runtime": "NOT_TESTED",
     "actual_macbook_4gib": "NOT_TESTED"
-  }
+  },
+  "validation_evidence": [
+    {
+      "gate": "Python/Node foundation",
+      "run": 44804592372,
+      "sha": "da112193bd82dd4ec5184204337f300288723e8c",
+      "result": "PASS_40_TESTS"
+    },
+    {
+      "gate": "ShellCheck/synthetic/staged signed ArchISO",
+      "run": 44804592390,
+      "sha": "da112193bd82dd4ec5184204337f300288723e8c",
+      "result": "PASS"
+    }
+  ]
 }

@@ -38,8 +38,8 @@ Only the Python standard library and the existing Firefox are used. The source a
 
 | Pass | Acceptance test | Status |
 | --- | --- | --- |
-| R29-03a | Python unit tests: manual add/list/status, private DB, export/non-overwrite, symlink rejection, input bounds and static network policy | CI PENDING |
-| R29-03b | Synthetic and native signed ArchISO Operator staging includes files and execute permissions, preserves rescue/Air profiles | CI PENDING |
+| R29-03a | Python unit tests: manual add/list/status, private DB, export/non-overwrite, symlink rejection, input bounds and static network policy | **PASS — 40 tests**, [CI 44804592372](https://github.com/pskeffington/nemesis/actions/runs/44804592372), source `da112193` |
+| R29-03b | ShellCheck, synthetic and native signed ArchISO Operator staging includes files and execute permissions, preserves rescue/Air profiles | **PASS**, [CI 44804592390](https://github.com/pskeffington/nemesis/actions/runs/44804592390), source `da112193` |
 | R29-03c | Built Operator SquashFS includes notebook/viewer/launchers and privacy constraints; original wallpaper intact | NOT RUN on this branch |
 | R29-03d | Real Firefox `file://` import and Canvas rendering, keyboard/reader accessibility, 4-GiB Mac use | NOT TESTED |
 | R29-04 | Reviewed optional Meshtastic and Remote ID adapters | DEFERRED |

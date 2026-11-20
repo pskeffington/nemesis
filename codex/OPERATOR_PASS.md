@@ -77,3 +77,8 @@ Once OP-03 passes, review source and UI assets from the separate [theme PR #5](h
 5. If accepted, create a clean, separately reviewable changeset. Do not claim actual KDE rendering, usable offline street maps or physical Mac performance from source CI.
 
 **Exit:** observed green source/fixtures + clear unresolved runtime/retention limits. Follow-up R29-04: opt-in Meshtastic and broadcast Remote ID hardware interface **research only**, no auto-scan or private-data relay. Full offline basemap/routing requires geographic data and license/quality gates before calling it navigation.
+
+### R29-03 evidence receipt
+
+- [Source `da112193`](https://github.com/pskeffington/nemesis/commit/da112193bd82dd4ec5184204337f300288723e8c): [foundation 44804592372](https://github.com/pskeffington/nemesis/actions/runs/44804592372) **PASS, 40 tests** including notebook SQLite and JS syntax; [static/installed ArchISO 44804592390](https://github.com/pskeffington/nemesis/actions/runs/44804592390) **PASS**.
+- Source gates **ACCEPTED for source staging only**. Image SquashFS, KDE/Firefox rendering and actual MacBook Air field readiness are **NOT ACCEPTED**. Never copy this record to another source SHA without re-running checks. [Dependent PR #23](https://github.com/pskeffington/nemesis/pull/23) follows package [PR #21](https://github.com/pskeffington/nemesis/pull/21).
