@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "pass_id": "R29-03",
+  "edition": "mac-intel-operator",
+  "based_on": "spec/robotics-2029-capabilities.json",
+  "status": "SOURCE_COMMITTED",
+  "intention": "private offline geographic feature review and manual event notes, no robotics detection or automated response",
+  "viewer": {
+    "html": "/usr/share/nemesis-operator/offline-field-map.html",
+    "launch": "/usr/share/applications/nemesis-operator-offline-map.desktop",
+    "input": "user-selected GeoJSON FeatureCollection / Feature / supported geometry",
+    "max_bytes": 5242880,
+    "max_vertices": 30000,
+    "max_features": 2500,
+    "map_projection": "simple equirectangular coordinate visualization only",
+    "basemap_licensing": "No data, tiles or geographic truth bundled",
+    "browser_runtime_tested": false
+  },
+  "notebook": {
+    "executable": "/usr/local/bin/nemesis-field-note",
+    "commands": [
+      "add",
+      "list",
+      "status",
+      "export"
+    ],
+    "storage": "~/.local/share/nemesis-operator/field-notes.sqlite3",
+    "storage_mode": "0700 directory / 0600 sqlite file",
+    "export": "explicit --output and 0600 new file; refuses overwrite",
+    "persistence": "ephemeral live desktop home unless user manually exports; no automatic retention",
+    "database": "Python standard-library SQLite, no server or network",
+    "instance": "nonprivileged operator user only",
+    "runtime_tested_on_mac": false
+  },
+  "basemap_status": "NOT_PROVIDED",
+  "routing_status": "NOT_IMPLEMENTED",
+  "network_requirements": {
+    "requires_network": false,
+    "no_external_tiles": true,
+    "airplanes_wallpaper_remains_separate": true
+  },
+  "privacy": {
+    "automatic_location": false,
+    "automatic_camera": false,
+    "automatic_radio": false,
+    "automatic_export": false,
+    "automatic_network": false,
+    "no_auto_services": true
+  },
+  "companions": {
+    "meshtastic": {
+      "status": "DEFERRED",
+      "interface": "user-initiated external radio/phone, no system service or credentials",
+      "requirement": "hardware pairing, permissions, privacy and signed-package review"
+    },
+    "remote_id": {
+      "status": "DEFERRED",
+      "interface": "supported passive BLE/Wi-Fi receiver, no inferred hostility",
+      "requirement": "legal broadcast-only detection, privacy and platform support review"
+    }
+  },
+  "gates": {
+    "python_tests": "PENDING",
+    "synthetic_releng_stage": "PENDING",
+    "native_archiso_stage": "PENDING",
+    "built_squashfs": "PENDING",
+    "offline_browser_runtime": "NOT_TESTED",
+    "actual_macbook_4gib": "NOT_TESTED"
+  }
+}
