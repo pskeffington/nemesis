@@ -59,5 +59,13 @@ install -Dm0755 "$assets/linux-live-wallpaper" "$dest/airootfs/usr/local/bin/lin
 install -Dm0644 "$assets/LICENSE" "$dest/airootfs/usr/share/licenses/linux-live-wallpaper/LICENSE"
 install -Dm0644 "$assets/provenance.txt" "$dest/airootfs/usr/share/nemesis-operator/wallpaper-provenance.txt"
 [[ -f "$dest/airootfs/usr/local/bin/nemesis-operator-wallpaper" ]] || die "wallpaper launcher source missing"
+# Brand resources are opt-in at source composition time; never override the
+# live globe wallpaper, its fallback, or the existing KDE user configuration.
+# Only the Operator edition may receive these objects.
+if [[ "${NEMESIS_OPERATOR_BRAND:-0}" == 1 ]]; then
+  bash "$root/scripts/stage-operator-brand.sh" "$dest"
+elif [[ "${NEMESIS_OPERATOR_BRAND:-0}" != 0 ]]; then
+  die "NEMESIS_OPERATOR_BRAND must be 0 or 1"
+fi
 bash -n "$dest/profiledef.sh"
 printf 'Prepared distinct Operator ISO with pinned wallpaper: %s\n' "$dest"
