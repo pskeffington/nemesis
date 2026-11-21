@@ -1,0 +1,45 @@
+name: Nemesis Operator brand object rendering
+
+# Independent unprivileged Qt 6 object checks: no privileged ISO builds on PRs.
+on:
+  push:
+    paths:
+      - '.github/workflows/operator-brand-ui.yml'
+      - 'brand/**'
+      - 'tests/qml/**'
+      - 'tests/test_operator_brand.py'
+      - 'scripts/stage-operator-brand.sh'
+      - 'scripts/prepare-operator-profile.sh'
+  pull_request:
+    paths:
+      - '.github/workflows/operator-brand-ui.yml'
+      - 'brand/**'
+      - 'tests/qml/**'
+      - 'tests/test_operator_brand.py'
+      - 'scripts/stage-operator-brand.sh'
+      - 'scripts/prepare-operator-profile.sh'
+
+permissions:
+  contents: read
+
+jobs:
+  qml-object-rendering:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - name: Test icon decoding and interactive object transitions in headless Qt 6
+        run: |
+          docker run --rm --security-opt no-new-privileges \
+            --volume "$PWD:/workspace:ro" --workdir /workspace \
+            archlinux:base-devel \
+            bash -euo pipefail -c '
+              pacman -Sy --noconfirm --needed python qt6-declarative qt6-svg
+              python3 -m unittest discover -s tests -p test_operator_brand.py -v
+              for qml in brand/plasmoid/org.nemesis.themecontrols/contents/ui/*.qml tests/qml/*.qml; do
+                /usr/lib/qt6/bin/qmlformat "$qml" >/dev/null
+              done
+              QT_QPA_PLATFORM=offscreen QT_QUICK_BACKEND=software /usr/lib/qt6/bin/qmltestrunner -input tests/qml -platform offscreen
+            '
