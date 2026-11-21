@@ -1,0 +1,58 @@
+name: Nemesis Operator brand object rendering
+
+# Independent unprivileged Qt 6 object checks: no privileged ISO builds on PRs.
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/operator-brand-ui.yml'
+      - '.github/workflows/docker-operator.yml'
+      - 'docker/operator/check-payload.sh'
+      - 'brand/**'
+      - 'tests/qml/**'
+      - 'tests/test_operator_brand.py'
+      - 'tests/test-operator-profile.sh'
+      - 'tests/test-installed-operator-profile.sh'
+      - 'scripts/stage-operator-brand.sh'
+      - 'scripts/prepare-operator-profile.sh'
+
+permissions:
+  contents: read
+
+jobs:
+  qml-object-rendering:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - name: Test icon decoding and interactive object transitions in headless Qt 6
+        run: |
+          docker run --rm --security-opt no-new-privileges \
+            --volume "$PWD:/workspace:ro" --workdir /workspace \
+            archlinux:base-devel \
+            bash -euo pipefail -c '
+              # Arch Linux rolling repositories require a full transaction; partial -Sy
+              # caused openssl-3 path conflicts with the base image.
+              pacman -Syu --noconfirm --needed python qt6-declarative qt6-svg
+              python3 -m unittest discover -s tests -p test_operator_brand.py -v
+              for qml in brand/plasmoid/org.nemesis.themecontrols/contents/ui/*.qml tests/qml/*.qml; do
+                /usr/lib/qt6/bin/qmlformat "$qml" >/dev/null
+              done
+              QT_QPA_PLATFORM=offscreen QT_QUICK_BACKEND=software /usr/lib/qt6/bin/qmltestrunner -input tests/qml -platform offscreen
+            '
+
+  native-archiso-objects:
+    name: Signed ArchISO Operator theme staging
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    container:
+      image: archlinux:base-devel
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - name: Check real releng stage, palette defaults, application icons and isolation
+        run: |
+          pacman -Syu --noconfirm --needed archiso
+          bash tests/test-installed-operator-profile.sh

@@ -1,0 +1,12 @@
+{
+  "KPlugin": {
+    "Name": "Nemesis Preview",
+    "Description": "Dark indigo and violet Plasma color preview; inherits Breeze artwork",
+    "Id": "Nemesis",
+    "Version": "0.2.0",
+    "License": "GPL-3.0-or-later",
+    "Category": "Plasma Theme"
+  },
+  "X-Plasma-API": "6.0",
+  "KPackageStructure": "Plasma/Theme"
+}

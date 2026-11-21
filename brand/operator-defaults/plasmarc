@@ -1,0 +1,3 @@
+# Optional Operator live-only KDE default. Never immutable; user settings win.
+[Theme]
+name=Nemesis

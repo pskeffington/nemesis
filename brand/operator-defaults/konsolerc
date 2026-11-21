@@ -1,0 +1,3 @@
+# Live Operator default only; individual Konsole settings may override.
+[Desktop Entry]
+DefaultProfile=Nemesis.profile
