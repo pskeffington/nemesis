@@ -80,6 +80,19 @@ ARCHISO_RELENG_PROFILE="$fixture" NEMESIS_OPERATOR_WALLPAPER_ASSETS="$assets" NE
 object_root="$branded/airootfs/usr/share/plasma/plasmoids/org.nemesis.themecontrols"
 [[ -f "$object_root/metadata.json" && -f "$object_root/contents/ui/ModeBoard.qml" ]]
 cmp -s "$root/brand/theme/kde/Nemesis.colors" "$branded/airootfs/usr/share/color-schemes/Nemesis.colors"
+# The opt-in theme must be a real live KDE default, not just an asset directory.
+cmp -s "$root/brand/theme/kde/Nemesis.colors" "$branded/airootfs/etc/xdg/kdeglobals"
+cmp -s "$root/brand/operator-defaults/plasmarc" "$branded/airootfs/etc/xdg/plasmarc"
+grep -Fxq 'ColorScheme=Nemesis' "$branded/airootfs/etc/xdg/kdeglobals"
+grep -Fxq 'name=Nemesis' "$branded/airootfs/etc/xdg/plasmarc"
+branded_airmap="$branded/airootfs/usr/share/applications/nemesis-operator-airmap.desktop"
+branded_readiness="$branded/airootfs/usr/share/applications/nemesis-operator-readiness.desktop"
+grep -Fxq 'Icon=nemesis-location' "$branded_airmap"
+grep -Fxq 'Icon=nemesis-shield' "$branded_readiness"
+cmp -s "$root/profiles/mac-intel-operator/airootfs/usr/share/applications/nemesis-operator-airmap.desktop" "$stage/airootfs/usr/share/applications/nemesis-operator-airmap.desktop"
+cmp -s "$root/profiles/mac-intel-operator/airootfs/usr/share/applications/nemesis-operator-readiness.desktop" "$stage/airootfs/usr/share/applications/nemesis-operator-readiness.desktop"
+grep -Fxq 'Exec=firefox --new-window https://globe.airplanes.live/' "$branded_airmap"
+grep -Fxq 'Exec=konsole --hold -e /usr/local/bin/nemesis-field-check' "$branded_readiness"
 for icon in terminal radio database location drone satellite headphones shield; do
   cmp -s "$root/brand/icons/$icon.svg" "$branded/airootfs/usr/share/icons/hicolor/scalable/apps/nemesis-$icon.svg"
   cmp -s "$root/brand/icons/$icon.svg" "$object_root/contents/images/$icon.svg"
@@ -88,6 +101,14 @@ done
 cmp -s "$stage/airootfs/usr/share/nemesis-operator/offline.html" "$branded/airootfs/usr/share/nemesis-operator/offline.html"
 cmp -s "$stage/airootfs/etc/xdg/kscreenlockerrc" "$branded/airootfs/etc/xdg/kscreenlockerrc"
 [[ ! -e "$stage/airootfs/usr/share/color-schemes/Nemesis.colors" ]]
+[[ ! -e "$stage/airootfs/etc/xdg/kdeglobals" ]]
+[[ ! -e "$stage/airootfs/etc/xdg/plasmarc" ]]
+# Re-running a one-shot branded stage must fail before changing existing files.
+if bash "$root/scripts/stage-operator-brand.sh" "$branded" >/dev/null 2>&1; then
+  printf 'ERROR: repeated brand staging accepted\n' >&2
+  exit 1
+fi
+grep -Fxq 'Icon=nemesis-location' "$branded_airmap"
 [[ ! -e "$stage/airootfs/usr/share/plasma/plasmoids/org.nemesis.themecontrols" ]]
 # Invalid flag must reject rather than silently changing profile selection.
 if ARCHISO_RELENG_PROFILE="$fixture" NEMESIS_OPERATOR_WALLPAPER_ASSETS="$assets" NEMESIS_OPERATOR_BRAND=yes \
