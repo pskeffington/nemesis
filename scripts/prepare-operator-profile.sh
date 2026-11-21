@@ -9,6 +9,11 @@ die() { printf 'nemesis operator stage: %s\n' "$*" >&2; exit 1; }
 dest="${1%/}"
 [[ "$dest" == /* ]] || die "destination must be an absolute path"
 [[ ! -e "$dest" && ! -L "$dest" ]] || die "refusing existing destination"
+# Fail invalid opt-in flags BEFORE creating a partially staged image.
+case "${NEMESIS_OPERATOR_BRAND:-0}" in
+  0|1) ;;
+  *) die "NEMESIS_OPERATOR_BRAND must be 0 or 1" ;;
+esac
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 overlay="$root/profiles/mac-intel-operator/airootfs"
 desktop="$root/profiles/mac-intel-operator/desktop.packages.x86_64"
@@ -64,8 +69,6 @@ install -Dm0644 "$assets/provenance.txt" "$dest/airootfs/usr/share/nemesis-opera
 # Only the Operator edition may receive these objects.
 if [[ "${NEMESIS_OPERATOR_BRAND:-0}" == 1 ]]; then
   bash "$root/scripts/stage-operator-brand.sh" "$dest"
-elif [[ "${NEMESIS_OPERATOR_BRAND:-0}" != 0 ]]; then
-  die "NEMESIS_OPERATOR_BRAND must be 0 or 1"
 fi
 bash -n "$dest/profiledef.sh"
 printf 'Prepared distinct Operator ISO with pinned wallpaper: %s\n' "$dest"
