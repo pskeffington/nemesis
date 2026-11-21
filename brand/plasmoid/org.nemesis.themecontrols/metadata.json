@@ -1,0 +1,13 @@
+{
+  "KPlugin": {
+    "Id": "org.nemesis.themecontrols",
+    "Name": "Nemesis Theme Inspector",
+    "Description": "Interactive Nemesis icon and appearance preview; no device control",
+    "Icon": "nemesis",
+    "Category": "Utilities",
+    "Version": "0.3.0",
+    "License": "GPL-3.0-or-later"
+  },
+  "X-Plasma-API-Minimum-Version": "6.0",
+  "KPackageStructure": "Plasma/Applet"
+}

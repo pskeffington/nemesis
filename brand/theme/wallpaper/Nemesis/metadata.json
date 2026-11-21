@@ -1,0 +1,10 @@
+{
+  "KPlugin": {
+    "Id": "Nemesis",
+    "Name": "Nemesis Signal Dusk",
+    "Description": "Original Nemesis 4K desktop wallpaper, optional ISO preview",
+    "Version": "0.1.0",
+    "License": "GPL-3.0-or-later"
+  },
+  "KPackageStructure": "Plasma/Wallpaper"
+}
