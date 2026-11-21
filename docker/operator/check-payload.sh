@@ -51,4 +51,29 @@ expected="$(printf '%s\n' "$provenance" | sed -n 's/^binary_sha256=//p')"
 actual="$(unsquashfs -cat "$sfs" usr/local/bin/linux-live-wallpaper | sha256sum | awk '{print $1}')"
 [[ "$expected" == "$actual" ]] || die "built wallpaper binary hash mismatch"
 printf 'binary_sha256=%s\n' "$actual" > "$evidence/wallpaper-sha256.txt"
+# Brand images are optional: on branded dispatches, inspect the actual
+# assembled rootfs and compare every installed object to its source master.
+if [[ "${NEMESIS_OPERATOR_BRAND:-0}" == 1 ]]; then
+  for pair in \
+    "brand/theme/kde/Nemesis.colors:usr/share/color-schemes/Nemesis.colors" \
+    "brand/plasmoid/org.nemesis.themecontrols/metadata.json:usr/share/plasma/plasmoids/org.nemesis.themecontrols/metadata.json" \
+    "brand/plasmoid/org.nemesis.themecontrols/contents/ui/ModeBoard.qml:usr/share/plasma/plasmoids/org.nemesis.themecontrols/contents/ui/ModeBoard.qml" \
+    "brand/plasmoid/org.nemesis.themecontrols/contents/ui/IconTile.qml:usr/share/plasma/plasmoids/org.nemesis.themecontrols/contents/ui/IconTile.qml" \
+    "brand/plasmoid/org.nemesis.themecontrols/contents/ui/main.qml:usr/share/plasma/plasmoids/org.nemesis.themecontrols/contents/ui/main.qml"; do
+    src="${pair%%:*}"
+    target="${pair#*:}"
+    unsquashfs -cat "$sfs" "$target" | cmp -s "$root/$src" - || die "built theme object mismatch: $target"
+  done
+  for icon in terminal radio database location drone satellite headphones shield; do
+    for target in "usr/share/icons/hicolor/scalable/apps/nemesis-$icon.svg" \
+      "usr/share/plasma/plasmoids/org.nemesis.themecontrols/contents/images/$icon.svg"; do
+      unsquashfs -cat "$sfs" "$target" | cmp -s "$root/brand/icons/$icon.svg" - || die "built icon mismatch: $target"
+    done
+  done
+  printf 'brand_payload=CANONICAL_OBJECTS_VERIFIED_NOT_RENDERED\n' >> "$evidence/provenance.txt"
+else
+  if unsquashfs -ll "$sfs" usr/share/plasma/plasmoids/org.nemesis.themecontrols 2>/dev/null | grep -Fq 'org.nemesis.themecontrols'; then
+    die "unrequested brand applet leaked into default Operator rootfs"
+  fi
+fi
 printf 'Operator SquashFS payload integrity and autostart contracts: PASS (not boot evidence)\n'
