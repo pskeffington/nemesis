@@ -45,3 +45,18 @@ jobs:
               done
               QT_QPA_PLATFORM=offscreen QT_QUICK_BACKEND=software /usr/lib/qt6/bin/qmltestrunner -input tests/qml -platform offscreen
             '
+
+  native-archiso-objects:
+    name: Signed ArchISO Operator theme staging
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    container:
+      image: archlinux:base-devel
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - name: Check real releng stage, palette defaults, application icons and isolation
+        run: |
+          pacman -Syu --noconfirm --needed archiso
+          bash tests/test-installed-operator-profile.sh
