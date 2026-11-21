@@ -55,6 +55,12 @@ The purpose is to make repeatable measurements and reversible theme testing poss
 
 Research the exact M3 model, Asahi kernel/m1n1, display/DCP, Mesa GPU readiness, Wi-Fi, audio, sleep, battery and recovery separately. Fedora Asahi on real hardware requires a reviewed backup and partition/boot plan; do not copy generic ARM64 virtual-machine firmware or Intel ArchISO boot files to a native M3 target. Any future Arch Linux ARM-based distro requires an independently reviewed trusted package/boot chain. No physical Apple Silicon device is accepted by this source change.
 
+## Codex graphical handoff and evidence gate
+
+The next pass is [M3-GUI-V01](../codex/M3_GRAPHICAL_VALIDATION_PASS.md). Local Codex on the actual M3 may operate a disposable Fedora KDE UTM VM **only after explicit GO** and sufficient Computer Use permissions. The [machine-readable visual test matrix](../spec/m3-gui-acceptance.json) keeps GUI boot, object visibility, 100%/200% scaling, input, measured performance and restoration separate from source-only CI.
+
+Codex can generate an unobserved evidence template (read-only) with `python3 scripts/validate_m3_gui_report.py --template`. After supervised guest tests, it can check a sanitized report using `python3 scripts/validate_m3_gui_report.py /private/path/report.json`. The validator checks case IDs and required supporting references, not screenshot authenticity; a reviewer still needs to inspect the actual guest screenshots. The report starts `NOT_RUN`, not `PASS`. No raw screenshot or device-identifying logs belong in Git.
+
 ## CI, dependencies and rollback
 
 [m3-arm64.yml](../.github/workflows/m3-arm64.yml) checks deterministic source contracts and a **native ARM64 Linux GitHub runner**. That runner is **not** an M3 Mac and does **not** boot UTM. The existing repo-only handoff policy and source/build/GUI/hardware acceptance levels remain separate. Stacked PR dependency: first resolve [#24](https://github.com/pskeffington/nemesis/pull/24); then review/rebase this pass. To roll back, discard the unmerged branch and/or restore the user-managed preview inside the disposable VM. Intel source profiles remain unaffected.
