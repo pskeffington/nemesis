@@ -36,7 +36,9 @@ jobs:
             --volume "$PWD:/workspace:ro" --workdir /workspace \
             archlinux:base-devel \
             bash -euo pipefail -c '
-              pacman -Sy --noconfirm --needed python qt6-declarative qt6-svg
+              # Arch Linux rolling repositories require a full transaction; partial -Sy
+              # caused openssl-3 path conflicts with the base image.
+              pacman -Syu --noconfirm --needed python qt6-declarative qt6-svg
               python3 -m unittest discover -s tests -p test_operator_brand.py -v
               for qml in brand/plasmoid/org.nemesis.themecontrols/contents/ui/*.qml tests/qml/*.qml; do
                 /usr/lib/qt6/bin/qmlformat "$qml" >/dev/null
