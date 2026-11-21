@@ -83,6 +83,10 @@ cmp -s "$root/brand/theme/kde/Nemesis.colors" "$branded/airootfs/usr/share/color
 # The opt-in theme must be a real live KDE default, not just an asset directory.
 cmp -s "$root/brand/theme/kde/Nemesis.colors" "$branded/airootfs/etc/xdg/kdeglobals"
 cmp -s "$root/brand/operator-defaults/plasmarc" "$branded/airootfs/etc/xdg/plasmarc"
+cmp -s "$root/brand/operator-defaults/konsolerc" "$branded/airootfs/etc/xdg/konsolerc"
+cmp -s "$root/brand/operator-defaults/Nemesis.profile" "$branded/airootfs/usr/share/konsole/Nemesis.profile"
+grep -Fxq 'DefaultProfile=Nemesis.profile' "$branded/airootfs/etc/xdg/konsolerc"
+grep -Fxq 'ColorScheme=Nemesis' "$branded/airootfs/usr/share/konsole/Nemesis.profile"
 grep -Fxq 'ColorScheme=Nemesis' "$branded/airootfs/etc/xdg/kdeglobals"
 grep -Fxq 'name=Nemesis' "$branded/airootfs/etc/xdg/plasmarc"
 branded_airmap="$branded/airootfs/usr/share/applications/nemesis-operator-airmap.desktop"
@@ -103,6 +107,8 @@ cmp -s "$stage/airootfs/etc/xdg/kscreenlockerrc" "$branded/airootfs/etc/xdg/kscr
 [[ ! -e "$stage/airootfs/usr/share/color-schemes/Nemesis.colors" ]]
 [[ ! -e "$stage/airootfs/etc/xdg/kdeglobals" ]]
 [[ ! -e "$stage/airootfs/etc/xdg/plasmarc" ]]
+[[ ! -e "$stage/airootfs/etc/xdg/konsolerc" ]]
+[[ ! -e "$stage/airootfs/usr/share/konsole/Nemesis.profile" ]]
 # Re-running a one-shot branded stage must fail before changing existing files.
 if bash "$root/scripts/stage-operator-brand.sh" "$branded" >/dev/null 2>&1; then
   printf 'ERROR: repeated brand staging accepted\n' >&2
