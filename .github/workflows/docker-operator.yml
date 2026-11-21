@@ -3,6 +3,12 @@ name: Nemesis Operator ISO and live globe packaging
 # Only trusted main commits and explicit dispatch; no privileged PR code.
 on:
   workflow_dispatch:
+    inputs:
+      include_nemesis_brand:
+        description: 'Include optional Nemesis theme and eight interactive objects'
+        type: boolean
+        default: false
+        required: false
   push:
     branches: [main]
     paths:
@@ -10,6 +16,8 @@ on:
       - 'docker/operator/**'
       - 'scripts/build-operator-wallpaper.sh'
       - 'scripts/prepare-operator-profile.sh'
+      - 'scripts/stage-operator-brand.sh'
+      - 'brand/**'
       - 'scripts/build-operator-iso.sh'
       - 'profiles/mac-intel-operator/**'
       - 'spec/operator-edition.json'
@@ -55,6 +63,7 @@ jobs:
         run: |
           docker run --rm --privileged \
             --env NEMESIS_CI_DOCKER=1 \
+            --env NEMESIS_OPERATOR_BRAND=${{ inputs.include_nemesis_brand && '1' || '0' }} \
             --mount "type=bind,source=${{ github.workspace }},target=/workspace" \
             --workdir /workspace \
             nemesis-operator-archiso \
