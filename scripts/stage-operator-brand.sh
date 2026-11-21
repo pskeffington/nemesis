@@ -10,8 +10,11 @@ dest="${1%/}"
 [[ "$dest" == /* && -d "$dest/airootfs" && -f "$dest/profiledef.sh" ]] || die "expected absolute, prepared ArchISO profile"
 grep -Eq '^iso_name="nemesis-operator"$' "$dest/profiledef.sh" || die "refusing non-Operator profile"
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
+[[ ! -L "$dest" && ! -L "$dest/airootfs" && ! -L "$dest/profiledef.sh" ]] || die "symlinked Operator stage is not allowed"
 pairs=(
   'brand/theme/kde/Nemesis.colors:usr/share/color-schemes/Nemesis.colors'
+  'brand/theme/kde/Nemesis.colors:etc/xdg/kdeglobals'
+  'brand/operator-defaults/plasmarc:etc/xdg/plasmarc'
   'brand/theme/konsole/Nemesis.colorscheme:usr/share/konsole/Nemesis.colorscheme'
   'brand/theme/plasma/Nemesis/metadata.json:usr/share/plasma/desktoptheme/Nemesis/metadata.json'
   'brand/theme/plasma/Nemesis/colors:usr/share/plasma/desktoptheme/Nemesis/colors'
@@ -28,6 +31,16 @@ for icon in terminal radio database location drone satellite headphones shield; 
   pairs+=("brand/icons/$icon.svg:usr/share/icons/hicolor/scalable/apps/nemesis-$icon.svg")
   pairs+=("brand/plasmoid/org.nemesis.themecontrols/contents/images/$icon.svg:usr/share/plasma/plasmoids/org.nemesis.themecontrols/contents/images/$icon.svg")
 done
+# Preflight launchers too: map real Operator menu objects to namespaced
+# hicolor icons without changing their Exec/permissions or source overlay.
+airmap="$dest/airootfs/usr/share/applications/nemesis-operator-airmap.desktop"
+readiness="$dest/airootfs/usr/share/applications/nemesis-operator-readiness.desktop"
+for launcher in "$airmap" "$readiness"; do
+  [[ -f "$launcher" && ! -L "$launcher" ]] || die "missing or linked Operator launcher"
+  [[ "$(grep -c '^Icon=' "$launcher")" -eq 1 ]] || die "ambiguous Operator launcher icon"
+done
+grep -Fxq 'Icon=applications-internet' "$airmap" || die "unrecognized aircraft map icon"
+grep -Fxq 'Icon=utilities-system-monitor' "$readiness" || die "unrecognized readiness icon"
 # Preflight every source, parent directory and destination before writing.
 # Reject symlinks in destinations to prevent staged-path redirection.
 for pair in "${pairs[@]}"; do
@@ -51,4 +64,6 @@ for pair in "${pairs[@]}"; do
   install -Dm0644 "$root/$source" "$dest/airootfs/$relative"
   cmp -s "$root/$source" "$dest/airootfs/$relative" || die "asset mismatch: $relative"
 done
-printf 'Staged %s Operator brand objects (not auto-activated).\n' "${#pairs[@]}"
+sed -i 's/^Icon=applications-internet$/Icon=nemesis-location/' "$airmap"
+sed -i 's/^Icon=utilities-system-monitor$/Icon=nemesis-shield/' "$readiness"
+printf 'Staged %s Operator brand objects with live-only KDE defaults and mapped launcher icons.\n' "${#pairs[@]}"
