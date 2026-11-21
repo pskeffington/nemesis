@@ -48,4 +48,22 @@ bash -c '
   [[ "${file_permissions[/usr/local/bin/linux-live-wallpaper]:-}" == "0:0:755" ]]
   [[ "${file_permissions[/usr/local/bin/nemesis-operator-wallpaper]:-}" == "0:0:755" ]]
 ' _ "$stage" || die "profile metadata invalid"
+# Independently stage the branded profile against real signed ArchISO releng.
+# The disposable live image alone gains defaults; unbranded operator stays intact.
+env -u ARCHISO_RELENG_PROFILE NEMESIS_OPERATOR_WALLPAPER_ASSETS="$assets" NEMESIS_OPERATOR_BRAND=1 \
+  bash "$root/scripts/prepare-operator-profile.sh" "$tmp/operator-branded"
+branded="$tmp/operator-branded/airootfs"
+cmp -s "$root/brand/theme/kde/Nemesis.colors" "$branded/etc/xdg/kdeglobals" || die "system KDE palette absent"
+cmp -s "$root/brand/operator-defaults/plasmarc" "$branded/etc/xdg/plasmarc" || die "Plasma theme selection absent"
+cmp -s "$root/brand/operator-defaults/konsolerc" "$branded/etc/xdg/konsolerc" || die "Konsole selection absent"
+cmp -s "$root/brand/operator-defaults/Nemesis.profile" "$branded/usr/share/konsole/Nemesis.profile" || die "Konsole profile absent"
+for icon in terminal radio database location drone satellite headphones shield; do
+  cmp -s "$root/brand/icons/$icon.svg" "$branded/usr/share/icons/hicolor/scalable/apps/nemesis-$icon.svg" || die "hicolor icon diverged: $icon"
+  cmp -s "$root/brand/icons/$icon.svg" "$branded/usr/share/plasma/plasmoids/org.nemesis.themecontrols/contents/images/$icon.svg" || die "widget icon diverged: $icon"
+done
+grep -Fxq 'Icon=nemesis-location' "$branded/usr/share/applications/nemesis-operator-airmap.desktop" || die "aircraft launcher not styled"
+grep -Fxq 'Icon=nemesis-shield' "$branded/usr/share/applications/nemesis-operator-readiness.desktop" || die "readiness launcher not styled"
+cmp -s "$stage/airootfs/usr/share/nemesis-operator/offline.html" "$branded/usr/share/nemesis-operator/offline.html" || die "globe offline page changed"
+cmp -s "$stage/airootfs/etc/xdg/kscreenlockerrc" "$branded/etc/xdg/kscreenlockerrc" || die "live lock policy changed"
+[[ ! -e "$stage/airootfs/etc/xdg/kdeglobals" ]] || die "unbranded Operator inherited theme"
 printf 'Installed signed ArchISO Operator staging: PASS (not a live desktop boot)\n'
