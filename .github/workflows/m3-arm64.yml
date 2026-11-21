@@ -12,6 +12,10 @@ on:
       - 'tests/test_m3_vm_optimization.py'
       - 'brand/scripts/**'
       - 'tests/test_dragonized.py'
+      - 'codex/M3_GRAPHICAL_VALIDATION_PASS.md'
+      - 'spec/m3-gui-acceptance.json'
+      - 'scripts/validate_m3_gui_report.py'
+      - 'tests/test_m3_gui_handoff.py'
   workflow_dispatch:
 
 permissions:
@@ -27,8 +31,9 @@ jobs:
       - name: Source tests and reversible per-user theme fixtures
         run: |
           python3 -m unittest discover -s tests -p 'test_m3_vm_optimization.py' -v
+          python3 -m unittest discover -s tests -p 'test_m3_gui_handoff.py' -v
           python3 -m unittest discover -s tests -p 'test_dragonized.py' -v
-          python3 -m py_compile scripts/m3-vm-audit.py brand/scripts/dragonized.py
+          python3 -m py_compile scripts/m3-vm-audit.py scripts/validate_m3_gui_report.py brand/scripts/dragonized.py
           bash -n brand/scripts/dragonized.sh
 
   arm64-source:
@@ -42,6 +47,7 @@ jobs:
         run: |
           test "$(uname -m)" = aarch64
           python3 -m unittest discover -s tests -p 'test_m3_vm_optimization.py' -v
+          python3 -m unittest discover -s tests -p 'test_m3_gui_handoff.py' -v
           python3 -m unittest discover -s tests -p 'test_dragonized.py' -v
           python3 scripts/m3-vm-audit.py --require-arm64 > m3-arm64-ci-audit.json
           python3 - <<'PY'
