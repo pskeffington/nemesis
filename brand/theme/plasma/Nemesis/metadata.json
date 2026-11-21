@@ -5,7 +5,8 @@
     "Id": "Nemesis",
     "Version": "0.2.0",
     "License": "GPL-3.0-or-later",
-    "Category": ""
+    "Category": "Plasma Theme"
   },
-  "X-Plasma-API": "6.0"
+  "X-Plasma-API": "6.0",
+  "KPackageStructure": "Plasma/Theme"
 }
