@@ -2,20 +2,16 @@ name: Nemesis Operator brand object rendering
 
 # Independent unprivileged Qt 6 object checks: no privileged ISO builds on PRs.
 on:
-  push:
-    paths:
-      - '.github/workflows/operator-brand-ui.yml'
-      - 'brand/**'
-      - 'tests/qml/**'
-      - 'tests/test_operator_brand.py'
-      - 'scripts/stage-operator-brand.sh'
-      - 'scripts/prepare-operator-profile.sh'
   pull_request:
     paths:
       - '.github/workflows/operator-brand-ui.yml'
+      - '.github/workflows/docker-operator.yml'
+      - 'docker/operator/check-payload.sh'
       - 'brand/**'
       - 'tests/qml/**'
       - 'tests/test_operator_brand.py'
+      - 'tests/test-operator-profile.sh'
+      - 'tests/test-installed-operator-profile.sh'
       - 'scripts/stage-operator-brand.sh'
       - 'scripts/prepare-operator-profile.sh'
 
