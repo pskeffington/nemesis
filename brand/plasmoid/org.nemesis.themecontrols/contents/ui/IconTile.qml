@@ -11,6 +11,7 @@ Controls.Button {
 
     property string channelKey: ""
     property string iconKey: ""
+    readonly property int iconStatus: objectIcon.status
     property bool selected: false
     property bool highContrast: false
     property color accentColor: "#883DFF"
@@ -45,6 +46,7 @@ Controls.Button {
         spacing: 6
 
         Image {
+            id: objectIcon
             Layout.alignment: Qt.AlignHCenter
             Layout.preferredWidth: 38
             Layout.preferredHeight: 38
