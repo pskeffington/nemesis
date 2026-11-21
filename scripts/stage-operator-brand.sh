@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # ---------------------------------------------------------------------
 # Copy reviewed Nemesis theme + interactive objects into a staged
-# Operator ArchISO. This installs resources only; no global activation.
+# Operator ArchISO. Explicitly branded live-only builds use these as
+# non-immutable KDE/Plasma/Konsole defaults; nothing touches host systems.
 # ---------------------------------------------------------------------
 set -euo pipefail
 die() { printf 'nemesis brand stage: %s\n' "$*" >&2; exit 1; }
@@ -15,6 +16,8 @@ pairs=(
   'brand/theme/kde/Nemesis.colors:usr/share/color-schemes/Nemesis.colors'
   'brand/theme/kde/Nemesis.colors:etc/xdg/kdeglobals'
   'brand/operator-defaults/plasmarc:etc/xdg/plasmarc'
+  'brand/operator-defaults/konsolerc:etc/xdg/konsolerc'
+  'brand/operator-defaults/Nemesis.profile:usr/share/konsole/Nemesis.profile'
   'brand/theme/konsole/Nemesis.colorscheme:usr/share/konsole/Nemesis.colorscheme'
   'brand/theme/plasma/Nemesis/metadata.json:usr/share/plasma/desktoptheme/Nemesis/metadata.json'
   'brand/theme/plasma/Nemesis/colors:usr/share/plasma/desktoptheme/Nemesis/colors'
