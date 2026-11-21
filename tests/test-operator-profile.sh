@@ -72,6 +72,29 @@ bash -c '
   [[ "${file_permissions[/usr/local/bin/linux-live-wallpaper]:-}" == "0:0:755" ]]
   [[ "${file_permissions[/usr/local/bin/nemesis-operator-wallpaper]:-}" == "0:0:755" ]]
 ' _ "$stage"
+# Exercise the real Operator composition with branding enabled.
+# Every object must be present and identical to its canonical SVG master.
+branded="$tmp/operator-branded"
+ARCHISO_RELENG_PROFILE="$fixture" NEMESIS_OPERATOR_WALLPAPER_ASSETS="$assets" NEMESIS_OPERATOR_BRAND=1 \
+  bash "$root/scripts/prepare-operator-profile.sh" "$branded"
+object_root="$branded/airootfs/usr/share/plasma/plasmoids/org.nemesis.themecontrols"
+[[ -f "$object_root/metadata.json" && -f "$object_root/contents/ui/ModeBoard.qml" ]]
+cmp -s "$root/brand/theme/kde/Nemesis.colors" "$branded/airootfs/usr/share/color-schemes/Nemesis.colors"
+for icon in terminal radio database location drone satellite headphones shield; do
+  cmp -s "$root/brand/icons/$icon.svg" "$branded/airootfs/usr/share/icons/hicolor/scalable/apps/nemesis-$icon.svg"
+  cmp -s "$root/brand/icons/$icon.svg" "$object_root/contents/images/$icon.svg"
+done
+[[ -f "$branded/airootfs/etc/xdg/autostart/nemesis-operator-wallpaper.desktop" ]]
+cmp -s "$stage/airootfs/usr/share/nemesis-operator/offline.html" "$branded/airootfs/usr/share/nemesis-operator/offline.html"
+cmp -s "$stage/airootfs/etc/xdg/kscreenlockerrc" "$branded/airootfs/etc/xdg/kscreenlockerrc"
+[[ ! -e "$stage/airootfs/usr/share/color-schemes/Nemesis.colors" ]]
+[[ ! -e "$stage/airootfs/usr/share/plasma/plasmoids/org.nemesis.themecontrols" ]]
+# Invalid flag must reject rather than silently changing profile selection.
+if ARCHISO_RELENG_PROFILE="$fixture" NEMESIS_OPERATOR_WALLPAPER_ASSETS="$assets" NEMESIS_OPERATOR_BRAND=yes \
+    bash "$root/scripts/prepare-operator-profile.sh" "$tmp/invalid-brand-flag" >/dev/null 2>&1; then
+  printf 'ERROR: invalid theme flag accepted\n' >&2
+  exit 1
+fi
 if ARCHISO_RELENG_PROFILE="$fixture" NEMESIS_OPERATOR_WALLPAPER_ASSETS="$assets" \
     bash "$root/scripts/prepare-operator-profile.sh" "$stage" >/dev/null 2>&1; then
   printf 'ERROR: staging overwritten\n' >&2
