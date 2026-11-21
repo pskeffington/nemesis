@@ -15,6 +15,7 @@
 | 4 | F04 | security-release-reviewer | package/ISO provenance, release criteria and recovery plan | review gates and no insecure trust bypass | NOT STARTED |
 | 5 | F05 | build-qa-engineer | pinned `codex/HANDOFF_CONTRACT.md` packet | F02–F04 accepted + explicit human GO | NOT STARTED |
 | optional | F06 | separate visual design role | icon/KDE/wallpaper source and reversibility | branch PR #5, nonblocking; physical test deferred | PARALLEL |
+| optional | M3-GUI-V01 | Codex local M3 GUI validator | [UTM guest inspection, screenshots, performance and rollback](M3_GRAPHICAL_VALIDATION_PASS.md) | separate local GO + observed guest GUI evidence | PREPARED / NOT RUN |
 | hold | M02-P01 | archiso-build-engineer | actual Intel ISO and SHA | authorized Linux build with real evidence | DEFERRED |
 | hold | M03-P01 | uefi-boot-validator | actual UEFI VM boot | accepted M02 | DEFERRED |
 | hold | M04-P01 | intel-mac-compatibility | actual Mac model-level tests/recovery | accepted M03 + approved device | DEFERRED |
