@@ -13,7 +13,9 @@ evidence="$2"
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 sfs="$root/.build/work-mac-intel-operator/iso/arch/x86_64/airootfs.sfs"
 [[ -s "$sfs" ]] || die "built operator SquashFS missing"
-xorriso -indev "$iso" -find /arch/x86_64/airootfs.sfs -print \
+# -find ... -print is unsupported on installed xorriso; inspect the
+# single ISO member using -lsd. This is metadata, not a boot test.
+xorriso -indev "$iso" -lsd /arch/x86_64/airootfs.sfs \
   > "$evidence/iso-rootfs-entry.txt" 2>&1 || die "ISO rootfs missing"
 grep -Fq /arch/x86_64/airootfs.sfs "$evidence/iso-rootfs-entry.txt" || die "rootfs entry absent"
 unsquashfs -ll "$sfs" usr/local/bin etc/xdg/autostart etc/systemd/system \
@@ -56,6 +58,10 @@ printf 'binary_sha256=%s\n' "$actual" > "$evidence/wallpaper-sha256.txt"
 if [[ "${NEMESIS_OPERATOR_BRAND:-0}" == 1 ]]; then
   for pair in \
     "brand/theme/kde/Nemesis.colors:usr/share/color-schemes/Nemesis.colors" \
+    "brand/theme/kde/Nemesis.colors:etc/xdg/kdeglobals" \
+    "brand/operator-defaults/plasmarc:etc/xdg/plasmarc" \
+    "brand/operator-defaults/konsolerc:etc/xdg/konsolerc" \
+    "brand/operator-defaults/Nemesis.profile:usr/share/konsole/Nemesis.profile" \
     "brand/plasmoid/org.nemesis.themecontrols/metadata.json:usr/share/plasma/plasmoids/org.nemesis.themecontrols/metadata.json" \
     "brand/plasmoid/org.nemesis.themecontrols/contents/ui/ModeBoard.qml:usr/share/plasma/plasmoids/org.nemesis.themecontrols/contents/ui/ModeBoard.qml" \
     "brand/plasmoid/org.nemesis.themecontrols/contents/ui/IconTile.qml:usr/share/plasma/plasmoids/org.nemesis.themecontrols/contents/ui/IconTile.qml" \
@@ -70,7 +76,13 @@ if [[ "${NEMESIS_OPERATOR_BRAND:-0}" == 1 ]]; then
       unsquashfs -cat "$sfs" "$target" | cmp -s "$root/brand/icons/$icon.svg" - || die "built icon mismatch: $target"
     done
   done
-  printf 'brand_payload=CANONICAL_OBJECTS_VERIFIED_NOT_RENDERED\n' >> "$evidence/provenance.txt"
+  # Verify the actual Operator application launchers reference the SVG
+  # icon names; otherwise install-only SVGs would never appear in the menu.
+  airmap="$(unsquashfs -cat "$sfs" usr/share/applications/nemesis-operator-airmap.desktop)"
+  readiness="$(unsquashfs -cat "$sfs" usr/share/applications/nemesis-operator-readiness.desktop)"
+  [[ "$airmap" == *"Icon=nemesis-location"* && "$airmap" == *"Exec=firefox --new-window https://globe.airplanes.live/"* ]] || die "branded aircraft launcher invalid"
+  [[ "$readiness" == *"Icon=nemesis-shield"* && "$readiness" == *"Exec=konsole --hold -e /usr/local/bin/nemesis-field-check"* ]] || die "branded readiness launcher invalid"
+  printf 'brand_payload=CANONICAL_DEFAULTS_AND_OBJECTS_VERIFIED_NOT_RENDERED\n' >> "$evidence/provenance.txt"
 else
   if unsquashfs -ll "$sfs" usr/share/plasma/plasmoids/org.nemesis.themecontrols 2>/dev/null | grep -Fq 'org.nemesis.themecontrols'; then
     die "unrequested brand applet leaked into default Operator rootfs"
