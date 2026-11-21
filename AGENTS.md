@@ -21,6 +21,10 @@ Read in order: `README.md`, `docs/FOUNDATION_PRIORITY_PLAN.md`, `ROADMAP.md`, `s
 
 Current Operator objective: preloaded Plasma Wayland and field tools with the user's pinned MIT `linux_live_wallpaper` displaying `https://globe.airplanes.live/` at login. See [design and source contract](docs/OPERATOR_EDITION.md), [OP-01/OP-02 pass queue](codex/OPERATOR_PASS.md), and [desktop agent](agents/operator-desktop-engineer.md). Build Rust source from pinned commit **without root**; stage binary in a separate trusted Docker `mkarchiso` run. Test auto-start/Wayland runtime separately; do not treat a source or payload check as booted. Keep the generic Intel rescue and Air editions unchanged, no default SSH, radio capture, external geolocation, secrets or physical device operations.
 
+## M3 ARM64 visual-validation handoff (repo preparation only)
+
+For requested Apple M3 advancement, read [Codex M3 graphical pass](codex/M3_GRAPHICAL_VALIDATION_PASS.md) and [ARM64 VM plan](docs/M3_OPTIMIZATION.md). PR #25 is stacked on the independent Operator theme PR #24; do not merge the latter implicitly. The current repository-only policy remains in force. Codex may prepare guest reports and use GitHub ARM64/QML CI now, but must not access UTM, operate the user's Mac, install guest software or capture live screenshots without a **separate explicit local execution GO** and appropriate user-granted computer permissions. VM validation is not native M3/Asahi hardware validation. No installation, disk or firmware actions are authorized by these docs.
+
 ## Platform contract
 
 1. `mac-intel` — Intel x86_64 without T2, candidate live/rescue profile scaffold, **not built or booted**.
