@@ -1,0 +1,91 @@
+name: Nemesis M3 ARM64 VM source and portability
+
+# An ARM64 Linux runner is NOT an Apple M3 or a booted UTM guest.
+# These tests perform no privileged package install, QEMU or host operations.
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/m3-arm64.yml'
+      - 'spec/m3-arm64-vm.json'
+      - 'docs/M3_OPTIMIZATION.md'
+      - 'scripts/m3-vm-audit.py'
+      - 'tests/test_m3_vm_optimization.py'
+      - 'brand/scripts/**'
+      - 'tests/test_dragonized.py'
+      - 'codex/M3_GRAPHICAL_VALIDATION_PASS.md'
+      - 'spec/m3-gui-acceptance.json'
+      - 'scripts/validate_m3_gui_report.py'
+      - 'tests/test_m3_gui_handoff.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-contract:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - name: Source tests and reversible per-user theme fixtures
+        run: |
+          python3 -m unittest discover -s tests -p 'test_m3_vm_optimization.py' -v
+          python3 -m unittest discover -s tests -p 'test_m3_gui_handoff.py' -v
+          python3 -m unittest discover -s tests -p 'test_dragonized.py' -v
+          python3 -m py_compile scripts/m3-vm-audit.py scripts/validate_m3_gui_report.py brand/scripts/dragonized.py
+          bash -n brand/scripts/dragonized.sh
+
+  arm64-source:
+    name: Native ARM64 runner (not Apple M3 hardware)
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - name: Verify actual ARM64 Linux environment and read-only preflight
+        run: |
+          test "$(uname -m)" = aarch64
+          python3 -m unittest discover -s tests -p 'test_m3_vm_optimization.py' -v
+          python3 -m unittest discover -s tests -p 'test_m3_gui_handoff.py' -v
+          python3 -m unittest discover -s tests -p 'test_dragonized.py' -v
+          python3 scripts/m3-vm-audit.py --require-arm64 > m3-arm64-ci-audit.json
+          python3 - <<'PY'
+          import json
+          with open('m3-arm64-ci-audit.json', encoding='utf-8') as stream:
+              report = json.load(stream)
+          assert report['assessment']['linux_aarch64'], 'ARM64 guest contract failed'
+          assert report['assessment']['actual_m3_host_verified'] is False
+          assert report['assessment']['gui_boot_verified'] is False
+          assert report['assessment']['performance_benchmarked'] is False
+          print('Native generic ARM64 source preflight: PASS; M3 hardware NOT TESTED')
+          PY
+
+  arm64-qml:
+    name: ARM64 Qt 6 offscreen object rendering (not Apple M3 GPU)
+    runs-on: ubuntu-26.04-arm
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - name: Install distro-signed Qt 6 ARM64 test modules
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            qt6-declarative-dev-tools \
+            qml6-module-qttest \
+            qml6-module-qtquick \
+            qml6-module-qtquick-window \
+            qml6-module-qtquick-layouts \
+            qml6-module-qtquick-controls \
+            qml6-module-qtquick-templates \
+            libqt6svg6 qt6-svg-plugins
+      - name: Validate all eight SVG objects, keyboard and mouse on ARM64 software Qt
+        run: |
+          test "$(uname -m)" = aarch64
+          for qml in brand/plasmoid/org.nemesis.themecontrols/contents/ui/*.qml tests/qml/*.qml; do
+            /usr/lib/qt6/bin/qmlformat "$qml" >/dev/null
+          done
+          QT_QPA_PLATFORM=offscreen QT_QUICK_BACKEND=software \
+            /usr/lib/qt6/bin/qmltestrunner -input tests/qml -platform offscreen

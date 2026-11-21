@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "pass_id": "M3-GUI-V01",
+  "mode": "local-M3-UTM-with-explicit-human-GO",
+  "current_acceptance": "NOT_RUN",
+  "environment": {
+    "host_class": "Apple M3 family macOS",
+    "virtualization": "UTM",
+    "guest_architecture": "aarch64",
+    "guest_os_family": "Fedora KDE Plasma",
+    "gpu_claim": "virtio or other guest graphics; not native Asahi"
+  },
+  "acceptance_semantics": {
+    "source_ci": "not_gui_boot",
+    "arm64_qml_offscreen": "not_m3_gui_boot",
+    "utm_gui": "virtual_guest_only_not_native_hardware",
+    "native_asahi": "separate_test_and_permission_gate"
+  },
+  "statuses": [
+    "PASS",
+    "FAIL",
+    "BLOCKED",
+    "NOT_RUN"
+  ],
+  "evidence_policy": {
+    "all_pass_cases_need_measured_or_visual_observation": true,
+    "report_in_private_local_artifact_directory": true,
+    "redact_usernames_serials_ssids_ips_geolocation_credentials": true,
+    "no_raw_guest_screenshots_committed_to_repo": true,
+    "no_pass_from_source_CI_alone": true
+  },
+  "cases": [
+    {
+      "id": "ENV-01",
+      "requirement": "Confirm actual M3 host, UTM virtualized aarch64 Fedora KDE, read-only guest audit",
+      "evidence_kind": "text",
+      "required": true
+    },
+    {
+      "id": "BOOT-01",
+      "requirement": "Observe guest KDE Plasma login and desktop on the M3 UTM VM",
+      "evidence_kind": "screenshot",
+      "required": true
+    },
+    {
+      "id": "BASE-01",
+      "requirement": "Record three cold boot timings and five-minute idle CPU/memory measurements for stock KDE",
+      "evidence_kind": "metrics",
+      "required": true
+    },
+    {
+      "id": "THEME-01",
+      "requirement": "Apply/review Nemesis KDE palette and Plasma Style with before and after guest screenshots",
+      "evidence_kind": "screenshot",
+      "required": true
+    },
+    {
+      "id": "OBJ-01",
+      "requirement": "Show all eight SVG objects decoded and visible in a real Plasma widget window",
+      "evidence_kind": "screenshot",
+      "required": true
+    },
+    {
+      "id": "INPUT-01",
+      "requirement": "Demonstrate hover, pointer selection, keyboard Tab Space Enter, cyan accent, strong focus and reset",
+      "evidence_kind": "screenshot",
+      "required": true
+    },
+    {
+      "id": "SCALE-01",
+      "requirement": "Inspect Nemesis panel/widgets/labels at 100 percent guest scaling without clipping",
+      "evidence_kind": "screenshot",
+      "required": true
+    },
+    {
+      "id": "SCALE-02",
+      "requirement": "Inspect Nemesis panel/widgets/labels at 200 percent guest scaling without clipping",
+      "evidence_kind": "screenshot",
+      "required": true
+    },
+    {
+      "id": "KONSOLE-01",
+      "requirement": "Inspect readable Konsole colors and appropriate application menu icon fallbacks",
+      "evidence_kind": "screenshot",
+      "required": true
+    },
+    {
+      "id": "PERF-01",
+      "requirement": "Record stock-vs-Nemesis idle/resource deltas with units and sample count",
+      "evidence_kind": "metrics",
+      "required": true
+    },
+    {
+      "id": "RESTORE-01",
+      "requirement": "Remove widget, restore saved KDE settings, uninstall managed assets, confirm original guest appearance",
+      "evidence_kind": "screenshot",
+      "required": true
+    }
+  ],
+  "optional_cases": [
+    {
+      "id": "GLOBE-01",
+      "requirement": "Compare optional browser display of aircraft globe after baseline; do not assert ARM64 wallpaper binary or native layer-shell integration",
+      "evidence_kind": "metrics",
+      "required": false
+    },
+    {
+      "id": "NATIVE-M3-01",
+      "requirement": "Native Fedora Asahi M3 graphics/driver/energy tests require new explicit GO; not part of this VM pass",
+      "evidence_kind": "none",
+      "required": false
+    }
+  ],
+  "report_contract": {
+    "source_commit": "immutable git SHA",
+    "guest_version": "installed KDE/Fedora versions from guest",
+    "vm_profile": "vCPU RAM disk resolution and display class",
+    "samples": "three boot observations and idle CPU memory with units",
+    "per_case": "id, status, observed_at_utc, evidence_refs, actual, expected",
+    "overall": "PASS only when every required case passes with real evidence, otherwise FAIL/BLOCKED/NOT_RUN",
+    "native_asahi": "always NOT_RUN for this pass"
+  }
+}

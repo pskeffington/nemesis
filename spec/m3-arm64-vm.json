@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "profile_id": "m3-arm64-kde-vm-preview",
+  "target_host": "Apple M3 family running macOS",
+  "guest_architecture": "aarch64",
+  "guest_platform": "generic-UEFI-virtio-virtual-machine",
+  "guest_reference": "Fedora KDE Plasma Desktop 45 aarch64 Live ISO",
+  "guest_download": "https://fedoraproject.org/kde/download/",
+  "current_stage": "source-validation-only",
+  "sizing_presets": [
+    {
+      "host_ram_gib": 8,
+      "guest_vcpus": 2,
+      "guest_ram_mib": 4096,
+      "guest_disk_gib": 32
+    },
+    {
+      "host_ram_gib": 16,
+      "guest_vcpus": 4,
+      "guest_ram_mib": 6144,
+      "guest_disk_gib": 48
+    },
+    {
+      "host_ram_gib": 24,
+      "guest_vcpus": 4,
+      "guest_ram_mib": 8192,
+      "guest_disk_gib": 64
+    }
+  ],
+  "minimum_guest": {
+    "vcpus": 2,
+    "ram_mib": 4096
+  },
+  "ui_policy": {
+    "prefer": "KDE Plasma 6 Wayland, virtual virtio display",
+    "initial_resolution": "1920x1200",
+    "alternate_resolution": "2560x1600",
+    "display_scaling": "measure 100 percent and 200 percent separately",
+    "gpu_acceleration": "unknown until measured inside guest; do not infer M3 native GPU support",
+    "compositor": "keep upstream defaults; only change after repeatable measurements",
+    "wallpaper": "do not auto-start live Airplanes globe until idle baseline is measured",
+    "radio_sdr": "manual opt-in only; no hardware passthrough or capture",
+    "default_theme": "non-destructive per-user preview from brand/scripts/dragonized.py"
+  },
+  "measurement_passes": [
+    "cold_boot_to_login_seconds",
+    "idle_memory_mib",
+    "idle_cpu_load",
+    "interactive_frame_consistency",
+    "icon_scaling_100_and_200_percent",
+    "keyboard_focus_accessibility",
+    "live_globe_cpu_gpu_delta_after_opt_in",
+    "restore_theme_and_keep_macos_unchanged"
+  ],
+  "safety": {
+    "change_macos_settings": false,
+    "write_host_partitions": false,
+    "install_native_bootloader": false,
+    "request_apple_firmware": false,
+    "assume_native_gpu_acceleration": false,
+    "build_intel_archiso_on_arm": false,
+    "enable_automatic_radio_capture": false,
+    "vm_guest_install_requires_separate_user_action": true,
+    "native_asahi_deployment_requires_separate_go": true
+  },
+  "native_asahi": {
+    "stage": "research-only",
+    "recommended_upstream": "Fedora Asahi Remix 45 (hardware-enabled distribution)",
+    "m3_gpu_acceleration_as_of_2026_11_21": "not_proven; upstream Fedora Remix 45 announcement states GPU driver not included",
+    "m3_family_scope": "M3, M3 Pro, M3 Max; exclude M3 Ultra without independent confirmation",
+    "baseline_not_equivalent_to_vm": true
+  },
+  "sources": [
+    "https://fedoramagazine.org/fedora-asahi-remix-45-is-now-available/",
+    "https://asahilinux.org/docs/platform/feature-support/m3/",
+    "https://asahilinux.org/2026/11/progress-report-7-3/",
+    "https://fedoraproject.org/kde/download/",
+    "https://getutm.app/"
+  ]
+}
