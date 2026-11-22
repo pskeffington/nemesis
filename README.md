@@ -57,3 +57,7 @@ When the repository foundation is accepted and an explicit handoff GO is given, 
 Official signed Arch packages by default. No automatic internal Mac disk changes, proprietary firmware redistribution, default remote credentials, or unreviewed package signature bypass. Hardware is verified model-by-model; a successful source check or ISO build is never proof of Mac compatibility.
 
 Nemesis is not an official Arch Linux or Apple distribution. The repository retains GPL-3.0; dependencies and firmware have independent license obligations. Host-specific work remains in [linux_config](https://github.com/pskeffington/linux_config) and is not copied into Nemesis images without review.
+
+## Repository sweep and change control
+
+Documentation and maintenance passes follow the generalized [repository sweep decision-routing policy](https://github.com/pskeffington/agent_skills/blob/main/docs/REPO_SWEEP_DECISION_ROUTING.md). Hosted builds, ISO checksums, graphical boot, physical hardware, operator authorization, and release approval remain separate gates; no local deployment or firmware action is implied by a passing workflow.
